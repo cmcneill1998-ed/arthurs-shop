@@ -120,7 +120,7 @@ export default function App() {
   }, [lastOrder]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/products")
+    fetch("https://arthurs-shop.onrender.com/products")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to load products");
         return res.json();
@@ -148,7 +148,7 @@ export default function App() {
   function refreshOrders() {
     if (!currentUser) return;
 
-    fetch(`http://localhost:3001/orders?role=${currentUser.role}&email=${currentUser.email}`)
+    fetch(`https://arthurs-shop.onrender.com/orders?role=${currentUser.role}&email=${currentUser.email}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to load orders");
         return res.json();
@@ -439,7 +439,7 @@ export default function App() {
       items: cart,
     });
 
-    fetch("http://localhost:3001/order", {
+    fetch("https://arthurs-shop.onrender.com/order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -476,7 +476,7 @@ export default function App() {
   }
 
   function markDelivered(orderId) {
-    fetch("http://localhost:3001/orders/update", {
+    fetch("https://arthurs-shop.onrender.com/orders/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -510,7 +510,7 @@ export default function App() {
       return;
     }
 
-    fetch("http://localhost:3001/products/add", {
+    fetch("https://arthurs-shop.onrender.com/products/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -540,7 +540,7 @@ export default function App() {
           barPrice: "",
           description: "",
         });
-        return fetch("http://localhost:3001/products");
+        return fetch("https://arthurs-shop.onrender.com/products");
       })
       .then((res) => res.json())
       .then((data) => {
