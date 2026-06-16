@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Routes, Route, Link, Navigate, useNavigate } from "react-router-dom";
 import logo from "./image.png";
+const API_BASE = "https://arthurs-shop.onrender.com";
 
 const PRODUCTS_PER_PAGE = 50;
 
@@ -120,46 +121,46 @@ export default function App() {
   }, [lastOrder]);
 
   useEffect(() => {
-    fetch("https://arthurs-shop.onrender.com/products")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load products");
-        return res.json();
-      })
-      .then((data) => {
-        const cleanProducts = Array.isArray(data)
-          ? data.map((p, index) => ({
-              id: p.id ?? index + 1,
-              name: p.name || "Unnamed product",
-              category: p.category || "Uncategorised",
-              description: p.description || "",
-              retailPrice: Number(p.retailPrice || 0),
-              barPrice: Number(p.barPrice || 0),
-            }))
-          : [];
+  fetch(`${API_BASE}/products`)
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to load products");
+      return res.json();
+    })
+    .then((data) => {
+      const cleanProducts = Array.isArray(data)
+        ? data.map((p, index) => ({
+            id: p.id ?? index + 1,
+            name: p.name || "Unnamed product",
+            category: p.category || "Uncategorised",
+            description: p.description || "",
+            retailPrice: Number(p.retailprice ?? p.retailPrice ?? 0),
+            barPrice: Number(p.barprice ?? p.barPrice ?? 0),
+          }))
+        : [];
 
-        setProducts(cleanProducts);
-      })
-      .catch(() => {
-        setProducts([]);
-        setMessage("Could not load products from backend.");
-      });
-  }, []);
+      setProducts(cleanProducts);
+    })
+    .catch(() => {
+      setProducts([]);
+      setMessage("Could not load products from backend.");
+    });
+}, []);
 
-  function refreshOrders() {
-    if (!currentUser) return;
+function refreshOrders() {
+  if (!currentUser) return;
 
-    fetch(`https://arthurs-shop.onrender.com/orders?role=${currentUser.role}&email=${currentUser.email}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load orders");
-        return res.json();
-      })
-      .then((data) => {
-        setOrders(Array.isArray(data) ? data : []);
-      })
-      .catch(() => {
-        setOrders([]);
-      });
-  }
+  fetch(`${API_BASE}/orders?role=${currentUser.role}&email=${currentUser.email}`)
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to load orders");
+      return res.json();
+    })
+    .then((data) => {
+      setOrders(Array.isArray(data) ? data : []);
+    })
+    .catch(() => {
+      setOrders([]);
+    });
+}
 
   useEffect(() => {
     if (!currentUser) {
@@ -208,10 +209,13 @@ export default function App() {
 
   const categories = ["All", ...new Set(products.map((p) => p.category))];
 
-  function getPrice(product) {
-    const price = isBar ? product.barPrice : product.retailPrice;
-    return Number(price || 0);
-  }
+function getPrice(product) {
+  const price = isBar
+    ? product.barPrice ?? product.barprice
+    : product.retailPrice ?? product.retailprice;
+
+  return Number(price || 0);
+}
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
@@ -439,7 +443,7 @@ export default function App() {
       items: cart,
     });
 
-    fetch("https://arthurs-shop.onrender.com/order", {
+    fetch(`${API_BASE}/order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -476,7 +480,7 @@ export default function App() {
   }
 
   function markDelivered(orderId) {
-    fetch("https://arthurs-shop.onrender.com/orders/update", {
+    fetch(`${API_BASE}/order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -504,65 +508,62 @@ export default function App() {
       });
   }
 
-  function addProduct() {
-    if (!newProduct.name || !newProduct.category || !newProduct.retailPrice || !newProduct.barPrice) {
-      setMessage("Enter product name, category and both prices.");
-      return;
-    }
-
-    fetch("https://arthurs-shop.onrender.com/products/add", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: newProduct.name,
-        category: newProduct.category,
-        retailPrice: Number(newProduct.retailPrice),
-        barPrice: Number(newProduct.barPrice),
-        description: newProduct.description || "",
-      }),
-    })
-      .then(async (res) => {
-        if (!res.ok) throw new Error("Add product failed");
-        try {
-          return await res.json();
-        } catch {
-          return {};
-        }
-      })
-      .then(() => {
-        setMessage("Product added.");
-        setNewProduct({
-          name: "",
-          category: "",
-          retailPrice: "",
-          barPrice: "",
-          description: "",
-        });
-        return fetch("https://arthurs-shop.onrender.com/products");
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        const cleanProducts = Array.isArray(data)
-          ? data.map((p, index) => ({
-              id: p.id ?? index + 1,
-              name: p.name || "Unnamed product",
-              category: p.category || "Uncategorised",
-              description: p.description || "",
-              retailPrice: Number(p.retailPrice || 0),
-              barPrice: Number(p.barPrice || 0),
-            }))
-          : [];
-        setProducts(cleanProducts);
-      })
-      .catch(() => {
-        setMessage("Could not add product.");
-      });
+ function addProduct() {
+  if (!newProduct.name || !newProduct.category || !newProduct.retailPrice || !newProduct.barPrice) {
+    setMessage("Enter product name, category and both prices.");
+    return;
   }
 
+  fetch(`${API_BASE}/products/add`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: newProduct.name,
+      category: newProduct.category,
+      retailPrice: Number(newProduct.retailPrice),
+      barPrice: Number(newProduct.barPrice),
+      description: newProduct.description || "",
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Add product failed");
+      return res.json();
+    })
+    .then(() => {
+      setMessage("Product added.");
+      setNewProduct({
+        name: "",
+        category: "",
+        retailPrice: "",
+        barPrice: "",
+        description: "",
+      });
+      return fetch(`${API_BASE}/products`);
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      const cleanProducts = Array.isArray(data)
+        ? data.map((p, index) => ({
+            id: p.id ?? index + 1,
+            name: p.name || "Unnamed product",
+            category: p.category || "Uncategorised",
+            description: p.description || "",
+            retailPrice: Number(p.retailprice ?? p.retailPrice ?? 0),
+            barPrice: Number(p.barprice ?? p.barPrice ?? 0),
+          }))
+        : [];
+
+      setProducts(cleanProducts);
+    })
+    .catch(() => {
+      setMessage("Could not add product.");
+    });
+}
+
   function loadItems(orderId) {
-    fetch(`http://localhost:3001/order-items/${orderId}`)
+    fetch(`${API_BASE}/order-items/${orderId}`)
       .then((res) => {
         if (!res.ok) throw new Error("Items load failed");
         return res.json();
