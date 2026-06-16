@@ -80,6 +80,15 @@ app.post("/create-checkout-session", async (req, res) => {
       cancel_url: `${process.env.FRONTEND_URL}/cart`,
     });
 
+    // ✅ THIS IS CRITICAL – sends URL back to frontend
+    res.json({ url: session.url });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Stripe failed" });
+  }
+});
+
 
 
 // =========================
