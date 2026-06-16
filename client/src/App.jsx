@@ -1077,9 +1077,15 @@ function CheckoutPage({
   </div>
 </div>
 
-      <button style={styles.primaryBtn} onClick={placeOrder}>
-        Place Order
-      </button>
+      <button
+  style={styles.primaryBtn}
+  onClick={() => {
+    console.log("PLACE ORDER CLICKED");
+    placeOrder();
+  }}
+>
+  Place Order
+</button>
     </section>
   );
 }
