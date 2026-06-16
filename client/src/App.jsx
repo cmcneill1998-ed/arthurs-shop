@@ -53,7 +53,7 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [page, setPage] = useState(1);
-  const [authMode, setAuthMode] = useState("register");
+  const [authMode, setAuthMode] = useState("login");
 
   const [loginForm, setLoginForm] = useState({
     email: "",
@@ -1416,6 +1416,18 @@ function LoginPage({
           <button style={styles.primaryBtn} onClick={createAccount}>
             Create Account
           </button>
+
+          <p style={{ marginTop: 12, fontSize: 14 }}>
+  Already have an account?{" "}
+  <button
+    type="button"
+    onClick={() => setAuthMode("login")}
+    style={{ background: "none", border: "none", color: "#F97316", cursor: "pointer", fontWeight: "bold" }}
+  >
+    Login here
+  </button>
+</p>
+
         </>
       ) : (
         <>
@@ -1443,6 +1455,17 @@ function LoginPage({
           <button style={styles.primaryBtn} onClick={login}>
             Login
           </button>
+
+          <p style={{ marginTop: 12, fontSize: 14 }}>
+  Need an account?{" "}
+  <button
+    type="button"
+    onClick={() => setAuthMode("register")}
+    style={{ background: "none", border: "none", color: "#F97316", cursor: "pointer", fontWeight: "bold" }}
+  >
+    Register here
+  </button>
+</p>
 
           <p style={{ marginTop: 12, fontSize: 12, color: "#6b7280" }}>
             Staff demo login: <strong>staff@arthurs.test</strong> / <strong>demo123</strong>
