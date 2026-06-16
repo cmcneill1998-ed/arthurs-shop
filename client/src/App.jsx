@@ -626,7 +626,6 @@ function getPrice(product) {
           <div style={styles.navLinks}>
             <Link style={styles.navLink} to="/">Products</Link>
             <Link style={styles.navLink} to="/cart">Cart ({cart.length})</Link>
-            <Link style={styles.navLink} to="/checkout">Checkout</Link>
             <Link style={styles.navLink} to="/orders">Orders</Link>
             {currentUser && <Link style={styles.navLink} to="/account">Account</Link>}
             {isStaff && <Link style={styles.navLink} to="/add-product">Add Product</Link>}
@@ -729,21 +728,22 @@ function getPrice(product) {
           />
 
           <Route
-            path="/account"
-            element={
-              currentUser ? (
-                <AccountPage
-                  isBar={isBar}
-                  profileForm={profileForm}
-                  setProfileForm={setProfileForm}
-                  saveProfile={saveProfile}
-                  message={message}
-                />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
+  path="/account"
+  element={
+    currentUser ? (
+      <AccountPage
+        isBar={isBar}
+        isStaff={isStaff}
+        profileForm={profileForm}
+        setProfileForm={setProfileForm}
+        saveProfile={saveProfile}
+        message={message}
+      />
+    ) : (
+      <Navigate to="/login" />
+    )
+  }
+/>
 
           <Route
             path="/login"
@@ -903,6 +903,7 @@ function ProductsPage({
 }
 
 function CartPage({ cart, subtotal, total, decreaseQty, increaseQty, removeItem }) {
+  const navigate = useNavigate();
   return (
     <section style={styles.card}>
       <h2 style={styles.sectionTitle}>Basket</h2>
@@ -915,7 +916,9 @@ function CartPage({ cart, subtotal, total, decreaseQty, increaseQty, removeItem 
             <div key={item.id} style={styles.basketItem}>
               <div>
                 <strong>{item.name}</strong>
-                <p style={styles.smallText}>€{Number(item.price).toFixed(2)} each</p>
+                <p style={{ fontSize: "18px", fontWeight: "bold", margin: "4px 0", color: "#111827" }}>
+  €{Number(item.price).toFixed(2)} each
+</p>
               </div>
 
               <div style={styles.qtyRow}>
@@ -934,10 +937,17 @@ function CartPage({ cart, subtotal, total, decreaseQty, increaseQty, removeItem 
           ))}
 
           <div style={styles.totalBox}>
-            <p><strong>Subtotal:</strong> €{Number(subtotal).toFixed(2)}</p>
-            <p><strong>Delivery:</strong> Free</p>
-            <p style={styles.total}><strong>Total:</strong> €{Number(total).toFixed(2)}</p>
-          </div>
+  <p><strong>Subtotal:</strong> €{Number(subtotal).toFixed(2)}</p>
+  <p><strong>Delivery:</strong> Free</p>
+  <p style={styles.total}><strong>Total:</strong> €{Number(total).toFixed(2)}</p>
+
+  <button
+    style={{ ...styles.primaryBtn, marginTop: "12px", width: "100%" }}
+    onClick={() => navigate("/checkout")}
+  >
+    Go to Checkout
+  </button>
+</div>
         </>
       )}
     </section>
@@ -966,7 +976,12 @@ function CheckoutPage({
         </div>
       )}
 
-      {message && <div style={styles.successBox}>{message}</div>}
+{currentUser && cart.length > 0 && (
+  <div style={styles.successBox}>
+    Confirm account details before checking out.
+  </div>
+)}
+
 
       <div style={styles.formGrid}>
         <input
@@ -1041,9 +1056,18 @@ function CheckoutPage({
       )}
 
       <div style={styles.checkoutSummary}>
-        <p><strong>Items:</strong> {cart.length}</p>
-        <p><strong>Total:</strong> €{Number(total).toFixed(2)}</p>
-      </div>
+  <p><strong>Items:</strong> {cart.length}</p>
+  <p><strong>Total:</strong> €{Number(total).toFixed(2)}</p>
+
+  <div style={{ marginTop: "12px", padding: "12px", background: "#f9fafb", borderRadius: "8px" }}>
+    <p style={{ fontWeight: "bold", marginBottom: "8px" }}>Final order summary</p>
+    {cart.map((item) => (
+      <p key={item.id} style={{ margin: "4px 0", fontSize: "14px" }}>
+        {item.name} x {item.qty} — €{Number(item.price).toFixed(2)} each
+      </p>
+    ))}
+  </div>
+</div>
 
       <button style={styles.primaryBtn} onClick={placeOrder}>
         Place Order
@@ -1197,7 +1221,7 @@ function AddProductPage({ newProduct, setNewProduct, addProduct, message }) {
   );
 }
 
-function AccountPage({ isBar, profileForm, setProfileForm, saveProfile, message }) {
+function AccountPage({ isBar, isStaff, profileForm, setProfileForm, saveProfile, message }) {
   return (
     <section style={styles.card}>
       <h2 style={styles.sectionTitle}>My Details</h2>
@@ -1218,43 +1242,59 @@ function AccountPage({ isBar, profileForm, setProfileForm, saveProfile, message 
           onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
         />
 
-        {isBar ? (
-          <>
-            <input
-              style={styles.input}
-              placeholder="Company name"
-              value={profileForm.companyName}
-              onChange={(e) => setProfileForm({ ...profileForm, companyName: e.target.value })}
-            />
-            <input
-              style={styles.input}
-              placeholder="Business address"
-              value={profileForm.address}
-              onChange={(e) => setProfileForm({ ...profileForm, address: e.target.value })}
-            />
-            <input
-              style={styles.input}
-              placeholder="NIF"
-              value={profileForm.nif}
-              onChange={(e) => setProfileForm({ ...profileForm, nif: e.target.value })}
-            />
-          </>
-        ) : (
-          <>
-            <input
-              style={styles.input}
-              placeholder="Hotel room"
-              value={profileForm.hotelRoom}
-              onChange={(e) => setProfileForm({ ...profileForm, hotelRoom: e.target.value })}
-            />
-            <input
-              style={styles.input}
-              placeholder="Hotel address"
-              value={profileForm.hotelAddress}
-              onChange={(e) => setProfileForm({ ...profileForm, hotelAddress: e.target.value })}
-            />
-          </>
-        )}
+       {isBar ? (
+  <>
+    <input
+      style={styles.input}
+      placeholder="Company name"
+      value={profileForm.companyName}
+      onChange={(e) => setProfileForm({ ...profileForm, companyName: e.target.value })}
+    />
+    <input
+      style={styles.input}
+      placeholder="Business address"
+      value={profileForm.address}
+      onChange={(e) => setProfileForm({ ...profileForm, address: e.target.value })}
+    />
+    <input
+      style={styles.input}
+      placeholder="NIF"
+      value={profileForm.nif}
+      onChange={(e) => setProfileForm({ ...profileForm, nif: e.target.value })}
+    />
+  </>
+) : !isStaff ? (
+  <>
+    <input
+      style={styles.input}
+      placeholder="Hotel room"
+      value={profileForm.hotelRoom}
+      onChange={(e) => setProfileForm({ ...profileForm, hotelRoom: e.target.value })}
+    />
+    <input
+      style={styles.input}
+      placeholder="Hotel address"
+      value={profileForm.hotelAddress}
+      onChange={(e) => setProfileForm({ ...profileForm, hotelAddress: e.target.value })}
+    />
+  </>
+) : null}
+  {!isStaff ? (
+  <>
+    <input
+      style={styles.input}
+      placeholder="Hotel room"
+      value={profileForm.hotelRoom}
+      onChange={(e) => setProfileForm({ ...profileForm, hotelRoom: e.target.value })}
+    />
+    <input
+      style={styles.input}
+      placeholder="Hotel address"
+      value={profileForm.hotelAddress}
+      onChange={(e) => setProfileForm({ ...profileForm, hotelAddress: e.target.value })}
+    />
+  </>
+) : null}
       </div>
 
       <button style={styles.primaryBtn} onClick={saveProfile}>
@@ -1277,20 +1317,7 @@ function LoginPage({
 }) {
   return (
     <section style={styles.authCard}>
-      <div style={styles.tabRow}>
-        <button
-          style={authMode === "register" ? styles.tabActive : styles.tab}
-          onClick={() => setAuthMode("register")}
-        >
-          Register
-        </button>
-        <button
-          style={authMode === "login" ? styles.tabActive : styles.tab}
-          onClick={() => setAuthMode("login")}
-        >
-          Login
-        </button>
-      </div>
+      
 
       {message && <div style={styles.formMessage}>{message}</div>}
 
