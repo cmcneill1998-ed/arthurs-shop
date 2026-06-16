@@ -433,59 +433,44 @@ function getPrice(product) {
       }
     }
 
-    const orderNumber = `ARTH-${Date.now().toString().slice(-8)}`;
+ const orderNumber = `ARTH-${Date.now().toString().slice(-8)}`;
 
-    setLastOrder({
-      orderNumber,
-      customerType: isBar ? "Bar Customer" : isStaff ? "Staff" : "Standard Customer",
-      delivery: "Free",
-      total: Number(total).toFixed(2),
-      items: cart,
-    });
+setLastOrder({
+  orderNumber,
+  customerType: isBar ? "Bar Customer" : isStaff ? "Staff" : "Standard Customer",
+  delivery: "Free",
+  total: Number(total).toFixed(2),
+  items: cart,
+});
 
-    function placeOrder() {
-  setCheckoutError("");
-  setMessage("");
+fetch(`${API_BASE}/create-checkout-session`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    items: cart,
+    customerName: checkoutForm.contactName,
+    email: checkoutForm.email,
+    role: currentUser.role,
+    hotelRoom: checkoutForm.hotelRoom || "",
+    hotelAddress: checkoutForm.hotelAddress || "",
+  }),
+})
+  .then((res) => res.json())
+  .then((data) => {
+    if (!data.url) {
+      setCheckoutError("Stripe session failed");
+      return;
+    }
 
-  if (!currentUser) {
-    setCheckoutError("You must create an account or log in.");
-    return;
-  }
-
-  if (cart.length === 0) {
-    setCheckoutError("Your basket is empty.");
-    return;
-  }
-
-  fetch(`${API_BASE}/create-checkout-session`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      items: cart,
-      customerName: checkoutForm.contactName,
-      email: checkoutForm.email,
-      role: currentUser.role,
-      hotelRoom: checkoutForm.hotelRoom || "",
-      hotelAddress: checkoutForm.hotelAddress || "",
-    }),
+    window.location.href = data.url;
   })
-    .then((res) => res.json())
-    .then((data) => {
-      if (!data.url) {
-        setCheckoutError("Stripe session failed");
-        return;
-      }
-
-      // 🔥 THIS IS WHAT REDIRECTS TO STRIPE
-      window.location.href = data.url;
-    })
-    .catch(() => {
-      setCheckoutError("Checkout failed");
-    });
+  .catch(() => {
+    setCheckoutError("Checkout failed");
+  });
 }
-  }
+  
 
   function markDelivered(orderId) {
     fetch(`${API_BASE}/order`, {
@@ -1077,15 +1062,9 @@ function CheckoutPage({
   </div>
 </div>
 
-      <button
-  style={styles.primaryBtn}
-  onClick={() => {
-    console.log("PLACE ORDER CLICKED");
-    placeOrder();
-  }}
->
-  Place Order
-</button>
+      <button style={styles.primaryBtn} onClick={placeOrder}>
+        Place Order
+      </button>
     </section>
   );
 }
