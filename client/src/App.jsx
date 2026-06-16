@@ -443,40 +443,48 @@ function getPrice(product) {
       items: cart,
     });
 
-    fetch(`${API_BASE}/order`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-  customerName: checkoutForm.contactName,
-  email: checkoutForm.email,
-  total: total,
-  items: cart,
-  role: currentUser.role,
-  hotelRoom: checkoutForm.hotelRoom || "",
-  hotelAddress: checkoutForm.hotelAddress || "",
-}),
+    function placeOrder() {
+  setCheckoutError("");
+  setMessage("");
+
+  if (!currentUser) {
+    setCheckoutError("You must create an account or log in.");
+    return;
+  }
+
+  if (cart.length === 0) {
+    setCheckoutError("Your basket is empty.");
+    return;
+  }
+
+  fetch(`${API_BASE}/create-checkout-session`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      items: cart,
+      customerName: checkoutForm.contactName,
+      email: checkoutForm.email,
+      role: currentUser.role,
+      hotelRoom: checkoutForm.hotelRoom || "",
+      hotelAddress: checkoutForm.hotelAddress || "",
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (!data.url) {
+        setCheckoutError("Stripe session failed");
+        return;
+      }
+
+      // 🔥 THIS IS WHAT REDIRECTS TO STRIPE
+      window.location.href = data.url;
     })
-      .then(async (res) => {
-        if (!res.ok) throw new Error("Order failed");
-        try {
-          return await res.json();
-        } catch {
-          return {};
-        }
-      })
-      .then(() => {
-        setMessage(
-          `Order saved to database ✅ (Order: ${orderNumber}). ${deliveryMessage} ${deliveryDayMessage}`
-        );
-        setCart([]);
-        refreshOrders();
-        navigate("/orders");
-      })
-      .catch(() => {
-        setCheckoutError("Failed to save order");
-      });
+    .catch(() => {
+      setCheckoutError("Checkout failed");
+    });
+}
   }
 
   function markDelivered(orderId) {

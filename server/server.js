@@ -54,6 +54,33 @@ app.post("/order", async (req, res) => {
   }
 });
 
+const Stripe = require("stripe");
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+app.post("/create-checkout-session", async (req, res) => {
+  try {
+    const { items } = req.body;
+
+    const line_items = items.map((item) => ({
+      price_data: {
+        currency: "eur",
+        product_data: {
+          name: item.name,
+        },
+        unit_amount: Math.round(item.price * 100),
+      },
+      quantity: item.qty,
+    }));
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items,
+      mode: "payment",
+      success_url: `${process.env.FRONTEND_URL}/orders`,
+      cancel_url: `${process.env.FRONTEND_URL}/cart`,
+    });
+
+
 
 // =========================
 // TEST
