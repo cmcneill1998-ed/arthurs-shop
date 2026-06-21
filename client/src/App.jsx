@@ -1482,9 +1482,12 @@ function LoginPage({
             />
           </div>
 
-          <button style={styles.primaryBtn} onClick={login}>
-            Login
-          </button>
+          <button
+  style={{ ...styles.primaryBtn, marginTop: "20px" }}
+  onClick={login}
+>
+  Login
+</button>
 
           <p style={{ marginTop: 12, fontSize: 14 }}>
   Need an account?{" "}
