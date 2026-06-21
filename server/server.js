@@ -199,20 +199,19 @@ app.get("/order-items/:orderId", async (req, res) => {
   const orderId = req.params.orderId;
 
   try {
+    console.log("🔍 Fetching items for order:", orderId);
+
     const result = await db.query(
-      `SELECT 
-        productname AS "productName",
-        quantity,
-        price
-       FROM order_items
-       WHERE orderid = $1`,
+      `SELECT * FROM order_items WHERE orderid = $1`,
       [orderId]
     );
 
+    console.log("✅ RAW DB RESULT:", result.rows);
+
     res.json(result.rows);
   } catch (err) {
-    console.error("❌ Items load failed:", err);
-    res.status(500).json({ error: "Items load failed" });
+    console.error("❌ ERROR LOADING ITEMS:", err.message);
+    res.status(500).json({ error: err.message });
   }
 });
 
