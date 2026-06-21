@@ -1525,6 +1525,13 @@ function LoginPage({
   >
     Register here
   </button>
+
+  <button
+  style={{ marginTop: "10px" }}
+  onClick={resetPassword}
+>
+  Forgot password?
+</button>
 </p>
 
           <p style={{ marginTop: 12, fontSize: 12, color: "#6b7280" }}>
@@ -1535,6 +1542,38 @@ function LoginPage({
     </section>
   );
 }
+
+const resetPassword = async () => {
+  if (!email || !password) {
+    alert("Enter email and new password");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/reset-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        newPassword: password
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Password reset successful");
+    } else {
+      alert("Reset failed");
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Error resetting password");
+  }
+};
 
 const styles = {
   page: {
