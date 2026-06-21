@@ -528,20 +528,47 @@ fetch(`${API_BASE}/create-checkout-session`, {
     hotelAddress: checkoutForm.hotelAddress || "",
   }),
 })
+  // ✅ YOU WERE MISSING THIS
   .then((res) => res.json())
+
   .then((data) => {
     if (!data.url) {
       setCheckoutError("Stripe session failed");
       return;
     }
 
+    // ✅ SAVE ORDER + ITEMS
+    fetch(`${API_BASE}/order`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        customerName: checkoutForm.contactName,
+        email: checkoutForm.email,
+        total: total,
+        items: cart,
+        role: currentUser.role,
+        hotelRoom: checkoutForm.hotelRoom || "",
+        hotelAddress: checkoutForm.hotelAddress || "",
+      }),
+    })
+      .then((res) => {
+  if (!res.ok) throw new Error("Order save failed");
+  return res.json();
+})
+.then((data) => console.log("✅ ORDER SAVED:", data))
+      .catch((err) => console.error("❌ ORDER ERROR:", err));
+
+    // ✅ THEN GO TO STRIPE
     window.location.href = data.url;
   })
+
   .catch(() => {
     setCheckoutError("Checkout failed");
   });
+
 }
-  
 
   function markDelivered(orderId) {
     fetch(`${API_BASE}/order`, {
