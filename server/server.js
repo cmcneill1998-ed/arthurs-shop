@@ -194,6 +194,27 @@ app.post("/orders/update", async (req, res) => {
   }
 });
 
+app.post("/reset-password", async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  try {
+    if (!email || !newPassword) {
+      return res.status(400).json({ error: "Missing fields" });
+    }
+
+    await db.query(
+      "UPDATE users SET password = $1 WHERE email = $2",
+      [newPassword, email]
+    );
+
+    res.json({ success: true });
+
+  } catch (err) {
+    console.error("Reset password failed:", err);
+    res.status(500).send("Reset failed");
+  }
+});
+
 
 // =========================
 // TEST
