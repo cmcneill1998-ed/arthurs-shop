@@ -530,15 +530,15 @@ fetch(`${API_BASE}/create-checkout-session`, {
 })
   // ✅ YOU WERE MISSING THIS
   .then((res) => res.json())
+.then(async (data) => {
+  if (!data.url) {
+    setCheckoutError("Stripe session failed");
+    return;
+  }
 
-  .then((data) => {
-    if (!data.url) {
-      setCheckoutError("Stripe session failed");
-      return;
-    }
-
-    // ✅ SAVE ORDER + ITEMS
-    fetch(`${API_BASE}/order`, {
+  try {
+    // ✅ WAIT FOR ORDER TO SAVE
+    await fetch(`${API_BASE}/order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -552,17 +552,16 @@ fetch(`${API_BASE}/create-checkout-session`, {
         hotelRoom: checkoutForm.hotelRoom || "",
         hotelAddress: checkoutForm.hotelAddress || "",
       }),
-    })
-      .then((res) => {
-  if (!res.ok) throw new Error("Order save failed");
-  return res.json();
-})
-.then((data) => console.log("✅ ORDER SAVED:", data))
-      .catch((err) => console.error("❌ ORDER ERROR:", err));
+    });
 
-    // ✅ THEN GO TO STRIPE
-    window.location.href = data.url;
-  })
+    console.log("✅ ORDER SAVED");
+  } catch (err) {
+    console.error("❌ ORDER SAVE FAILED:", err);
+  }
+
+  // ✅ NOW redirect AFTER save is done
+  window.location.href = data.url;
+})
 
   .catch(() => {
     setCheckoutError("Checkout failed");
