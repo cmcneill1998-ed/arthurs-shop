@@ -296,36 +296,60 @@ function getPrice(product) {
   function login() {
     resetMessages();
 
-    const foundUser = users.find(
-      (u) =>
-        u.email.toLowerCase() === loginForm.email.toLowerCase() &&
-        u.password === loginForm.password
-    );
+    const matchedUser = users.find((u) =>
+  u.email.toLowerCase() === loginForm.email.toLowerCase() &&
+  (
+    (u.role === "customer" && u.hotelRoom === loginForm.resetCheck) ||
+    (u.role === "bar" && u.nif === loginForm.resetCheck)
+  )
+);
 
-    if (!foundUser) {
-      setMessage("Login details not recognised.");
-      return;
-    }
+if (!matchedUser) {
+  setMessage("Details do not match our records.");
+  return;
+}
 
     setCurrentUser(foundUser);
     setMessage(`Logged in as ${foundUser.role}.`);
     navigate("/");
   }
 
-  function resetPassword() {
+function resetPassword() {
   resetMessages();
 
-  if (!loginForm.email || !loginForm.password) {
-    setMessage("Enter email and new password.");
+  // ✅ FIRST CLICK = instruction only, no reset yet
+  if (!isResetMode) {
+    setMessage("⚠️ Enter your email, NEW password, and hotel room/NIF below, then click 'Confirm reset password'.");
+    setIsResetMode(true);
     return;
   }
 
-  const userExists = users.some(
-    (u) => u.email.toLowerCase() === loginForm.email.toLowerCase()
-  );
+  // ✅ SECOND CLICK = validate fields
+  if (!loginForm.email || !loginForm.password || !loginForm.resetCheck) {
+    setMessage("Enter email, new password, and hotel room/NIF.");
+    return;
+  }
 
-  if (!userExists) {
-    setMessage("No account found with that email.");
+  const matchedUser = users.find((u) => {
+    const emailMatches =
+      u.email.toLowerCase() === loginForm.email.toLowerCase();
+
+    const securityMatches =
+      (u.role === "customer" &&
+        String(u.hotelRoom || "").toLowerCase() ===
+          String(loginForm.resetCheck || "").toLowerCase()) ||
+      (u.role === "bar" &&
+        String(u.nif || "").toLowerCase() ===
+          String(loginForm.resetCheck || "").toLowerCase()) ||
+      (u.role === "staff" &&
+        String(u.email || "").toLowerCase() ===
+          String(loginForm.email || "").toLowerCase());
+
+    return emailMatches && securityMatches;
+  });
+
+  if (!matchedUser) {
+    setMessage("Details do not match our records.");
     return;
   }
 
@@ -335,17 +359,11 @@ function getPrice(product) {
       : u
   );
 
- if (!isResetMode) {
-  setMessage("⚠️ Enter your email and NEW password above, then click 'Confirm reset password'.");
-  setIsResetMode(true);
-  return;
-}
-
-
   setUsers(updatedUsers);
   localStorage.setItem("arthurs_users", JSON.stringify(updatedUsers));
 
-  setMessage("Password reset successful. You can now log in.");
+  setMessage("✅ Password reset successful. You can now log in.");
+  setIsResetMode(false);
 }
 
   function logout() {
@@ -1568,6 +1586,17 @@ function LoginPage({
             />
           </div>
 
+          {isResetMode && (
+  <input
+    style={styles.input}
+    placeholder="Hotel room (or NIF for bars)"
+    value={loginForm.resetCheck || ""}
+    onChange={(e) =>
+      setLoginForm({ ...loginForm, resetCheck: e.target.value })
+    }
+    />
+  )}
+
           <button
             style={{ ...styles.primaryBtn, marginTop: "20px" }}
             onClick={login}
@@ -1611,7 +1640,7 @@ function LoginPage({
       textAlign: "center",
     }}
   >
-    Enter your email and a new password, then click the button above to reset it.
+    Click this button if you have forgotten your password and want to reset it.
   </p>
 
   <p style={{ marginTop: 12, fontSize: 12, color: "#6b7280" }}>
