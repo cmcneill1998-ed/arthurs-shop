@@ -202,20 +202,24 @@ app.get("/order-items/:orderId", async (req, res) => {
     console.log("🔍 Fetching items for order:", orderId);
 
     const result = await db.query(
-      `SELECT
-  productname AS "productName",
-  quantity,
-  price
-FROM order_items 
-WHERE orderid = $1`,
+      `SELECT productname, quantity, price
+       FROM order_items
+       WHERE orderid = $1`,
       [orderId]
     );
 
     console.log("✅ RAW DB RESULT:", result.rows);
 
-    res.json(result.rows);
+    // ✅ manually map property name
+    const formatted = result.rows.map(item => ({
+      productName: item.productname,
+      quantity: item.quantity,
+      price: item.price
+    }));
+
+    res.json(formatted);
   } catch (err) {
-    console.error("❌ ERROR LOADING ITEMS:", err.message);
+    console.error("❌ ERROR LOADING ITEMS:", err);
     res.status(500).json({ error: err.message });
   }
 });
