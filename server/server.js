@@ -85,46 +85,67 @@ app.post("/order", async (req, res) => {
 
     const orderId = result.rows[0].id;
 
- // ✅ SEND CONFIRMATION EMAIL
-try {
-  const emailResult = await resend.emails.send({
-    from: "Arthurs <orders@arthursofflicence.com>",
-    to: email,
-    subject: "Order Confirmation - Arthurs",
-    html: `
-      <h2>Thanks for your order, ${customerName}!</h2>
-      <p>Your order ID is <strong>${orderId}</strong></p>
+    console.log("✅ Order saved:", orderId);
 
-      <h3>Order Details:</h3>
-      <ul>
-        ${items.map(item => `
-          <li>${item.name} x${item.qty || item.quantity || 1}</li>
-        `).join("")}
-      </ul>
+    // ✅ SAVE ORDER ITEMS
+    for (const item of items) {
+      await db.query(
+        `INSERT INTO order_items (orderId, productName, quantity, price)
+         VALUES ($1, $2, $3, $4)`,
+        [
+          orderId,
+          item.name,
+          item.qty || item.quantity || 1,
+          item.price || 0
+        ]
+      );
+    }
 
-      <p><strong>Total:</strong> €${total}</p>
+    console.log("🛒 Order items saved for order:", orderId);
 
-      ${hotelRoom ? `<p><strong>Room:</strong> ${hotelRoom}</p>` : ""}
-      ${hotelAddress ? `<p><strong>Address:</strong> ${hotelAddress}</p>` : ""}
+    // ✅ SEND CONFIRMATION EMAIL
+    try {
+      const emailResult = await resend.emails.send({
+        from: "Arthurs <orders@arthursofflicence.com>",
+        to: email,
+        subject: "🍻 Order Confirmation - Arthurs",
+        html: `
+          <h2>Thanks for your order, ${customerName}! 🍻</h2>
+          <p>Your order ID is <strong>${orderId}</strong></p>
 
-      <p>We’ll process your order shortly.</p>
-      <p>Thanks,<br/>Arthurs</p>
-    `
-  });
+          <h3>🛒 Order Details:</h3>
+          <ul>
+            ${items.map(item => `
+              <li>${item.name} x${item.qty || item.quantity || 1}</li>
+            `).join("")}
+          </ul>
 
-  console.log("✅ EMAIL SENT:", emailResult);
+          <p><strong>Total:</strong> €${total}</p>
 
-} catch (emailErr) {
-  console.error("❌ EMAIL FAILED:", emailErr);
-}
+          ${hotelRoom ? `<p><strong>Room:</strong> ${hotelRoom}</p>` : ""}
+          ${hotelAddress ? `<p><strong>Address:</strong> ${hotelAddress}</p>` : ""}
+
+          <p>✅ We’ll process your order shortly.</p>
+          <p>Orders placed after 12pm will be delivered the next working day.</p>
+          <p>Weekend orders will be delivered Monday.</p>
+
+          <p>Thanks,<br/>Arthurs 🍾</p>
+        `
+      });
+
+      console.log("📧 Email sent:", emailResult);
+    } catch (emailErr) {
+      console.error("❌ Email failed:", emailErr);
+    }
 
     res.json({ success: true, orderId });
 
   } catch (err) {
-    console.error("Order failed:", err);
+    console.error("❌ Order failed:", err);
     res.status(500).send("Order failed");
   }
 });
+
 
 // =========================
 // ORDERS (FIXES YOUR 404 ERRORS)
@@ -160,15 +181,23 @@ app.get("/order-items/:orderId", async (req, res) => {
   const orderId = req.params.orderId;
 
   try {
+    console.log("🔍 Loading items for order:", orderId);
+
     const result = await db.query(
-      "SELECT * FROM order_items WHERE orderId = $1",
+      `SELECT 
+        productName AS "productName",
+        quantity,
+        price
+       FROM order_items
+       WHERE orderId = $1`,
       [orderId]
     );
 
-    res.json(result.rows);
+    console.log("📦 Items returned:", result.rows);
 
+    res.json(result.rows);
   } catch (err) {
-    console.error(err);
+    console.error("❌ Items load failed:", err);
     res.status(500).send("Items load failed");
   }
 });
