@@ -311,6 +311,35 @@ function getPrice(product) {
     navigate("/");
   }
 
+  function resetPassword() {
+  resetMessages();
+
+  if (!loginForm.email || !loginForm.password) {
+    setMessage("Enter email and new password.");
+    return;
+  }
+
+  const userExists = users.some(
+    (u) => u.email.toLowerCase() === loginForm.email.toLowerCase()
+  );
+
+  if (!userExists) {
+    setMessage("No account found with that email.");
+    return;
+  }
+
+  const updatedUsers = users.map((u) =>
+    u.email.toLowerCase() === loginForm.email.toLowerCase()
+      ? { ...u, password: loginForm.password }
+      : u
+  );
+
+  setUsers(updatedUsers);
+  localStorage.setItem("arthurs_users", JSON.stringify(updatedUsers));
+
+  setMessage("Password reset successful. You can now log in.");
+}
+
   function logout() {
     setCurrentUser(null);
     setCart([]);
