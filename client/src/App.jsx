@@ -335,8 +335,8 @@ function getPrice(product) {
       : u
   );
 
-  if (!isResetMode) {
-  setMessage("Enter your email and NEW password, then click 'Forgot password' again.");
+ if (!isResetMode) {
+  setMessage("⚠️ Enter your email and NEW password above, then click 'Confirm reset password'.");
   setIsResetMode(true);
   return;
 }
@@ -1596,9 +1596,9 @@ function LoginPage({
             type="button"
             style={{ ...styles.secondaryBtn, marginTop: "10px" }}
             onClick={resetPassword}
-          >
-         
-Forgot password?
+          
+>
+  {isResetMode ? "Confirm reset password" : "Forgot password?"}
 </button>
 
 <p style={{ marginTop: "8px", fontSize: "12px", color: "#6b7280" }}>
