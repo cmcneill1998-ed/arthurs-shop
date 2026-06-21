@@ -949,17 +949,30 @@ function CartPage({ cart, subtotal, total, decreaseQty, increaseQty, removeItem 
           <div style={styles.totalBox}>
   <p><strong>Subtotal:</strong> €{Number(subtotal).toFixed(2)}</p>
   <p><strong>Delivery:</strong> Free</p>
-  <p style={styles.total}><strong>Total:</strong> €{Number(total).toFixed(2)}</p>
+  <p style={styles.total}>
+    <strong>Total:</strong> €{Number(total).toFixed(2)}
+  </p>
 
   <button
     style={{ ...styles.primaryBtn, marginTop: "12px", width: "100%" }}
     onClick={() => navigate("/checkout")}
   >
     Go to Checkout
-    <p>
-      (You will be redirected to Stripe for payment)
-    </p>
   </button>
+
+  <div
+    style={{
+      marginTop: "12px",
+      padding: "10px",
+      background: "#f1f5f9",
+      borderRadius: "8px",
+      fontSize: "13px",
+      textAlign: "center",
+      color: "#334155"
+    }}
+  >
+    🔒 You will be redirected to Stripe for secure payment
+  </div>
 </div>
         </>
       )}
