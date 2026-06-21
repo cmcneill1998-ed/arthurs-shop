@@ -758,6 +758,7 @@ fetch(`${API_BASE}/create-checkout-session`, {
                   createAccount={createAccount}
                   login={login}
                   message={message}
+                  API_BASE={API_BASE}
                 />
               ) : (
                 <Navigate to="/" />
@@ -1365,7 +1366,42 @@ function LoginPage({
   createAccount,
   login,
   message,
+  API_BASE // ✅ ADD THIS
 }) {
+
+  // ✅ ADD THIS FUNCTION RIGHT HERE
+  const resetPassword = async () => {
+    if (!loginForm.email || !loginForm.password) {
+      alert("Enter email and new password");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/reset-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: loginForm.email,
+          newPassword: loginForm.password
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Password reset successful ✅");
+      } else {
+        alert("Reset failed");
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("Error resetting password");
+    }
+  };
+
   return (
     <section style={styles.authCard}>
       
