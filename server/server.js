@@ -89,7 +89,7 @@ app.post("/order", async (req, res) => {
     try {
       await resend.emails.send({
         from: "Arthurs <orders@arthursofflicence.com>",
-        to: currentUser.email,
+        to: email,
         subject: "Order Confirmation - Arthurs",
         html: `
           <h2>Thanks for your order, ${customerName}!</h2>
