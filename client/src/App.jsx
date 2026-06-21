@@ -348,23 +348,35 @@ function resetPassword() {
     return emailMatches && securityMatches;
   });
 
-  if (!matchedUser) {
-    setMessage("Details do not match our records.");
-    return;
-  }
-
-  const updatedUsers = users.map((u) =>
-    u.email.toLowerCase() === loginForm.email.toLowerCase()
-      ? { ...u, password: loginForm.password }
-      : u
-  );
-
-  setUsers(updatedUsers);
-  localStorage.setItem("arthurs_users", JSON.stringify(updatedUsers));
-
-  setMessage("✅ Password reset successful. You can now log in.");
-  setIsResetMode(false);
+if (!matchedUser) {
+  setMessage("Details do not match our records.");
+  return;
 }
+
+const updatedUsers = users.map((u) => {
+  if (u.email.toLowerCase() === loginForm.email.toLowerCase()) {
+    return {
+      ...u,
+      password: loginForm.password.trim()
+    };
+  }
+  return u;
+});
+
+setUsers(updatedUsers);
+localStorage.setItem("arthurs_users", JSON.stringify(updatedUsers));
+
+setMessage("✅ Password reset successful. You can now log in.");
+setIsResetMode(false);
+
+setLoginForm({
+  email: "",
+  password: "",
+  resetCheck: ""
+});
+
+}
+
 
   function logout() {
     setCurrentUser(null);
@@ -1913,6 +1925,4 @@ select: {
 },
 
 };
-
-
 
