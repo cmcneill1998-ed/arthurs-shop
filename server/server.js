@@ -102,11 +102,8 @@ app.post("/order", async (req, res) => {
     );
 
     const orderId = result.rows[0].id;
-
-    console.log("✅ Order saved:", orderId);
-
-    // ✅ SAVE ORDER ITEMS
-    for (const item of items) {
+// ✅ SAVE ORDER ITEMS (THIS IS THE MISSING BIT)
+for (const item of items) {
   console.log("🧪 Saving item:", item);
 
   await db.query(
@@ -121,7 +118,8 @@ app.post("/order", async (req, res) => {
   );
 }
 
-console.log("✅ All items saved for order:", orderId);
+console.log("✅ Items saved for order:", orderId);
+
 
     // ✅ SEND CONFIRMATION EMAIL
     try {
@@ -204,7 +202,12 @@ app.get("/order-items/:orderId", async (req, res) => {
     console.log("🔍 Fetching items for order:", orderId);
 
     const result = await db.query(
-      `SELECT * FROM order_items WHERE orderid = $1`,
+      `SELECT
+  productname AS "productName",
+  quantity,
+  price
+FROM order_items 
+WHERE orderid = $1`,
       [orderId]
     );
 
