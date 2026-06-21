@@ -1525,14 +1525,14 @@ function LoginPage({
   >
     Register here
   </button>
-
+</p>
   <button
   style={{ marginTop: "10px" }}
   onClick={resetPassword}
 >
   Forgot password?
 </button>
-</p>
+
 
           <p style={{ marginTop: 12, fontSize: 12, color: "#6b7280" }}>
             Staff demo login: <strong>staff@arthurs.test</strong> / <strong>demo123</strong>
