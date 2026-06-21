@@ -1597,9 +1597,14 @@ function LoginPage({
             style={{ ...styles.secondaryBtn, marginTop: "10px" }}
             onClick={resetPassword}
           >
-           
- {isResetMode ? "Confirm reset password" : "Forgot password?"}
+         
+Forgot password?
 </button>
+
+<p style={{ marginTop: "8px", fontSize: "12px", color: "#6b7280" }}>
+  Enter your email and a new password, then click "Forgot password" to reset it.
+</p>
+
 
 
           <p style={{ marginTop: 12, fontSize: 12, color: "#6b7280" }}>
