@@ -757,6 +757,7 @@ fetch(`${API_BASE}/create-checkout-session`, {
                   setLoginForm={setLoginForm}
                   createAccount={createAccount}
                   login={login}
+                  resetPassword={resetPassword}
                   message={message}
                 />
               ) : (
