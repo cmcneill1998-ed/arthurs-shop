@@ -4,6 +4,8 @@ const express = require("express");
 const cors = require("cors");
 const { Pool } = require("pg");
 const Stripe = require("stripe");
+const { Resend } = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const app = express();
 app.use(cors());
@@ -70,27 +72,56 @@ app.post("/create-checkout-session", async (req, res) => {
 });
 
 
-// =========================
-// OLD ORDER SAVE (optional, can keep)
-// =========================
 app.post("/order", async (req, res) => {
-  const { customerName, email, total, role, hotelRoom, hotelAddress } = req.body;
+  const { customerName, email, total, items = [], role, hotelRoom, hotelAddress } = req.body;
 
   try {
+    // ✅ SAVE ORDER TO DB FIRST
     const result = await db.query(
       `INSERT INTO orders (customerName, email, total, role, hotelRoom, hotelAddress, status, staffNote)
        VALUES ($1, $2, $3, $4, $5, $6, 'Pending', '') RETURNING id`,
       [customerName, email, total, role, hotelRoom || "", hotelAddress || ""]
     );
 
-    res.json({ success: true, orderId: result.rows[0].id });
+    const orderId = result.rows[0].id;
+
+    // ✅ SEND CONFIRMATION EMAIL
+    try {
+      await resend.emails.send({
+        from: "onboarding@resend.dev",
+        to: email,
+        subject: "Order Confirmation - Arthurs",
+        html: `
+          <h2>Thanks for your order, ${customerName}!</h2>
+          <p>Your order ID is <strong>${orderId}</strong></p>
+
+          <h3>Order Details:</h3>
+          <ul>
+            ${items.map(item => `
+              <li>${item.name} x${item.qty || item.quantity || 1}</li>
+            `).join("")}
+          </ul>
+
+          <p><strong>Total:</strong> €${total}</p>
+
+          ${hotelRoom ? `<p><strong>Room:</strong> ${hotelRoom}</p>` : ""}
+          ${hotelAddress ? `<p><strong>Address:</strong> ${hotelAddress}</p>` : ""}
+
+          <p>We’ll process your order shortly.</p>
+          <p>Thanks,<br/>Arthurs</p>
+        `
+      });
+    } catch (emailErr) {
+      console.error("Email failed:", emailErr);
+    }
+
+    res.json({ success: true, orderId });
 
   } catch (err) {
-    console.error(err);
+    console.error("Order failed:", err);
     res.status(500).send("Order failed");
   }
 });
-
 
 // =========================
 // ORDERS (FIXES YOUR 404 ERRORS)

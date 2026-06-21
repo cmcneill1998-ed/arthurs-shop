@@ -1,6 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { Routes, Route, Link, Navigate, useNavigate } from "react-router-dom";
 import logo from "./image.png";
+import Orders from "./Orders";
+
+
+<Routes>
+  <Route path="/" element={<Home />} />
+  <Route path="/cart" element={<Cart />} />
+
+  <Route path="/orders" element={<Orders />} />  {/* ⬅️ ADD THIS LINE */}
+
+</Routes>
+
+
 const API_BASE = "https://arthurs-shop.onrender.com";
 
 const PRODUCTS_PER_PAGE = 50;
@@ -939,6 +951,9 @@ function CartPage({ cart, subtotal, total, decreaseQty, increaseQty, removeItem 
     onClick={() => navigate("/checkout")}
   >
     Go to Checkout
+    <p>
+      (You will be redirected to Stripe for payment)
+    </p>
   </button>
 </div>
         </>
