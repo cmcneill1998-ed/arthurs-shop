@@ -26,6 +26,9 @@ export default function App() {
     },
   ];
 
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState(() => {
     const saved = localStorage.getItem("arthurs_users");
@@ -1544,7 +1547,7 @@ function LoginPage({
 }
 
 const resetPassword = async () => {
-  if (!email || !password) {
+  if (!loginForm.email || !LoginForm.password) {
     alert("Enter email and new password");
     return;
   }
@@ -1556,8 +1559,8 @@ const resetPassword = async () => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        email,
-        newPassword: password
+        email: loginForm.email,
+        newPassword: loginForm.password
       })
     });
 
