@@ -107,19 +107,21 @@ app.post("/order", async (req, res) => {
 
     // ✅ SAVE ORDER ITEMS
     for (const item of items) {
-      await db.query(
-        `INSERT INTO order_items (orderid, productname, quantity, price)
-         VALUES ($1, $2, $3, $4)`,
-        [
-          orderId,
-          item.name,
-          item.qty || item.quantity || 1,
-          item.price || 0
-        ]
-      );
-    }
+  console.log("🧪 Saving item:", item);
 
-    console.log("🛒 Order items saved for order:", orderId);
+  await db.query(
+    `INSERT INTO order_items (orderid, productname, quantity, price)
+     VALUES ($1, $2, $3, $4)`,
+    [
+      orderId,
+      item.name,
+      item.qty || item.quantity || 1,
+      Number(item.price || 0)
+    ]
+  );
+}
+
+console.log("✅ All items saved for order:", orderId);
 
     // ✅ SEND CONFIRMATION EMAIL
     try {
