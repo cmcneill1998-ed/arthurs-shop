@@ -1087,6 +1087,25 @@ function OrdersPage({
   message,
   lastOrder,
 }) {
+  useEffect(() => {
+  if (!lastOrder || !currentUser) return;
+
+  fetch(`${API_BASE}/order`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      customerName: currentUser.fullName,
+      email: currentUser.email,
+      total: lastOrder.total,
+      items: lastOrder.items,
+      role: currentUser.role,
+      hotelRoom: currentUser.hotelRoom || "",
+      hotelAddress: currentUser.hotelAddress || "",
+    }),
+  });
+}, []);
   if (!currentUser) {
     return (
       <section style={styles.card}>
