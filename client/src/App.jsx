@@ -917,18 +917,25 @@ function CartPage({ cart, subtotal, total, decreaseQty, increaseQty, removeItem 
 </p>
               </div>
 
-              <div style={styles.qtyRow}>
-                <button style={styles.qtyBtn} onClick={() => decreaseQty(item.id)}>
-                  −
-                </button>
-                <span style={styles.qtyText}>{item.qty}</span>
-                <button style={styles.qtyBtn} onClick={() => increaseQty(item.id)}>
-                  +
-                </button>
-                <button style={styles.removeBtn} onClick={() => removeItem(item.id)}>
-                  Remove
-                </button>
-              </div>
+              <div style={{
+  display: "flex",
+  alignItems: "center",
+  gap: "10px" // 👈 controls ALL spacing cleanly
+}}>
+  <button style={styles.qtyBtn} onClick={() => decreaseQty(item.id)}>
+    −
+  </button>
+
+  <span style={styles.qtyText}>{item.qty}</span>
+
+  <button style={styles.qtyBtn} onClick={() => increaseQty(item.id)}>
+    +
+  </button>
+
+  <button style={{ ...styles.removeBtn, marginLeft: "10px" }}>
+    Remove
+  </button>
+</div>
             </div>
           ))}
 
