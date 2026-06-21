@@ -88,8 +88,8 @@ app.post("/order", async (req, res) => {
     // ✅ SEND CONFIRMATION EMAIL
     try {
       await resend.emails.send({
-        from: "onboarding@resend.dev",
-        to: "delivered@resend.dev",
+        from: "orders@arthursofflicence@gmail.com",
+        to: "currentUser.email",
         subject: "Order Confirmation - Arthurs",
         html: `
           <h2>Thanks for your order, ${customerName}!</h2>
