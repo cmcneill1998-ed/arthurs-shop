@@ -758,7 +758,6 @@ fetch(`${API_BASE}/create-checkout-session`, {
                   createAccount={createAccount}
                   login={login}
                   message={message}
-                  API_BASE={API_BASE}
                 />
               ) : (
                 <Navigate to="/" />
@@ -1365,52 +1364,17 @@ function LoginPage({
   setLoginForm,
   createAccount,
   login,
+  resetPassword,
   message,
-  API_BASE // ✅ ADD THIS
 }) {
-
-  // ✅ ADD THIS FUNCTION RIGHT HERE
-  const resetPassword = async () => {
-    if (!loginForm.email || !loginForm.password) {
-      alert("Enter email and new password");
-      return;
-    }
-
-    try {
-      const res = await fetch(`${API_BASE}/reset-password`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email: loginForm.email,
-          newPassword: loginForm.password
-        })
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        alert("Password reset successful ✅");
-      } else {
-        alert("Reset failed");
-      }
-
-    } catch (err) {
-      console.error(err);
-      alert("Error resetting password");
-    }
-  };
-
   return (
     <section style={styles.authCard}>
-      
-
       {message && <div style={styles.formMessage}>{message}</div>}
 
       {authMode === "register" ? (
         <>
           <h2 style={styles.sectionTitle}>Create Account</h2>
+
           <div style={styles.formGrid}>
             <select
               style={styles.input}
@@ -1458,17 +1422,25 @@ function LoginPage({
                   placeholder="Company name"
                   value={registerForm.companyName}
                   onChange={(e) =>
-                    setRegisterForm({ ...registerForm, companyName: e.target.value })
+                    setRegisterForm({
+                      ...registerForm,
+                      companyName: e.target.value,
+                    })
                   }
                 />
+
                 <input
                   style={styles.input}
                   placeholder="Business address"
                   value={registerForm.address}
                   onChange={(e) =>
-                    setRegisterForm({ ...registerForm, address: e.target.value })
+                    setRegisterForm({
+                      ...registerForm,
+                      address: e.target.value,
+                    })
                   }
                 />
+
                 <input
                   style={styles.input}
                   placeholder="NIF number"
@@ -1485,49 +1457,56 @@ function LoginPage({
                   placeholder="Hotel room"
                   value={registerForm.hotelRoom}
                   onChange={(e) =>
-                    setRegisterForm({ ...registerForm, hotelRoom: e.target.value })
+                    setRegisterForm({
+                      ...registerForm,
+                      hotelRoom: e.target.value,
+                    })
                   }
                 />
+
                 <input
                   style={styles.input}
                   placeholder="Hotel address"
                   value={registerForm.hotelAddress}
                   onChange={(e) =>
-                    setRegisterForm({ ...registerForm, hotelAddress: e.target.value })
+                    setRegisterForm({
+                      ...registerForm,
+                      hotelAddress: e.target.value,
+                    })
                   }
                 />
               </>
             )}
           </div>
 
-        <button
-  style={{ ...styles.primaryBtn, marginTop: "20px" }}
-  onClick={createAccount}
->
-  Create Account
-</button>
+          <button
+            style={{ ...styles.primaryBtn, marginTop: "20px" }}
+            onClick={createAccount}
+          >
+            Create Account
+          </button>
 
-<p style={{ marginTop: "20px", fontSize: 14 }}>
-  Already have an account?{" "}
-  <button
-    type="button"
-    onClick={() => setAuthMode("login")}
-    style={{
-      background: "none",
-      border: "none",
-      color: "#F97316",
-      cursor: "pointer",
-      fontWeight: "bold"
-    }}
-  >
-    Login here
-  </button>
-</p>
-
+          <p style={{ marginTop: "20px", fontSize: 14 }}>
+            Already have an account?{" "}
+            <button
+              type="button"
+              onClick={() => setAuthMode("login")}
+              style={{
+                background: "none",
+                border: "none",
+                color: "#F97316",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              Login here
+            </button>
+          </p>
         </>
       ) : (
         <>
           <h2 style={styles.sectionTitle}>Login</h2>
+
           <div style={styles.formGrid}>
             <input
               style={styles.input}
@@ -1537,10 +1516,11 @@ function LoginPage({
                 setLoginForm({ ...loginForm, email: e.target.value })
               }
             />
+
             <input
               style={styles.input}
               type="password"
-              placeholder="Password"
+              placeholder="Password / New password"
               value={loginForm.password}
               onChange={(e) =>
                 setLoginForm({ ...loginForm, password: e.target.value })
@@ -1549,70 +1529,46 @@ function LoginPage({
           </div>
 
           <button
-  style={{ ...styles.primaryBtn, marginTop: "20px" }}
-  onClick={login}
->
-  Login
-</button>
+            style={{ ...styles.primaryBtn, marginTop: "20px" }}
+            onClick={login}
+          >
+            Login
+          </button>
 
-          <p style={{ marginTop: 12, fontSize: 14 }}>
-  Need an account?{" "}
-  <button
-    type="button"
-    onClick={() => setAuthMode("register")}
-    style={{ background: "none", border: "none", color: "#F97316", cursor: "pointer", fontWeight: "bold" }}
-  >
-    Register here
-  </button>
-</p>
-  <button
-  style={{ marginTop: "10px" }}
-  onClick={resetPassword}
->
-  Forgot password?
-</button>
+          <p style={{ marginTop: "20px", fontSize: 14 }}>
+            Need an account?{" "}
+            <button
+              type="button"
+              onClick={() => setAuthMode("register")}
+              style={{
+                background: "none",
+                border: "none",
+                color: "#F97316",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              Register here
+            </button>
+          </p>
 
+          <button
+            type="button"
+            style={{ ...styles.secondaryBtn, marginTop: "10px" }}
+            onClick={resetPassword}
+          >
+            Forgot password?
+          </button>
 
           <p style={{ marginTop: 12, fontSize: 12, color: "#6b7280" }}>
-            Staff demo login: <strong>staff@arthurs.test</strong> / <strong>demo123</strong>
+            Staff demo login: <strong>staff@arthurs.test</strong> /{" "}
+            <strong>demo123</strong>
           </p>
         </>
       )}
     </section>
   );
 }
-
-const resetPassword = async () => {
-  if (!loginForm.email || !LoginForm.password) {
-    alert("Enter email and new password");
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API_BASE}/reset-password`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email: loginForm.email,
-        newPassword: loginForm.password
-      })
-    });
-
-    const data = await res.json();
-
-    if (data.success) {
-      alert("Password reset successful");
-    } else {
-      alert("Reset failed");
-    }
-
-  } catch (err) {
-    console.error(err);
-    alert("Error resetting password");
-  }
-};
 
 const styles = {
   page: {
