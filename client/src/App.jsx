@@ -57,6 +57,7 @@ const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [checkoutError, setCheckoutError] = useState("");
   const [search, setSearch] = useState("");
+  const [isResetMode, setIsResetMode] = useState(false);
   const [category, setCategory] = useState("All");
   const [page, setPage] = useState(1);
   const [authMode, setAuthMode] = useState("login");
@@ -333,6 +334,13 @@ function getPrice(product) {
       ? { ...u, password: loginForm.password }
       : u
   );
+
+  if (!isResetMode) {
+  setMessage("Enter your email and NEW password, then click 'Forgot password' again.");
+  setIsResetMode(true);
+  return;
+}
+
 
   setUsers(updatedUsers);
   localStorage.setItem("arthurs_users", JSON.stringify(updatedUsers));
@@ -787,6 +795,7 @@ fetch(`${API_BASE}/create-checkout-session`, {
                   createAccount={createAccount}
                   login={login}
                   resetPassword={resetPassword}
+                  isResetMode={isResetMode}
                   message={message}
                 />
               ) : (
@@ -1395,6 +1404,7 @@ function LoginPage({
   createAccount,
   login,
   resetPassword,
+  isResetMode,
   message,
 }) {
   return (
@@ -1587,8 +1597,10 @@ function LoginPage({
             style={{ ...styles.secondaryBtn, marginTop: "10px" }}
             onClick={resetPassword}
           >
-            Forgot password?
-          </button>
+           
+ {isResetMode ? "Confirm reset password" : "Forgot password?"}
+</button>
+
 
           <p style={{ marginTop: 12, fontSize: 12, color: "#6b7280" }}>
             Staff demo login: <strong>staff@arthurs.test</strong> /{" "}
