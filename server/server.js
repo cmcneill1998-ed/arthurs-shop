@@ -88,8 +88,8 @@ app.post("/order", async (req, res) => {
     // ✅ SEND CONFIRMATION EMAIL
     try {
       await resend.emails.send({
-        from: "orders@arthursofflicence@gmail.com",
-        to: "currentUser.email",
+        from: "Arthurs <orders@arthursofflicence.com>",
+        to: currentUser.email,
         subject: "Order Confirmation - Arthurs",
         html: `
           <h2>Thanks for your order, ${customerName}!</h2>
@@ -109,7 +109,7 @@ app.post("/order", async (req, res) => {
 
           <p>We’ll process your order shortly.</p>
           <p>Thanks,<br/>Arthurs</p>
-        `
+      `
       });
     } catch (emailErr) {
       console.error("Email failed:", emailErr);
