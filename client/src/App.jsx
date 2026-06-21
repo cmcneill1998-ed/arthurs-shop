@@ -1597,21 +1597,29 @@ function LoginPage({
             style={{ ...styles.secondaryBtn, marginTop: "10px" }}
             onClick={resetPassword}
           
+
 >
-  {isResetMode ? "Confirm reset password" : "Forgot password?"}
-</button>
+    {isResetMode ? "Confirm reset password" : "Forgot password?"}
+  </button>
 
-<p style={{ marginTop: "8px", fontSize: "12px", color: "#6b7280" }}>
-  Enter your email and a new password, then click "Forgot password" to reset it.
-</p>
+  {/* ✅ THIS WILL NOW SHOW PROPERLY */}
+  <p
+    style={{
+      marginTop: "8px",
+      fontSize: "12px",
+      color: "#6b7280",
+      textAlign: "center",
+    }}
+  >
+    Enter your email and a new password, then click the button above to reset it.
+  </p>
 
+  <p style={{ marginTop: 12, fontSize: 12, color: "#6b7280" }}>
+    Staff demo login: <strong>staff@arthurs.test</strong> /{" "}
+    <strong>demo123</strong>
+  </p>
+</>
 
-
-          <p style={{ marginTop: 12, fontSize: 12, color: "#6b7280" }}>
-            Staff demo login: <strong>staff@arthurs.test</strong> /{" "}
-            <strong>demo123</strong>
-          </p>
-        </>
       )}
     </section>
   );
