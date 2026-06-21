@@ -1434,16 +1434,25 @@ function LoginPage({
             )}
           </div>
 
-          <button style={styles.primaryBtn} onClick={createAccount}>
-            Create Account
-          </button>
+        <button
+  style={{ ...styles.primaryBtn, marginTop: "20px" }}
+  onClick={createAccount}
+>
+  Create Account
+</button>
 
-          <p style={{ marginTop: 12, fontSize: 14 }}>
+<p style={{ marginTop: "20px", fontSize: 14 }}>
   Already have an account?{" "}
   <button
     type="button"
     onClick={() => setAuthMode("login")}
-    style={{ background: "none", border: "none", color: "#F97316", cursor: "pointer", fontWeight: "bold" }}
+    style={{
+      background: "none",
+      border: "none",
+      color: "#F97316",
+      cursor: "pointer",
+      fontWeight: "bold"
+    }}
   >
     Login here
   </button>
