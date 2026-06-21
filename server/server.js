@@ -22,6 +22,24 @@ db.connect()
   .then(() => console.log("Connected to PostgreSQL ✅"))
   .catch((err) => console.error("DB connection failed:", err));
 
+  // ✅ ENSURE order_items TABLE EXISTS
+async function ensureOrderItemsTable() {
+  try {
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS order_items (
+        id SERIAL PRIMARY KEY,
+        orderid INTEGER NOT NULL,
+        productname TEXT NOT NULL,
+        quantity INTEGER NOT NULL,
+        price NUMERIC(10,2) DEFAULT 0
+      );
+    `);
+    console.log("✅ order_items table ready");
+  } catch (err) {
+    console.error("❌ Failed to create order_items table:", err);
+  }
+}
+
 
 // =========================
 // PRODUCTS
@@ -90,7 +108,7 @@ app.post("/order", async (req, res) => {
     // ✅ SAVE ORDER ITEMS
     for (const item of items) {
       await db.query(
-        `INSERT INTO order_items (orderId, productName, quantity, price)
+        `INSERT INTO order_items (orderid, productname, quantity, price)
          VALUES ($1, $2, $3, $4)`,
         [
           orderId,
@@ -181,24 +199,20 @@ app.get("/order-items/:orderId", async (req, res) => {
   const orderId = req.params.orderId;
 
   try {
-    console.log("🔍 Loading items for order:", orderId);
-
     const result = await db.query(
       `SELECT 
-        productName AS "productName",
+        productname AS "productName",
         quantity,
         price
        FROM order_items
-       WHERE orderId = $1`,
+       WHERE orderid = $1`,
       [orderId]
     );
-
-    console.log("📦 Items returned:", result.rows);
 
     res.json(result.rows);
   } catch (err) {
     console.error("❌ Items load failed:", err);
-    res.status(500).send("Items load failed");
+    res.status(500).json({ error: "Items load failed" });
   }
 });
 
@@ -252,6 +266,7 @@ app.get("/", (req, res) => {
   res.send("Backend working");
 });
 
+ensureOrderItemsTable();
 app.listen(process.env.PORT || 10000, () => {
   console.log("Server running ✅");
 });
