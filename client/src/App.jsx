@@ -293,26 +293,24 @@ function getPrice(product) {
     navigate("/");
   }
 
-  function login() {
-    resetMessages();
+ function login() {
+  resetMessages();
 
-    const matchedUser = users.find((u) =>
-  u.email.toLowerCase() === loginForm.email.toLowerCase() &&
-  (
-    (u.role === "customer" && u.hotelRoom === loginForm.resetCheck) ||
-    (u.role === "bar" && u.nif === loginForm.resetCheck)
-  )
-);
+  const foundUser = users.find(
+    (u) =>
+      u.email.toLowerCase() === loginForm.email.toLowerCase() &&
+      u.password === loginForm.password
+  );
 
-if (!matchedUser) {
-  setMessage("Details do not match our records.");
-  return;
-}
-
-    setCurrentUser(foundUser);
-    setMessage(`Logged in as ${foundUser.role}.`);
-    navigate("/");
+  if (!foundUser) {
+    setMessage("Login details not recognised.");
+    return;
   }
+
+  setCurrentUser(foundUser);
+  setMessage(`Logged in as ${foundUser.role}.`);
+  navigate("/");
+}
 
 function resetPassword() {
   resetMessages();
