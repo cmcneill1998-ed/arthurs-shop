@@ -621,7 +621,7 @@ fetch(`${API_BASE}/create-checkout-session`, {
         <nav style={styles.nav}>
           <div style={styles.navLinks}>
             <Link style={styles.navLink} to="/">Products</Link>
-            <Link style={styles.navLink} to="/cart">Cart ({cart.length})</Link>
+            <Link style={styles.navLink} to="/cart">Cart ({cart.reduce((total, item) => total + item.qty, 0)})</Link>
             <Link style={styles.navLink} to="/orders">Orders</Link>
             {currentUser && <Link style={styles.navLink} to="/account">Account</Link>}
             {isStaff && <Link style={styles.navLink} to="/add-product">Add Product</Link>}
