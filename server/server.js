@@ -22,6 +22,21 @@ db.connect()
   .then(() => console.log("Connected to PostgreSQL ✅"))
   .catch((err) => console.error("DB connection failed:", err));
 
+  async function insertTestProduct() {
+  try {
+    await db.query(`
+      INSERT INTO products (name, price)
+      VALUES ('Test Product (1p)', 0.01)
+      ON CONFLICT DO NOTHING;
+    `);
+
+    console.log("✅ Test product added");
+  } catch (err) {
+    console.error("❌ Failed to add test product:", err);
+  }
+}
+
+
   // ✅ ENSURE order_items TABLE EXISTS
 async function ensureOrderItemsTable() {
   try {
@@ -281,6 +296,8 @@ app.get("/", (req, res) => {
 });
 
 ensureOrderItemsTable();
+insertTestProduct();   // ✅ ADD IT HERE
+
 app.listen(process.env.PORT || 10000, () => {
   console.log("Server running ✅");
 });
