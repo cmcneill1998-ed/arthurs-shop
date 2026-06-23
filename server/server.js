@@ -30,13 +30,19 @@ async function ensureOrderItemsTable() {
         id SERIAL PRIMARY KEY,
         orderid INTEGER NOT NULL,
         productname TEXT NOT NULL,
-        quantity INTEGER NOT NULL,
-        price NUMERIC(10,2) DEFAULT 0
+        quantity INTEGER NOT NULL
       );
     `);
+
+    // ✅ THIS FIXES YOUR ERROR
+    await db.query(`
+      ALTER TABLE order_items
+      ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0;
+    `);
+
     console.log("✅ order_items table ready");
   } catch (err) {
-    console.error("❌ Failed to create order_items table:", err);
+    console.error("❌ Failed to create/update order_items table:", err);
   }
 }
 
