@@ -26,7 +26,7 @@ db.connect()
   try {
     await db.query(`
       INSERT INTO products (name, price, category)
-      VALUES ('Test Product (1p)', 0.01, 'test')
+      VALUES ('Test Product (1p)', 0.01, 'soft drinks')
       ON CONFLICT DO NOTHING;
     `);
 
@@ -60,6 +60,20 @@ async function ensureOrderItemsTable() {
     console.error("❌ Failed to create/update order_items table:", err);
   }
 }
+
+async function ensureProductsTableFix() {
+  try {
+    await db.query(`
+      ALTER TABLE products
+      ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0;
+    `);
+
+    console.log("✅ products table updated");
+  } catch (err) {
+    console.error("❌ Failed to update products table:", err);
+  }
+}
+
 
 
 // =========================
@@ -296,7 +310,8 @@ app.get("/", (req, res) => {
 });
 
 ensureOrderItemsTable();
-insertTestProduct();   // ✅ ADD IT HERE
+ensureProductsTableFix();   // ✅ ADD THIS
+insertTestProduct();
 
 app.listen(process.env.PORT || 10000, () => {
   console.log("Server running ✅");
