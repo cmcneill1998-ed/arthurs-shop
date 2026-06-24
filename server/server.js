@@ -71,7 +71,7 @@ async function ensureProductsTableFix() {
     // ✅ set your test product to 1p
  await db.query(`
   UPDATE products
-  SET price = 0.01
+  SET price = 0.5
   WHERE price = 0;
 `);
 
