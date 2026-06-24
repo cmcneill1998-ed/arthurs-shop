@@ -1316,12 +1316,36 @@ function OrdersPage({
                   style={styles.input}
                 />
 
-                <button
-                  style={styles.primaryBtn}
-                  onClick={() => markDelivered(order.id)}
-                >
-                  Mark Delivered
-                </button>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
+  <button
+    style={styles.primaryBtn}
+    onClick={() => markDelivered(order.id)}
+  >
+    Mark Delivered
+  </button>
+
+  <button
+    style={styles.removeBtn}
+    onClick={() => {
+      if (!window.confirm(`Delete order #${order.id}?`)) return;
+
+      fetch(`${API_BASE}/orders/delete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: order.id }),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error();
+          window.location.reload();
+        })
+        .catch(() => alert("Failed to delete order"));
+    }}
+  >
+    Delete Order
+  </button>
+</div>
 
                 <button
                   style={styles.removeBtn}
