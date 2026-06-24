@@ -140,8 +140,8 @@ const [password, setPassword] = useState("");
             name: p.name || "Unnamed product",
             category: p.category || "Uncategorised",
             description: p.description || "",
-            retailPrice: Number(p.retailprice ?? p.retailPrice ?? 0),
-            barPrice: Number(p.barprice ?? p.barPrice ?? 0),
+            retailPrice: Number(p.retailprice ?? p.retailPrice ?? p.price ?? 0),
+            barPrice: Number(p.barprice ?? p.barPrice ?? p.price ?? 0),
           }))
         : [];
 
@@ -640,8 +640,8 @@ fetch(`${API_BASE}/create-checkout-session`, {
             name: p.name || "Unnamed product",
             category: p.category || "Uncategorised",
             description: p.description || "",
-            retailPrice: Number(p.retailprice ?? p.retailPrice ?? 0),
-            barPrice: Number(p.barprice ?? p.barPrice ?? 0),
+            retailPrice: Number(p.retailprice ?? p.retailPrice ?? p.price ?? 0),
+            barPrice: Number(p.barprice ?? p.barPrice ?? p.price ?? 0),
           }))
         : [];
 
