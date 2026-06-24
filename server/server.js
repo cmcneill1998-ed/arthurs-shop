@@ -25,8 +25,8 @@ db.connect()
   async function insertTestProduct() {
   try {
     await db.query(`
-      INSERT INTO products (name, price)
-      VALUES ('Test Product (1p)', 0.01)
+      INSERT INTO products (name, price, category)
+      VALUES ('Test Product (1p)', 0.01, 'test')
       ON CONFLICT DO NOTHING;
     `);
 
