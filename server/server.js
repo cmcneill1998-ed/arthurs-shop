@@ -308,27 +308,6 @@ app.post("/reset-password", async (req, res) => {
   }
 });
 
-async function deleteAllExceptOrder30() {
-  try {
-    const keepId = 30;
-
-    // delete other items first
-    await db.query(
-      "DELETE FROM order_items WHERE orderid <> $1",
-      [keepId]
-    );
-
-    // then delete orders
-    await db.query(
-      "DELETE FROM orders WHERE id <> $1",
-      [keepId]
-    );
-
-    console.log("✅ All orders deleted except #30");
-  } catch (err) {
-    console.error("❌ Failed to clean orders:", err);
-  }
-}
 
 
 // =========================
@@ -339,7 +318,6 @@ app.get("/", (req, res) => {
 });
 
 ensureOrderItemsTable();   
-deleteAllExceptOrder30(); // ✅ DELETE ALL ORDERS (FOR TESTING PURPOSES)
 
 app.listen(process.env.PORT || 10000, () => {
   console.log("Server running ✅");

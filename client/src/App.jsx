@@ -1250,14 +1250,29 @@ function OrdersPage({
             <p>Status: {order.status || "Pending"}</p>
             {order.staffNote ? <p>Staff note: {order.staffNote}</p> : null}
 
-            <button
-              style={{ ...styles.secondaryBtn, marginBottom: 10 }}
-              onClick={() => loadItems(order.id)}
-            >
-              View Items
-            </button>
+           <button
+  onClick={() => {
+    if (openOrders[order.id]) {
+      // ✅ hide items
+      setOpenOrders(prev => ({
+        ...prev,
+        [order.id]: false
+      }));
+    } else {
+      // ✅ load + show items
+      loadItems(order.id);
+      setOpenOrders(prev => ({
+        ...prev,
+        [order.id]: true
+      }));
+    }
+  }}
+>
+  {openOrders[order.id] ? "Hide Items" : "View Items"}
+</button>
 
-            {orderItems[order.id] && orderItems[order.id].length > 0 && (
+const [openOrders, setOpenOrders] = useState({});
+            {openOrders[order.id] && orderItems[order.id] && (
               <div style={{ marginBottom: 10 }}>
                 {orderItems[order.id].map((item, i) => (
                   <p key={i} style={styles.smallText}>
