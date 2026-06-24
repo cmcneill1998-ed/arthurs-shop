@@ -105,22 +105,35 @@ app.post("/create-checkout-session", async (req, res) => {
   try {
     const { items } = req.body;
 
+    console.log("🧪 Stripe items:", items);
 
-console.log("🧪 Stripe items:", items);   // ✅ ADD HERE
+    const line_items = items.map((item) => {
+      const price = Number(
+        item.price ??
+        item.retailPrice ??
+        item.retailprice ??
+        item.barPrice ??
+        item.barprice ??
+        0
+      );
 
+      console.log("🧪 Stripe item:", item, "→ price used:", price);
 
-    const line_items = items.map((item) => ({
-  price_data: {
-    currency: "eur",
-    product_data: {
-      name: item.name,
-    },
-    unit_amount: Math.round(
-      Number(item.price ?? item.retailPrice ?? 0) * 100
-    ),
-  },
-  quantity: item.qty,
-}));
+      if (!price || price <= 0) {
+        throw new Error(`Invalid price for ${item.name}: ${price}`);
+      }
+
+      return {
+        price_data: {
+          currency: "eur",
+          product_data: {
+            name: item.name,
+          },
+          unit_amount: Math.round(price * 100),
+        },
+        quantity: item.qty || item.quantity || 1,
+      };
+    });
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -134,7 +147,7 @@ console.log("🧪 Stripe items:", items);   // ✅ ADD HERE
 
   } catch (err) {
     console.error("Stripe error:", err);
-    res.status(500).json({ error: "Stripe failed" });
+    res.status(500).json({ error: "Stripe failed", details: err.message });
   }
 });
 
@@ -162,7 +175,14 @@ for (const item of items) {
       orderId,
       item.name,
       item.qty || item.quantity || 1,
-      Number(item.price || 0)
+      Number(
+  item.price ??
+  item.retailPrice ??
+  item.retailprice ??
+  item.barPrice ??
+  item.barprice ??
+  0
+)
     ]
   );
 }
