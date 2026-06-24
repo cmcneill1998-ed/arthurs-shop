@@ -18,22 +18,6 @@ const db = new Pool({
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-db.connect()
-  .then(() => console.log("Connected to PostgreSQL ✅"))
-  .catch((err) => console.error("DB connection failed:", err));
-
-  async function insertTestProduct() {
-  try {
-    await db.query(`
-      INSERT INTO products (name, price, category)
-      VALUES ('Test Product (1p)', 0.5, 'soft drinks')
-    `);
-
-    console.log("✅ Test product added with 1p price");
-  } catch (err) {
-    console.error("❌ Failed to add test product:", err);
-  }
-}
 
 
   // ✅ ENSURE order_items TABLE EXISTS
@@ -60,27 +44,6 @@ async function ensureOrderItemsTable() {
   }
 }
 
-async function ensureProductsTableFix() {
-  try {
-    // ✅ make sure price column exists
-    await db.query(`
-      ALTER TABLE products
-      ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0.1;
-    `);
-
-    // ✅ set your test product to 1p
- await db.query(`
-  UPDATE products
-  SET price = 0.5
-  WHERE price = 0;
-`);
-
-
-    console.log("✅ products table updated + test product set to 1p");
-  } catch (err) {
-    console.error("❌ Failed to update products table:", err);
-  }
-}
 
 
 
@@ -368,8 +331,6 @@ app.get("/", (req, res) => {
 });
 
 ensureOrderItemsTable();
-ensureProductsTableFix();   // ✅ ADD THIS
-insertTestProduct();
 deleteTestProducts();      // ✅ ADD THIS
 
 app.listen(process.env.PORT || 10000, () => {
