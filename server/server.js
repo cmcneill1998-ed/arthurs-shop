@@ -312,24 +312,23 @@ async function deleteAllExceptOrder30() {
   try {
     const keepId = 30;
 
-    // ✅ delete all order items NOT linked to order 30
-    await db.query(`
-      DELETE FROM order_items
-      WHERE orderid != $1
-    `, [keepId]);
+    // delete other items first
+    await db.query(
+      "DELETE FROM order_items WHERE orderid <> $1",
+      [keepId]
+    );
 
-    // ✅ delete all orders except 30
-    await db.query(`
-      DELETE FROM orders
-      WHERE id != $1
-    `, [keepId]);
+    // then delete orders
+    await db.query(
+      "DELETE FROM orders WHERE id <> $1",
+      [keepId]
+    );
 
     console.log("✅ All orders deleted except #30");
   } catch (err) {
     console.error("❌ Failed to clean orders:", err);
   }
 }
-
 
 
 // =========================
