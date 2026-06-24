@@ -27,10 +27,9 @@ db.connect()
     await db.query(`
       INSERT INTO products (name, price, category)
       VALUES ('Test Product (1p)', 0.01, 'soft drinks')
-      ON CONFLICT DO NOTHING;
     `);
 
-    console.log("✅ Test product added");
+    console.log("✅ Test product added with 1p price");
   } catch (err) {
     console.error("❌ Failed to add test product:", err);
   }
