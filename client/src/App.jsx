@@ -1198,7 +1198,7 @@ function CheckoutPage({
   );
 }
 
-const [openOrders, setOpenOrders] = useState({});
+
 function OrdersPage({
   currentUser,
   isStaff,
@@ -1211,6 +1211,8 @@ function OrdersPage({
   message,
   lastOrder,
 }) {
+
+  const [openOrders, setOpenOrders] = useState({});
   if (!currentUser) {
     return (
       <section style={styles.card}>
