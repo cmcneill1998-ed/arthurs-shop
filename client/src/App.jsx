@@ -576,7 +576,7 @@ fetch(`${API_BASE}/create-checkout-session`, {
 }
 
   function markDelivered(orderId) {
-    fetch(`${API_BASE}/order`, {
+    fetch(`${API_BASE}/orders/update`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
