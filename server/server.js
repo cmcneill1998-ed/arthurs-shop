@@ -44,6 +44,20 @@ async function ensureOrderItemsTable() {
   }
 }
 
+async function fixBarPrices() {
+  try {
+    await db.query(`
+      UPDATE products
+      SET barprice = retailprice * 0.8
+    `);
+
+    console.log("✅ Bar prices updated");
+  } catch (err) {
+    console.error("❌ Failed to update bar prices:", err);
+  }
+}
+
+
 
 
 
@@ -308,10 +322,6 @@ app.post("/reset-password", async (req, res) => {
   }
 });
 
-await db.query(`
-  UPDATE products
-  SET barprice = retailprice * 0.8
-`);
 
 
 
@@ -323,6 +333,7 @@ app.get("/", (req, res) => {
 });
 
 ensureOrderItemsTable();   
+fixBarPrices();   // ✅ run once
 
 app.listen(process.env.PORT || 10000, () => {
   console.log("Server running ✅");
