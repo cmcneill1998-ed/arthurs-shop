@@ -63,12 +63,20 @@ async function ensureOrderItemsTable() {
 
 async function ensureProductsTableFix() {
   try {
+    // ✅ make sure price column exists
     await db.query(`
       ALTER TABLE products
       ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0;
     `);
 
-    console.log("✅ products table updated");
+    // ✅ set your test product to 1p
+    await db.query(`
+      UPDATE products
+      SET price = 0.01
+      WHERE name = 'Test Product (1p)';
+    `);
+
+    console.log("✅ products table updated + test product set to 1p");
   } catch (err) {
     console.error("❌ Failed to update products table:", err);
   }
