@@ -747,19 +747,20 @@ fetch(`${API_BASE}/create-checkout-session`, {
             path="/"
             element={
               <ProductsPage
-                filteredProducts={filteredProducts}
-                categories={categories}
-                category={category}
-                setCategory={setCategory}
-                search={search}
-                setSearch={setSearch}
-                searchSuggestions={searchSuggestions}
-                addToCart={addToCart}
-                getPrice={getPrice}
-                isBar={isBar}
-                page={page}
-                setPage={setPage}
-              />
+  filteredProducts={filteredProducts}
+  categories={categories}
+  category={category}
+  setCategory={setCategory}
+  search={search}
+  setSearch={setSearch}
+  searchSuggestions={searchSuggestions}
+  addToCart={addToCart}
+  getPrice={getPrice}
+  isBar={isBar}
+  isStaff={isStaff}
+  page={page}
+  setPage={setPage}
+/>
             }
           />
 
@@ -886,6 +887,7 @@ function ProductsPage({
   addToCart,
   getPrice,
   isBar,
+  isStaff,
   page,
   setPage,
 }) {
