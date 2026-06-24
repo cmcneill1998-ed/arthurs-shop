@@ -26,7 +26,7 @@ db.connect()
   try {
     await db.query(`
       INSERT INTO products (name, price, category)
-      VALUES ('Test Product (1p)', 0.11, 'soft drinks')
+      VALUES ('Test Product (1p)', 0.5, 'soft drinks')
     `);
 
     console.log("✅ Test product added with 1p price");
@@ -51,7 +51,7 @@ async function ensureOrderItemsTable() {
     // ✅ THIS FIXES YOUR ERROR
     await db.query(`
       ALTER TABLE order_items
-      ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0.1;
+      ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0.5;
     `);
 
     console.log("✅ order_items table ready");
