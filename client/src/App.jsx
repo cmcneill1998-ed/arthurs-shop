@@ -1253,13 +1253,11 @@ function OrdersPage({
            <button
   onClick={() => {
     if (openOrders[order.id]) {
-      // ✅ hide items
       setOpenOrders(prev => ({
         ...prev,
         [order.id]: false
       }));
     } else {
-      // ✅ load + show items
       loadItems(order.id);
       setOpenOrders(prev => ({
         ...prev,
