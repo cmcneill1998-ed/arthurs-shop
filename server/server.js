@@ -70,11 +70,12 @@ async function ensureProductsTableFix() {
     `);
 
     // ✅ set your test product to 1p
-    await db.query(`
-      UPDATE products
-      SET price = 0.01
-      WHERE name = 'Test Product (1p)';
-    `);
+ await db.query(`
+  UPDATE products
+  SET price = 0.01
+  WHERE price = 0;
+`);
+
 
     console.log("✅ products table updated + test product set to 1p");
   } catch (err) {
