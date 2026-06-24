@@ -104,7 +104,7 @@ app.get("/products", async (req, res) => {
 app.post("/create-checkout-session", async (req, res) => {
   try {
     const { items } = req.body;
-    const { items } = req.body;
+
 
 console.log("🧪 Stripe items:", items);   // ✅ ADD HERE
 
