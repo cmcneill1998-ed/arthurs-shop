@@ -953,52 +953,63 @@ function ProductsPage({
       </div>
 
       <div style={styles.productGrid}>
-        {currentProducts.map((p) => (
-          <div key={p.id} style={styles.productCard}>
-            <div>
-              <p style={styles.categoryTag}>{p.category}</p>
-              <h3 style={styles.productTitle}>{p.name}</h3>
-              <p style={styles.desc}>{p.description || " "}</p>
-            </div>
-
-            <div>
-              <p style={styles.price}>€{Number(getPrice(p)).toFixed(2)}</p>
-              <p style={styles.smallText}>
-                {isBar ? "Bar discount applied" : ""}
-              </p>
-            </div>
-
-            <button style={styles.primaryBtn} onClick={() => addToCart(p)}>
-              Add to Basket
-            </button>
-            
-{isStaff && (
-  <button
-    style={styles.removeBtn}
-    onClick={() => {
-      if (!window.confirm(`Delete ${p.name}?`)) return;
-
-      fetch(`${API_BASE}/products/delete`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: p.id }),
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error();
-          window.location.reload();
-        })
-        .catch(() => alert("Failed to delete product"));
-    }}
-  >
-    Delete Product
-  </button>
-)}
-
-          </div>
-        ))}
+  {currentProducts.map((p) => (
+    <div key={p.id} style={styles.productCard}>
+      <div>
+        <p style={styles.categoryTag}>{p.category}</p>
+        <h3 style={styles.productTitle}>{p.name}</h3>
+        <p style={styles.desc}>{p.description || " "}</p>
       </div>
+
+      <div>
+        <p style={styles.price}>€{Number(getPrice(p)).toFixed(2)}</p>
+        <p style={styles.smallText}>
+          {isBar ? "Bar discount applied" : ""}
+        </p>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+          marginTop: "10px",
+        }}
+      >
+        <button
+          style={styles.primaryBtn}
+          onClick={() => addToCart(p)}
+        >
+          Add to Basket
+        </button>
+
+        {isStaff && (
+          <button
+            style={styles.removeBtn}
+            onClick={() => {
+              if (!window.confirm(`Delete ${p.name}?`)) return;
+
+              fetch(`${API_BASE}/products/delete`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id: p.id }),
+              })
+                .then((res) => {
+                  if (!res.ok) throw new Error();
+                  window.location.reload();
+                })
+                .catch(() => alert("Failed to delete product"));
+            }}
+          >
+            Delete Product
+          </button>
+        )}
+      </div>
+    </div>
+  ))}
+</div>
 
       <div style={styles.paginationWrap}>
         <button
@@ -1346,28 +1357,6 @@ function OrdersPage({
     Delete Order
   </button>
 </div>
-
-                <button
-                  style={styles.removeBtn}
-                  onClick={() => {
-                    if (!window.confirm(`Delete order #${order.id}?`)) return;
-
-                    fetch(`${API_BASE}/orders/delete`, {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({ id: order.id }),
-                    })
-                      .then((res) => {
-                        if (!res.ok) throw new Error();
-                        window.location.reload();
-                      })
-                      .catch(() => alert("Failed to delete order"));
-                  }}
-                >
-                  Delete Order
-                </button>
               </>
             )}
           </div>
