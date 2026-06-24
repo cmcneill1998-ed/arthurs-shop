@@ -104,17 +104,23 @@ app.get("/products", async (req, res) => {
 app.post("/create-checkout-session", async (req, res) => {
   try {
     const { items } = req.body;
+    const { items } = req.body;
+
+console.log("🧪 Stripe items:", items);   // ✅ ADD HERE
+
 
     const line_items = items.map((item) => ({
-      price_data: {
-        currency: "eur",
-        product_data: {
-          name: item.name,
-        },
-        unit_amount: Math.round(item.price * 100),
-      },
-      quantity: item.qty,
-    }));
+  price_data: {
+    currency: "eur",
+    product_data: {
+      name: item.name,
+    },
+    unit_amount: Math.round(
+      Number(item.price ?? item.retailPrice ?? 0) * 100
+    ),
+  },
+  quantity: item.qty,
+}));
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
