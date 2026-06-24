@@ -26,7 +26,7 @@ db.connect()
   try {
     await db.query(`
       INSERT INTO products (name, price, category)
-      VALUES ('Test Product (1p)', 0.01, 'soft drinks')
+      VALUES ('Test Product (1p)', 0.11, 'soft drinks')
     `);
 
     console.log("✅ Test product added with 1p price");
@@ -51,7 +51,7 @@ async function ensureOrderItemsTable() {
     // ✅ THIS FIXES YOUR ERROR
     await db.query(`
       ALTER TABLE order_items
-      ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0;
+      ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0.1;
     `);
 
     console.log("✅ order_items table ready");
@@ -65,7 +65,7 @@ async function ensureProductsTableFix() {
     // ✅ make sure price column exists
     await db.query(`
       ALTER TABLE products
-      ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0;
+      ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0.1;
     `);
 
     // ✅ set your test product to 1p
