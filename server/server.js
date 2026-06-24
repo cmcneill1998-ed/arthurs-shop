@@ -308,19 +308,19 @@ app.post("/reset-password", async (req, res) => {
   }
 });
 
-async function deleteTestProducts() {
+async function deleteAllOrders() {
   try {
-    await db.query(`
-      DELETE FROM products
-      WHERE name LIKE 'Test Product%';
-    `);
+    // delete items first (important if linked)
+    await db.query(`DELETE FROM order_items`);
 
-    console.log("✅ All test products deleted");
+    // then delete orders
+    await db.query(`DELETE FROM orders`);
+
+    console.log("✅ ALL orders + items deleted");
   } catch (err) {
-    console.error("❌ Failed to delete test products:", err);
+    console.error("❌ Failed to delete orders:", err);
   }
 }
-``
 
 
 // =========================
@@ -331,7 +331,8 @@ app.get("/", (req, res) => {
 });
 
 ensureOrderItemsTable();
-deleteTestProducts();      // ✅ ADD THIS
+deleteTestProducts();      
+deleteAllOrders(); // ✅ DELETE ALL ORDERS (FOR TESTING PURPOSES)
 
 app.listen(process.env.PORT || 10000, () => {
   console.log("Server running ✅");
