@@ -1273,7 +1273,7 @@ function OrdersPage({
 </button>
 
 
-            {openOrders[order.id] && orderItems[order.id] && (
+            {openOrders[order.id] && Array.isArray(orderItems[order.id]) && (
               <div style={{ marginBottom: 10 }}>
                 {orderItems[order.id].map((item, i) => (
                   <p key={i} style={styles.smallText}>
