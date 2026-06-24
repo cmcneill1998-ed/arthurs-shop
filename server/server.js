@@ -105,7 +105,11 @@ app.post("/create-checkout-session", async (req, res) => {
   try {
     const { items } = req.body;
 
-    console.log("🧪 Stripe items:", items);
+    console.log("🧪 Stripe items received:", items);
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      throw new Error("No items received for Stripe checkout");
+    }
 
     const line_items = items.map((item) => {
       const price = Number(
@@ -117,9 +121,10 @@ app.post("/create-checkout-session", async (req, res) => {
         0
       );
 
-      console.log("🧪 Stripe item:", item, "→ price used:", price);
+      console.log("🧪 Stripe item:", item);
+      console.log("💷 Price used:", price);
 
-      if (!price || price <= 0) {
+      if (!price || price <= 0 || Number.isNaN(price)) {
         throw new Error(`Invalid price for ${item.name}: ${price}`);
       }
 
@@ -127,13 +132,15 @@ app.post("/create-checkout-session", async (req, res) => {
         price_data: {
           currency: "eur",
           product_data: {
-            name: item.name,
+            name: item.name || "Unnamed product",
           },
           unit_amount: Math.round(price * 100),
         },
         quantity: item.qty || item.quantity || 1,
       };
     });
+
+    console.log("✅ Stripe line items:", line_items);
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -146,8 +153,11 @@ app.post("/create-checkout-session", async (req, res) => {
     res.json({ url: session.url });
 
   } catch (err) {
-    console.error("Stripe error:", err);
-    res.status(500).json({ error: "Stripe failed", details: err.message });
+    console.error("❌ Stripe error full:", err);
+    res.status(500).json({
+      error: "Stripe failed",
+      details: err.message,
+    });
   }
 });
 
