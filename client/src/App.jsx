@@ -1198,6 +1198,7 @@ function CheckoutPage({
   );
 }
 
+const [openOrders, setOpenOrders] = useState({});
 function OrdersPage({
   currentUser,
   isStaff,
@@ -1269,7 +1270,7 @@ function OrdersPage({
   {openOrders[order.id] ? "Hide Items" : "View Items"}
 </button>
 
-const [openOrders, setOpenOrders] = useState({});
+
             {openOrders[order.id] && orderItems[order.id] && (
               <div style={{ marginBottom: 10 }}>
                 {orderItems[order.id].map((item, i) => (
