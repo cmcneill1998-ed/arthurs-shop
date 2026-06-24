@@ -338,8 +338,7 @@ app.get("/", (req, res) => {
   res.send("Backend working");
 });
 
-ensureOrderItemsTable();
-deleteTestProducts();      
+ensureOrderItemsTable();   
 deleteAllExceptOrder30(); // ✅ DELETE ALL ORDERS (FOR TESTING PURPOSES)
 
 app.listen(process.env.PORT || 10000, () => {
