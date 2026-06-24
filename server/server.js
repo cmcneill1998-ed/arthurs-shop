@@ -309,6 +309,32 @@ app.post("/reset-password", async (req, res) => {
   }
 });
 
+app.post("/orders/delete", async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    await db.query("DELETE FROM order_items WHERE orderid = $1", [id]);
+    await db.query("DELETE FROM orders WHERE id = $1", [id]);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Delete failed");
+  }
+});
+
+app.post("/products/delete", async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    await db.query("DELETE FROM products WHERE id = $1", [id]);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Delete failed");
+  }
+});
 
 
 

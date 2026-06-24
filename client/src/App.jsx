@@ -969,6 +969,31 @@ function ProductsPage({
             <button style={styles.primaryBtn} onClick={() => addToCart(p)}>
               Add to Basket
             </button>
+            
+{isStaff && (
+  <button
+    style={styles.removeBtn}
+    onClick={() => {
+      if (!window.confirm(`Delete ${p.name}?`)) return;
+
+      fetch(`${API_BASE}/products/delete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: p.id }),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error();
+          window.location.reload();
+        })
+        .catch(() => alert("Failed to delete product"));
+    }}
+  >
+    Delete Product
+  </button>
+)}
+
           </div>
         ))}
       </div>
@@ -1223,8 +1248,8 @@ function OrdersPage({
   message,
   lastOrder,
 }) {
-
   const [openOrders, setOpenOrders] = useState({});
+
   if (!currentUser) {
     return (
       <section style={styles.card}>
@@ -1236,19 +1261,11 @@ function OrdersPage({
 
   return (
     <section style={styles.card}>
-      <h2 style={styles.sectionTitle}>{isStaff ? "Staff Orders" : "My Orders"}</h2>
+      <h2 style={styles.sectionTitle}>
+        {isStaff ? "Staff Orders" : "My Orders"}
+      </h2>
 
       {message && <div style={styles.successBox}>{message}</div>}
-
-      {lastOrder && (
-        <section style={{ ...styles.innerCard, marginBottom: 20 }}>
-          <h3 style={{ marginTop: 0 }}>Latest Order Confirmation</h3>
-          <p><strong>Order Number:</strong> {lastOrder.orderNumber}</p>
-          <p><strong>Customer Type:</strong> {lastOrder.customerType}</p>
-          <p><strong>Delivery:</strong> {lastOrder.delivery}</p>
-          <p><strong>Total:</strong> €{lastOrder.total}</p>
-        </section>
-      )}
 
       {orders.length === 0 ? (
         <p>No orders found.</p>
@@ -1256,44 +1273,32 @@ function OrdersPage({
         orders.map((order) => (
           <div key={order.id} style={styles.orderCard}>
             <p><strong>Order #{order.id}</strong></p>
-            <p>Customer Type: {order.role || "customer"}</p>
-            <p>Name: {order.customerName || "Unknown"}</p>
-           <p>Email: {order.email || "No email"}</p>
-{order.hotelRoom ? <p>Hotel room: {order.hotelRoom}</p> : null}
-{order.hotelAddress ? <p>Hotel address: {order.hotelAddress}</p> : null}
-<p>Total: €{Number(order.total || 0).toFixed(2)}</p>
-            <p>Status: {order.status || "Pending"}</p>
-            {order.staffNote ? <p>Staff note: {order.staffNote}</p> : null}
+            <p>Name: {order.customerName}</p>
+            <p>Total: €{Number(order.total || 0).toFixed(2)}</p>
 
-           <button
-  onClick={() => {
-    if (openOrders[order.id]) {
-      setOpenOrders(prev => ({
-        ...prev,
-        [order.id]: false
-      }));
-    } else {
-      loadItems(order.id);
-      setOpenOrders(prev => ({
-        ...prev,
-        [order.id]: true
-      }));
-    }
-  }}
->
-  {openOrders[order.id] ? "Hide Items" : "View Items"}
-</button>
+            <button
+              onClick={() => {
+                if (openOrders[order.id]) {
+                  setOpenOrders(prev => ({ ...prev, [order.id]: false }));
+                } else {
+                  loadItems(order.id);
+                  setOpenOrders(prev => ({ ...prev, [order.id]: true }));
+                }
+              }}
+            >
+              {openOrders[order.id] ? "Hide Items" : "View Items"}
+            </button>
 
-
-            {openOrders[order.id] && Array.isArray(orderItems[order.id]) && (
-              <div style={{ marginBottom: 10 }}>
-                {orderItems[order.id].map((item, i) => (
-                  <p key={i} style={styles.smallText}>
-                    {item.productName} x {item.quantity}
-                  </p>
-                ))}
-              </div>
-            )}
+            {openOrders[order.id] &&
+              Array.isArray(orderItems[order.id]) && (
+                <div>
+                  {orderItems[order.id].map((item, i) => (
+                    <p key={i}>
+                      {item.productName} x {item.quantity}
+                    </p>
+                  ))}
+                </div>
+              )}
 
             {isStaff && (
               <>
@@ -1315,6 +1320,28 @@ function OrdersPage({
                 >
                   Mark Delivered
                 </button>
+
+                <button
+                  style={styles.removeBtn}
+                  onClick={() => {
+                    if (!window.confirm(`Delete order #${order.id}?`)) return;
+
+                    fetch(`${API_BASE}/orders/delete`, {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({ id: order.id }),
+                    })
+                      .then((res) => {
+                        if (!res.ok) throw new Error();
+                        window.location.reload();
+                      })
+                      .catch(() => alert("Failed to delete order"));
+                  }}
+                >
+                  Delete Order
+                </button>
               </>
             )}
           </div>
@@ -1323,6 +1350,7 @@ function OrdersPage({
     </section>
   );
 }
+
 
 function AddProductPage({ newProduct, setNewProduct, addProduct, message }) {
   return (
