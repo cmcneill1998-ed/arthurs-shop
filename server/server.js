@@ -336,6 +336,23 @@ app.post("/products/delete", async (req, res) => {
   }
 });
 
+app.post("/products/add", async (req, res) => {
+  const { name, category, retailPrice, barPrice, description } = req.body;
+
+  try {
+    await db.query(
+      `INSERT INTO products (name, category, retailprice, barprice, description)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [name, category, retailPrice, barPrice, description]
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("❌ Add product failed:", err);
+    res.status(500).send("Add product failed");
+  }
+});
+
 
 
 // =========================
