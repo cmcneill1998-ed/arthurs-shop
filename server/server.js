@@ -353,6 +353,23 @@ app.post("/products/add", async (req, res) => {
   }
 });
 
+app.post("/products/update", async (req, res) => {
+  const { id, retailPrice } = req.body;
+
+  try {
+    await db.query(
+      "UPDATE products SET retailprice = $1 WHERE id = $2",
+      [retailPrice, id]
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Update failed");
+  }
+});
+
+
 
 
 // =========================

@@ -968,45 +968,71 @@ function ProductsPage({
         </p>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "8px",
-          marginTop: "10px",
-        }}
-      >
-        <button
-          style={styles.primaryBtn}
-          onClick={() => addToCart(p)}
-        >
-          Add to Basket
-        </button>
+      <div style={{
+  display: "flex",
+  flexDirection: "column",
+  gap: "8px",
+  marginTop: "10px",
+}}>
+  <button
+    style={styles.primaryBtn}
+    onClick={() => addToCart(p)}
+  >
+    Add to Basket
+  </button>
 
-        {isStaff && (
-          <button
-            style={styles.removeBtn}
-            onClick={() => {
-              if (!window.confirm(`Delete ${p.name}?`)) return;
+  {isStaff && (
+    <button
+      style={styles.removeBtn}
+      onClick={() => {
+        if (!window.confirm(`Delete ${p.name}?`)) return;
 
-              fetch(`${API_BASE}/products/delete`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ id: p.id }),
-              })
-                .then((res) => {
-                  if (!res.ok) throw new Error();
-                  window.location.reload();
-                })
-                .catch(() => alert("Failed to delete product"));
-            }}
-          >
-            Delete Product
-          </button>
-        )}
-      </div>
+        fetch(`${API_BASE}/products/delete`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: p.id }),
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error();
+            window.location.reload();
+          })
+          .catch(() => alert("Failed to delete product"));
+      }}
+    >
+      Delete Product
+    </button>
+  )}
+
+  {isStaff && (
+    <button
+      style={styles.secondaryBtn}
+      onClick={() => {
+        const newPrice = prompt("Enter new retail price:", p.retailPrice);
+        if (!newPrice) return;
+
+        fetch(`${API_BASE}/products/update`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: p.id,
+            retailPrice: newPrice,
+          }),
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error();
+            window.location.reload();
+          })
+          .catch(() => alert("Failed to update product"));
+      }}
+    >
+      Edit Price
+    </button>
+  )}
+</div>
     </div>
   ))}
 </div>
@@ -1381,12 +1407,20 @@ function AddProductPage({ newProduct, setNewProduct, addProduct, message }) {
           value={newProduct.name}
           onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
         />
-        <input
-          style={styles.input}
-          placeholder="Category"
-          value={newProduct.category}
-          onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-        />
+        <select
+  style={styles.input}
+  value={newProduct.category}
+  onChange={(e) =>
+    setNewProduct({ ...newProduct, category: e.target.value })
+  }
+>
+  <option value="">Select category</option>
+  <option value="soft drinks">Soft drinks</option>
+  <option value="beer">Beer</option>
+  <option value="wine">Wine</option>
+  <option value="spirits">Spirits</option>
+  <option value="snacks">Snacks</option>
+</select>
         <input
           style={styles.input}
           placeholder="Retail price"
