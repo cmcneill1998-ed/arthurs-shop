@@ -1839,12 +1839,14 @@ function LoginPage({
     />
   )}
 
+
           <button
-            style={{ ...styles.primaryBtn, marginTop: "20px" }}
-            onClick={login}
-          >
-            Login
-          </button>
+  style={{ ...styles.primaryBtn, marginTop: "20px" }}
+  onClick={isResetMode ? resetPassword : login}
+>
+  {isResetMode ? "Confirm reset" : "Login"}
+</button>
+
 
           <p style={{ marginTop: "20px", fontSize: 14 }}>
             Need an account?{" "}
@@ -1864,14 +1866,13 @@ function LoginPage({
           </p>
 
           <button
-            type="button"
-            style={{ ...styles.secondaryBtn, marginTop: "10px" }}
-            onClick={resetPassword}
-          
-
+  type="button"
+  style={{ ...styles.secondaryBtn, marginTop: "10px" }}
+  onClick={() => setIsResetMode(!isResetMode)}
 >
-    {isResetMode ? "Confirm reset password" : "Forgot password?"}
-  </button>
+  {isResetMode ? "Back to login" : "Forgot password?"}
+</button>
+
 
   {/* ✅ THIS WILL NOW SHOW PROPERLY */}
   <p
