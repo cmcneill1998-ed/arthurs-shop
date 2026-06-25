@@ -304,7 +304,15 @@ app.get("/orders", async (req, res) => {
   try {
     if (role === "staff") {
       const result = await db.query("SELECT * FROM orders ORDER BY id DESC");
-      return res.json(result.rows);
+
+      const formatted = result.rows.map(order => ({
+        ...order,
+        customerName: order.customername,
+        hotelRoom: order.hotelroom,
+        hotelAddress: order.hoteladdress,
+      }));
+
+      return res.json(formatted);
     }
 
     const result = await db.query(
@@ -312,7 +320,14 @@ app.get("/orders", async (req, res) => {
       [email]
     );
 
-    res.json(result.rows);
+    const formatted = result.rows.map(order => ({
+      ...order,
+      customerName: order.customername,
+      hotelRoom: order.hotelroom,
+      hotelAddress: order.hoteladdress,
+    }));
+
+    res.json(formatted);
 
   } catch (err) {
     console.error(err);
