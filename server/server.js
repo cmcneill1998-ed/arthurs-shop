@@ -169,29 +169,115 @@ console.log("✅ Items saved for order:", orderId);
       const emailResult = await resend.emails.send({
         from: "Arthurs <orders@arthursofflicence.com>",
         to: email,
-        subject: "🍻 Order Confirmation - Arthurs",
+        subject: "Order Confirmation - Arthurs",
         html: `
-          <h2>Thanks for your order, ${customerName}! 🍻</h2>
-          <p>Your order ID is <strong>${orderId}</strong></p>
+  <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; padding: 20px; color: #1f2937;">
 
-          <h3>🛒 Order Details:</h3>
-          <ul>
-            ${items.map(item => `
-              <li>${item.name} x${item.qty || item.quantity || 1}</li>
-            `).join("")}
-          </ul>
+    <div style="text-align:center; margin-bottom: 15px;">
+      <img src="https://arthurs-off-licence.vercel.app/image.png"
+           alt="Arthurs Off Licence"
+           style="width: 180px; margin-bottom: 5px;" />
+      <p style="font-size: 13px; color: #16A34A; margin: 0;">
+        Premium drinks delivery
+      </p>
+    </div>
 
-          <p><strong>Total:</strong> €${total}</p>
+    <h2 style="color: #F97316; margin-bottom: 10px;">
+      Thanks for your order, ${customerName}! 🍻
+    </h2>
 
-          ${hotelRoom ? `<p><strong>Room:</strong> ${hotelRoom}</p>` : ""}
-          ${hotelAddress ? `<p><strong>Address:</strong> ${hotelAddress}</p>` : ""}
+    <p style="margin: 5px 0;">
+      Your order number is <strong>${orderId}</strong>
+    </p>
 
-          <p>✅ We’ll process your order shortly.</p>
-          <p>Orders placed after 12pm will be delivered the next working day.</p>
-          <p>Weekend orders will be delivered Monday.</p>
+    <h3 style="margin-top: 20px; margin-bottom: 10px;">
+      Order Details
+    </h3>
 
-          <p>Thanks,<br/>Arthurs 🍾</p>
-        `
+    <table style="width:100%; border-collapse: collapse; margin: 10px 0;">
+      <tbody>
+        ${items.map(item => {
+          const qty = item.qty || item.quantity || 1;
+          const price = Number(
+            item.price ??
+            item.retailPrice ??
+            item.retailprice ??
+            item.barPrice ??
+            item.barprice ??
+            0
+          );
+
+          return `
+            <tr>
+              <td style="padding: 6px 0;">
+                ${item.name} x${qty}
+              </td>
+              <td style="text-align: right;">
+                €${(price * qty).toFixed(2)}
+              </td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
+
+    <hr style="border:none; border-top:1px solid #e5e7eb; margin: 10px 0;" />
+
+    <table style="width:100%; margin-top:10px;">
+      <tbody>
+        ${
+          Number(total) < 20
+            ? `
+            <tr>
+              <td><strong>Delivery</strong></td>
+              <td style="text-align:right;">€2.50</td>
+            </tr>
+            `
+            : `
+            <tr>
+              <td><strong>Delivery</strong></td>
+              <td style="text-align:right;">Free</td>
+            </tr>
+            `
+        }
+
+        <tr>
+          <td style="padding-top: 6px;"><strong>Total</strong></td>
+          <td style="text-align:right; padding-top: 6px;">
+            <strong>€${Number(total).toFixed(2)}</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    ${hotelRoom ? `
+      <p style="margin: 10px 0;">
+        <strong>Room:</strong> ${hotelRoom}
+      </p>
+    ` : ""}
+
+    ${hotelAddress ? `
+      <p style="margin: 5px 0;">
+        <strong>Address:</strong> ${hotelAddress}
+      </p>
+    ` : ""}
+
+    <p style="margin-top: 15px;">
+      We’ll process your order shortly.
+    </p>
+
+    <p style="font-style: italic; font-size: 13px; color: #6b7280; margin-top: 8px;">
+      Orders placed after 12pm will be delivered the next working day. Weekend orders will be delivered Monday.
+    </p>
+
+    <p style="margin-top: 20px;">
+      Thanks,<br/>
+      <strong style="color:#F97316;">Arthurs 🍾</strong>
+    </p>
+
+  </div>
+`
+
       });
 
       console.log("📧 Email sent:", emailResult);
@@ -264,6 +350,17 @@ app.get("/order-items/:orderId", async (req, res) => {
   } catch (err) {
     console.error("❌ ERROR LOADING ITEMS:", err);
     res.status(500).json({ error: err.message });
+  }
+});
+
+//DELETE THIS AFTER
+app.get("/check-orders", async (req, res) => {
+  try {
+    const result = await db.query("SELECT id, email, customername FROM orders");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error");
   }
 });
 
