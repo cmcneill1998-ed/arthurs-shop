@@ -863,7 +863,9 @@ fetch(`${API_BASE}/create-checkout-session`, {
                   login={login}
                   resetPassword={resetPassword}
                   isResetMode={isResetMode}
+                  setIsResetMode={setIsResetMode}
                   message={message}
+                  
                 />
               ) : (
                 <Navigate to="/" />
@@ -1665,6 +1667,7 @@ function LoginPage({
   login,
   resetPassword,
   isResetMode,
+  setIsResetMode,
   message,
 }) {
   return (
