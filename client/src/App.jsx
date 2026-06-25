@@ -2081,21 +2081,25 @@ header: {
   },
 
   paginationBtn: {
-    padding: "6px 12px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-    background: "#ffffff",
-    cursor: "pointer",
-  },
+  padding: "8px 14px",
+  borderRadius: "8px",
+  border: "1px solid #d1d5db",
+  background: "#ffffff",
+  color: "#111827",   // ✅ ADD THIS
+  cursor: "pointer",
+  fontWeight: "bold",
+},
 
   pageNumber: {
-    width: "32px",
-    height: "32px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-    background: "#ffffff",
-    cursor: "pointer",
-  },
+  width: "36px",
+  height: "36px",
+  borderRadius: "8px",
+  border: "1px solid #d1d5db",
+  background: "#ffffff",
+  color: "#111827",   // ✅ ADD THIS
+  cursor: "pointer",
+  fontWeight: "bold",
+},
 
   pageNumberActive: {
     width: "32px",
