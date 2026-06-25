@@ -1070,12 +1070,14 @@ const [editPrices, setEditPrices] = useState({
         </p>
       </div>
 
-      <div style={{
-  display: "flex",
-  flexDirection: "column",
-  gap: "8px",
-  marginTop: "10px",
-}}>
+      <div
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    marginTop: "10px",
+  }}
+>
   <button
     style={styles.primaryBtn}
     onClick={() => addToCart(p)}
@@ -1108,42 +1110,14 @@ const [editPrices, setEditPrices] = useState({
   )}
 
   {isStaff && (
-  <button
-    style={styles.secondaryBtn}
-    onClick={() => {
-      setEditingProduct(p);
-      setEditPrices({
-        retailPrice: p.retailPrice || "",
-        barPrice: p.barPrice || "",
-      });
-    }}
-  >
-    Edit Price
-  </button>
-)}
-
-  {isStaff && (
     <button
       style={styles.secondaryBtn}
       onClick={() => {
-        const newPrice = prompt("Enter new retail price:", p.retailPrice);
-        if (!newPrice) return;
-
-        fetch(`${API_BASE}/products/update`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: p.id,
-            retailPrice: newPrice,
-          }),
-        })
-          .then((res) => {
-            if (!res.ok) throw new Error();
-            window.location.reload();
-          })
-          .catch(() => alert("Failed to update product"));
+        setEditingProduct(p);
+        setEditPrices({
+          retailPrice: Number(p.retailPrice || 0).toFixed(2),
+          barPrice: Number(p.barPrice || 0).toFixed(2),
+        });
       }}
     >
       Edit Price
