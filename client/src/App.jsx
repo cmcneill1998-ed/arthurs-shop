@@ -978,7 +978,8 @@ const [editPrices, setEditPrices] = useState({
         background: "#ffffff",
         padding: "20px",
         borderRadius: "12px",
-        width: "280px",
+        width: "300px",
+        boxSizing: "border-box",
         maxWidth: "90%",
         boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
       }}
@@ -996,12 +997,13 @@ const [editPrices, setEditPrices] = useState({
 </p>
 <input
   style={{
-  width: "100%",
+  width: "92%",
   boxSizing: "border-box",
   padding: "8px",
   borderRadius: "6px",
   border: "1px solid #d1d5db",
-  marginBottom: "12px",
+  margin: "0 auto 12px auto",
+  display: "block",
   background: "#ffffff",
   color: "#111827",
 }}
@@ -1019,15 +1021,17 @@ const [editPrices, setEditPrices] = useState({
   Bar price
 </p>
 <input
-  style={{
-  width: "100%",
+style={{
+  width: "92%",
   boxSizing: "border-box",
   padding: "8px",
   borderRadius: "6px",
   border: "1px solid #d1d5db",
-  marginBottom: "12px",
+  margin: "0 auto 12px auto",
+  display: "block",
   background: "#ffffff",
   color: "#111827",
+  outline: "none",
 }}
 
   value={editPrices.barPrice}
