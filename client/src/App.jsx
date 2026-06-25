@@ -1437,8 +1437,19 @@ function OrdersPage({
         orders.map((order) => (
           <div key={order.id} style={styles.orderCard}>
             <p><strong>Order #{order.id}</strong></p>
-            <p>Name: {order.customerName}</p>
-            <p>Total: €{Number(order.total || 0).toFixed(2)}</p>
+
+<p><strong>Name:</strong> {order.customerName || "N/A"}</p>
+<p><strong>Email:</strong> {order.email || "N/A"}</p>
+
+{order.hotelRoom && (
+  <p><strong>Room:</strong> {order.hotelRoom}</p>
+)}
+
+{order.hotelAddress && (
+  <p><strong>Address:</strong> {order.hotelAddress}</p>
+)}
+
+<p><strong>Total:</strong> €{Number(order.total || 0).toFixed(2)}</p>
 
             <button
               onClick={() => {
@@ -1631,22 +1642,7 @@ function AccountPage({ isBar, isStaff, profileForm, setProfileForm, saveProfile,
     />
   </>
 ) : null}
-  {!isStaff ? (
-  <>
-    <input
-      style={styles.input}
-      placeholder="Hotel room"
-      value={profileForm.hotelRoom}
-      onChange={(e) => setProfileForm({ ...profileForm, hotelRoom: e.target.value })}
-    />
-    <input
-      style={styles.input}
-      placeholder="Hotel address"
-      value={profileForm.hotelAddress}
-      onChange={(e) => setProfileForm({ ...profileForm, hotelAddress: e.target.value })}
-    />
-  </>
-) : null}
+  
       </div>
 
       <button style={styles.primaryBtn} onClick={saveProfile}>
