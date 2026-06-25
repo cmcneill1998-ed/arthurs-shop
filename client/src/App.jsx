@@ -900,6 +900,12 @@ function ProductsPage({
     visiblePages.push(i);
   }
 
+  const [editingProduct, setEditingProduct] = useState(null);
+const [editPrices, setEditPrices] = useState({
+  retailPrice: "",
+  barPrice: "",
+});
+
   return (
     <section style={styles.card}>
       <h2 style={styles.sectionTitle}>Browse Products</h2>
@@ -951,6 +957,102 @@ function ProductsPage({
       <div style={styles.resultsInfo}>
         Showing {currentProducts.length} of {filteredProducts.length} products
       </div>
+
+      {editingProduct && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: "rgba(0,0,0,0.4)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 9999,
+    }}
+  >
+    <div
+      style={{
+        background: "#ffffff",
+        padding: "20px",
+        borderRadius: "12px",
+        width: "320px",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+      }}
+    >
+      <h3 style={{ marginTop: 0, color: "#F97316" }}>
+        Edit Prices
+      </h3>
+
+      <p style={{ fontWeight: "bold" }}>{editingProduct.name}</p>
+
+      <input
+        style={{ ...styles.input, marginBottom: "10px" }}
+        placeholder="Retail price"
+        value={editPrices.retailPrice}
+        onChange={(e) =>
+          setEditPrices({
+            ...editPrices,
+            retailPrice: e.target.value,
+          })
+        }
+      />
+
+      <input
+        style={{ ...styles.input, marginBottom: "10px" }}
+        placeholder="Bar price"
+        value={editPrices.barPrice}
+        onChange={(e) =>
+          setEditPrices({
+            ...editPrices,
+            barPrice: e.target.value,
+          })
+        }
+      />
+
+      <div style={{ display: "flex", gap: "8px", marginTop: "12px" }}>
+        <button
+          style={styles.primaryBtn}
+          onClick={() => {
+            fetch(`${API_BASE}/products/update`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id: editingProduct.id,
+                retailPrice: Number(editPrices.retailPrice),
+                barPrice: Number(editPrices.barPrice),
+              }),
+            })
+              .then((res) => {
+                if (!res.ok) throw new Error();
+                window.location.reload();
+              })
+              .catch(() => alert("Failed to update product"));
+          }}
+        >
+          Save
+        </button>
+
+        <button
+          style={styles.secondaryBtn}
+          onClick={() => {
+            setEditingProduct(null);
+            setEditPrices({
+              retailPrice: "",
+              barPrice: "",
+            });
+          }}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
       <div style={styles.productGrid}>
   {currentProducts.map((p) => (
@@ -1004,6 +1106,21 @@ function ProductsPage({
       Delete Product
     </button>
   )}
+
+  {isStaff && (
+  <button
+    style={styles.secondaryBtn}
+    onClick={() => {
+      setEditingProduct(p);
+      setEditPrices({
+        retailPrice: p.retailPrice || "",
+        barPrice: p.barPrice || "",
+      });
+    }}
+  >
+    Edit Price
+  </button>
+)}
 
   {isStaff && (
     <button
