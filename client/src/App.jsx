@@ -979,6 +979,7 @@ const [editPrices, setEditPrices] = useState({
         padding: "20px",
         borderRadius: "12px",
         width: "280px",
+        maxWidth: "90%",
         boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
       }}
     >
@@ -995,11 +996,16 @@ const [editPrices, setEditPrices] = useState({
 </p>
 <input
   style={{
-    ...styles.input,
-    marginBottom: "12px",
-    background: "#ffffff",
-    color: "#111827",
-  }}
+  width: "100%",
+  boxSizing: "border-box",
+  padding: "8px",
+  borderRadius: "6px",
+  border: "1px solid #d1d5db",
+  marginBottom: "12px",
+  background: "#ffffff",
+  color: "#111827",
+}}
+
   value={editPrices.retailPrice}
   onChange={(e) =>
     setEditPrices({
@@ -1014,11 +1020,16 @@ const [editPrices, setEditPrices] = useState({
 </p>
 <input
   style={{
-    ...styles.input,
-    marginBottom: "12px",
-    background: "#ffffff",
-    color: "#111827",
-  }}
+  width: "100%",
+  boxSizing: "border-box",
+  padding: "8px",
+  borderRadius: "6px",
+  border: "1px solid #d1d5db",
+  marginBottom: "12px",
+  background: "#ffffff",
+  color: "#111827",
+}}
+
   value={editPrices.barPrice}
   onChange={(e) =>
     setEditPrices({
@@ -1028,18 +1039,6 @@ const [editPrices, setEditPrices] = useState({
   }
 />
 
-
-      <input
-        style={{ ...styles.input, marginBottom: "10px" }}
-        placeholder="Bar price"
-        value={editPrices.barPrice}
-        onChange={(e) =>
-          setEditPrices({
-            ...editPrices,
-            barPrice: e.target.value,
-          })
-        }
-      />
 
       <div style={{ display: "flex", gap: "8px", marginTop: "12px" }}>
         <button
