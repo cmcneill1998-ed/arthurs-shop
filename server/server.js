@@ -69,11 +69,16 @@ app.post("/create-checkout-session", async (req, res) => {
   try {
     const { items } = req.body;
 
+    const DELIVERY_THRESHOLD = 20;
+    const DELIVERY_FEE = 5;
+
     console.log("🧪 Stripe items received:", items);
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       throw new Error("No items received for Stripe checkout");
     }
+
+    let productSubtotal = 0;
 
     const line_items = items.map((item) => {
       const price = Number(
@@ -85,12 +90,16 @@ app.post("/create-checkout-session", async (req, res) => {
         0
       );
 
+      const quantity = item.qty || item.quantity || 1;
+
       console.log("🧪 Stripe item:", item);
       console.log("💷 Price used:", price);
 
       if (!price || price <= 0 || Number.isNaN(price)) {
         throw new Error(`Invalid price for ${item.name}: ${price}`);
       }
+
+      productSubtotal += price * quantity;
 
       return {
         price_data: {
@@ -100,10 +109,25 @@ app.post("/create-checkout-session", async (req, res) => {
           },
           unit_amount: Math.round(price * 100),
         },
-        quantity: item.qty || item.quantity || 1,
+        quantity,
       };
     });
 
+    // ✅ Add €5 delivery if product subtotal is under €20
+    if (productSubtotal < DELIVERY_THRESHOLD) {
+      line_items.push({
+        price_data: {
+          currency: "eur",
+          product_data: {
+            name: "Delivery Charge",
+          },
+          unit_amount: DELIVERY_FEE * 100,
+        },
+        quantity: 1,
+      });
+    }
+
+    console.log("✅ Product subtotal:", productSubtotal);
     console.log("✅ Stripe line items:", line_items);
 
     const session = await stripe.checkout.sessions.create({
@@ -138,30 +162,55 @@ app.post("/order", async (req, res) => {
     );
 
     const orderId = result.rows[0].id;
-// ✅ SAVE ORDER ITEMS (THIS IS THE MISSING BIT)
-for (const item of items) {
-  console.log("🧪 Saving item:", item);
 
-  await db.query(
-    `INSERT INTO order_items (orderid, productname, quantity, price)
-     VALUES ($1, $2, $3, $4)`,
-    [
-      orderId,
-      item.name,
-      item.qty || item.quantity || 1,
-      Number(
-  item.price ??
-  item.retailPrice ??
-  item.retailprice ??
-  item.barPrice ??
-  item.barprice ??
-  0
-)
-    ]
-  );
-}
+    // ✅ SAVE ORDER ITEMS
+    for (const item of items) {
+      console.log("🧪 Saving item:", item);
 
-console.log("✅ Items saved for order:", orderId);
+      await db.query(
+        `INSERT INTO order_items (orderid, productname, quantity, price)
+         VALUES ($1, $2, $3, $4)`,
+        [
+          orderId,
+          item.name,
+          item.qty || item.quantity || 1,
+          Number(
+            item.price ??
+            item.retailPrice ??
+            item.retailprice ??
+            item.barPrice ??
+            item.barprice ??
+            0
+          )
+        ]
+      );
+    }
+
+    console.log("✅ Items saved for order:", orderId);
+
+    // ✅ ✅ ONLY NEW PART ADDED (delivery calc)
+    const DELIVERY_THRESHOLD = 20;
+    const DELIVERY_FEE = 5;
+
+    let productSubtotal = 0;
+
+    for (const item of items) {
+      const qty = item.qty || item.quantity || 1;
+
+      const price = Number(
+        item.price ??
+        item.retailPrice ??
+        item.retailprice ??
+        item.barPrice ??
+        item.barprice ??
+        0
+      );
+
+      productSubtotal += price * qty;
+    }
+
+    const deliveryFee = productSubtotal < DELIVERY_THRESHOLD ? DELIVERY_FEE : 0;
+
 
 
     // ✅ SEND CONFIRMATION EMAIL
@@ -226,20 +275,20 @@ console.log("✅ Items saved for order:", orderId);
     <table style="width:100%; margin-top:10px;">
       <tbody>
         ${
-          Number(total) < 20
-            ? `
-            <tr>
-              <td><strong>Delivery</strong></td>
-              <td style="text-align:right;">€2.50</td>
-            </tr>
-            `
-            : `
-            <tr>
-              <td><strong>Delivery</strong></td>
-              <td style="text-align:right;">Free</td>
-            </tr>
-            `
-        }
+  deliveryFee > 0
+    ? `
+      <tr>
+        <td><strong>Delivery</strong></td>
+        <td style="text-align:right;">€5.00</td>
+      </tr>
+    `
+    : `
+      <tr>
+        <td><strong>Delivery</strong></td>
+        <td style="text-align:right;">Free</td>
+      </tr>
+    `
+}
 
         <tr>
           <td style="padding-top: 6px;"><strong>Total</strong></td>

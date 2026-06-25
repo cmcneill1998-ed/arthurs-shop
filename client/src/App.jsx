@@ -453,11 +453,18 @@ setLoginForm({
     setCart(cart.filter((item) => item.id !== id));
   }
 
-  const subtotal = cart.reduce(
-    (sum, item) => sum + Number(item.price || 0) * Number(item.qty || 0),
-    0
-  );
-  const total = subtotal;
+  const DELIVERY_THRESHOLD = 20;
+const DELIVERY_FEE = 5;
+
+const subtotal = cart.reduce(
+  (sum, item) => sum + Number(item.price || 0) * Number(item.qty || 0),
+  0
+);
+
+const delivery = cart.length > 0 && subtotal < DELIVERY_THRESHOLD ? DELIVERY_FEE : 0;
+
+const total = subtotal + delivery;
+
 
   function placeOrder() {
     setCheckoutError("");
@@ -703,7 +710,7 @@ fetch(`${API_BASE}/create-checkout-session`, {
   </h1>
 
   <p style={{ ...styles.sub, textAlign: "center", maxWidth: "500px", margin: "0 auto" }}>
-    Browse, order and manage stock with a cleaner, multi-page experience.
+    Premium drinks delivery for both businesses and everyday shoppers. 
   </p>
 </div>
 
@@ -768,9 +775,10 @@ fetch(`${API_BASE}/create-checkout-session`, {
             path="/cart"
             element={
               <CartPage
-                cart={cart}
-                subtotal={subtotal}
-                total={total}
+  cart={cart}
+  subtotal={subtotal}
+  delivery={delivery}
+  total={total}
                 decreaseQty={decreaseQty}
                 increaseQty={increaseQty}
                 removeItem={removeItem}
@@ -1195,7 +1203,7 @@ style={{
   );
 }
 
-function CartPage({ cart, subtotal, total, decreaseQty, increaseQty, removeItem }) {
+function CartPage({ cart, subtotal, delivery, total, decreaseQty, increaseQty, removeItem }) {
   const navigate = useNavigate();
   return (
     <section style={styles.card}>
@@ -1245,7 +1253,17 @@ function CartPage({ cart, subtotal, total, decreaseQty, increaseQty, removeItem 
 
           <div style={styles.totalBox}>
   <p><strong>Subtotal:</strong> €{Number(subtotal).toFixed(2)}</p>
-  <p><strong>Delivery:</strong> Free</p>
+  <p>
+  <strong>Delivery:</strong>{" "}
+  {delivery > 0 ? `€${Number(delivery).toFixed(2)}` : "Free"}
+</p>
+
+{delivery > 0 && (
+  <p style={{ fontSize: "12px", color: "#6b7280", fontStyle: "italic" }}>
+    €5 delivery charge applies to orders under €20.
+  </p>
+)}
+
   <p style={styles.total}>
     <strong>Total:</strong> €{Number(total).toFixed(2)}
   </p>
@@ -1538,13 +1556,13 @@ function AddProductPage({ newProduct, setNewProduct, addProduct, message }) {
 
       <div style={styles.formGrid}>
         <input
-          style={styles.input}
+          style={{ ...styles.input, width: "100%" }}
           placeholder="Product name"
           value={newProduct.name}
           onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
         />
         <select
-  style={styles.input}
+  style={{ ...styles.input, width: "100%" }}
   value={newProduct.category}
   onChange={(e) =>
     setNewProduct({ ...newProduct, category: e.target.value })
@@ -1593,13 +1611,13 @@ function AccountPage({ isBar, isStaff, profileForm, setProfileForm, saveProfile,
 
       <div style={styles.formGrid}>
         <input
-          style={styles.input}
+          style={{ ...styles.input, width: "100%" }}
           placeholder="Full name"
           value={profileForm.fullName}
           onChange={(e) => setProfileForm({ ...profileForm, fullName: e.target.value })}
         />
         <input
-          style={styles.input}
+          style={{ ...styles.input, width: "100%" }}
           placeholder="Email"
           value={profileForm.email}
           onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
@@ -1608,19 +1626,19 @@ function AccountPage({ isBar, isStaff, profileForm, setProfileForm, saveProfile,
        {isBar ? (
   <>
     <input
-      style={styles.input}
+      style={{ ...styles.input, width: "100%" }}
       placeholder="Company name"
       value={profileForm.companyName}
       onChange={(e) => setProfileForm({ ...profileForm, companyName: e.target.value })}
     />
     <input
-      style={styles.input}
+      style={{ ...styles.input, width: "100%" }}
       placeholder="Business address"
       value={profileForm.address}
       onChange={(e) => setProfileForm({ ...profileForm, address: e.target.value })}
     />
     <input
-      style={styles.input}
+      style={{ ...styles.input, width: "100%" }}
       placeholder="NIF"
       value={profileForm.nif}
       onChange={(e) => setProfileForm({ ...profileForm, nif: e.target.value })}
@@ -1629,13 +1647,13 @@ function AccountPage({ isBar, isStaff, profileForm, setProfileForm, saveProfile,
 ) : !isStaff ? (
   <>
     <input
-      style={styles.input}
+      style={{ ...styles.input, width: "100%" }}
       placeholder="Hotel room"
       value={profileForm.hotelRoom}
       onChange={(e) => setProfileForm({ ...profileForm, hotelRoom: e.target.value })}
     />
     <input
-      style={styles.input}
+      style={{ ...styles.input, width: "100%" }}
       placeholder="Hotel address"
       value={profileForm.hotelAddress}
       onChange={(e) => setProfileForm({ ...profileForm, hotelAddress: e.target.value })}
