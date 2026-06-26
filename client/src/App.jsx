@@ -1567,20 +1567,22 @@ function AddProductPage({ newProduct, setNewProduct, addProduct, message }) {
 
         <div style={styles.formRow}>
           <select
-  style={styles.selectClean}
+  style={{
+    ...styles.selectClean,
+    color: newProduct.category ? "#111827" : "#6b7280",
+  }}
   value={newProduct.category}
   onChange={(e) =>
     setNewProduct({ ...newProduct, category: e.target.value })
   }
 >
-
-            <option value="">Select category</option>
-            <option value="soft drinks">Soft drinks</option>
-            <option value="beer">Beer</option>
-            <option value="wine">Wine</option>
-            <option value="spirits">Spirits</option>
-            <option value="snacks">Snacks</option>
-          </select>
+  <option value="" disabled hidden>Select category</option>
+  <option value="soft drinks">Soft drinks</option>
+  <option value="beer">Beer</option>
+  <option value="wine">Wine</option>
+  <option value="spirits">Spirits</option>
+  <option value="snacks">Snacks</option>
+</select>
         </div>
 
         <div style={styles.formRow}>
@@ -2218,7 +2220,10 @@ inputClean: {
   border: "1px solid #d1d5db",
   fontSize: "14px",
   background: "#ffffff",
+  color: "#111827",
   outline: "none",
+  boxSizing: "border-box",
+  display: "block",
 },
 
 selectClean: {
@@ -2228,8 +2233,10 @@ selectClean: {
   border: "1px solid #d1d5db",
   fontSize: "14px",
   background: "#ffffff",
-  color: "#111827",       // ✅ THIS fixes invisible text
+  color: "#111827",
   outline: "none",
+  boxSizing: "border-box",
+  display: "block",
 },
 
 
