@@ -36,6 +36,8 @@ async function ensureOrderItemsTable() {
     await db.query(`
       ALTER TABLE order_items
       ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0.5;
+      ALTER TABLE orders
+ADD COLUMN IF NOT EXISTS customerNote
     `);
 
     console.log("✅ order_items table ready");
@@ -151,14 +153,14 @@ app.post("/create-checkout-session", async (req, res) => {
 
 
 app.post("/order", async (req, res) => {
-  const { customerName, email, total, items = [], role, hotelRoom, hotelAddress } = req.body;
+  const { customerName, email, total, items = [], role, hotelRoom, hotelAddress, note } = req.body;
 
   try {
     // ✅ SAVE ORDER TO DB FIRST
     const result = await db.query(
-      `INSERT INTO orders (customerName, email, total, role, hotelRoom, hotelAddress, status, staffNote)
-       VALUES ($1, $2, $3, $4, $5, $6, 'Pending', '') RETURNING id`,
-      [customerName, email, total, role, hotelRoom || "", hotelAddress || ""]
+      `INSERT INTO orders (customerName, email, total, role, hotelRoom, hotelAddress, status, staffNote, customerNote)
+VALUES ($1,$2,$3,$4,$5,$6,'Pending','',$7) RETURNING id`,
+     [customerName, email, total, role, hotelRoom || "", hotelAddress || "", note || ""]
     );
 
     const orderId = result.rows[0].id;

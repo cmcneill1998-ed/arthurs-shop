@@ -53,6 +53,7 @@ const [password, setPassword] = useState("");
   const [orders, setOrders] = useState([]);
   const [orderItems, setOrderItems] = useState({});
   const [orderNotes, setOrderNotes] = useState({});
+  const [orderNote, setOrderNote] = useState("");
 
   const [message, setMessage] = useState("");
   const [checkoutError, setCheckoutError] = useState("");
@@ -314,7 +315,7 @@ function getPrice(product) {
   }
 
   setCurrentUser(foundUser);
-  setMessage(`Logged in as ${foundUser.role}.`);
+  setMessage(`Logged in as ${foundUser.role} customer.`);
   navigate("/");
 }
 
@@ -612,10 +613,18 @@ fetch(`${API_BASE}/create-checkout-session`, {
   }
 
  function addProduct() {
-  if (!newProduct.name || !newProduct.category || !newProduct.retailPrice || !newProduct.barPrice) {
-    setMessage("Enter product name, category and both prices.");
-    return;
-  }
+  if (
+  !newProduct.name ||
+  !newProduct.category ||
+  isNaN(newProduct.retailPrice) ||
+  isNaN(newProduct.barPrice) ||
+  Number(newProduct.retailPrice) <= 0 ||
+  Number(newProduct.barPrice) <= 0
+) {
+  setMessage("Enter valid numeric prices (e.g. 0.80)");
+  return;
+}
+
 
   fetch(`${API_BASE}/products/add`, {
     method: "POST",
@@ -733,7 +742,7 @@ fetch(`${API_BASE}/create-checkout-session`, {
 
         <nav style={styles.nav}>
           <div style={styles.navLinks}>
-            <Link style={styles.navLink} to="/">Products</Link>
+            <Link to="/products">Products</Link>
             <Link style={styles.navLink} to="/cart">Cart ({cart.reduce((total, item) => total + item.qty, 0)})</Link>
             <Link style={styles.navLink} to="/orders">Orders</Link>
             {currentUser && <Link style={styles.navLink} to="/account">Account</Link>}
@@ -751,25 +760,30 @@ fetch(`${API_BASE}/create-checkout-session`, {
 
         <Routes>
           <Route
-            path="/"
-            element={
-              <ProductsPage
-  filteredProducts={filteredProducts}
-  categories={categories}
-  category={category}
-  setCategory={setCategory}
-  search={search}
-  setSearch={setSearch}
-  searchSuggestions={searchSuggestions}
-  addToCart={addToCart}
-  getPrice={getPrice}
-  isBar={isBar}
-  isStaff={isStaff}
-  page={page}
-  setPage={setPage}
+  path="/"
+  element={<LandingPage />}
 />
-            }
-          />
+
+<Route
+  path="/products"
+  element={
+    <ProductsPage
+      filteredProducts={filteredProducts}
+      categories={categories}
+      category={category}
+      setCategory={setCategory}
+      search={search}
+      setSearch={setSearch}
+      searchSuggestions={searchSuggestions}
+      addToCart={addToCart}
+      getPrice={getPrice}
+      isBar={isBar}
+      isStaff={isStaff}
+      page={page}
+      setPage={setPage}
+    />
+  }
+/>
 
           <Route
             path="/cart"
@@ -782,6 +796,9 @@ fetch(`${API_BASE}/create-checkout-session`, {
                 decreaseQty={decreaseQty}
                 increaseQty={increaseQty}
                 removeItem={removeItem}
+                orderNote={orderNote}
+setOrderNote={setOrderNote}
+
               />
             }
           />
@@ -881,6 +898,31 @@ fetch(`${API_BASE}/create-checkout-session`, {
             }
           />
         </Routes>
+
+        <footer style={styles.footer}>
+  <div style={{ maxWidth: "1000px", margin: "0 auto", textAlign: "center" }}>
+    
+    <p style={{ fontWeight: "bold", marginBottom: "8px" }}>
+      Island-wide drinks delivery service for customers and businesses.
+      Trade prices available – buy single items or full cases.
+    </p>
+
+    <p style={styles.footerText}>
+      📞 +34 685572263 <br />
+      📧 arthursofflicence@gmail.com <br />
+      📍 Carrer Ramon de Montcada 23, 07180 Calvià (Santa Ponsa)
+    </p>
+
+    <p style={{ ...styles.footerText, marginTop: "10px" }}>
+      Opening hours: Mon–Sat 10:00–20:00 | Sun 10:00–16:00
+    </p>
+
+    <p style={{ fontSize: "12px", marginTop: "12px", color: "#6b7280" }}>
+      © 2026 Arthurs Off Licence. All rights reserved.
+    </p>
+  </div>
+</footer>
+
       </div>
     </div>
   );
@@ -928,6 +970,17 @@ const [editPrices, setEditPrices] = useState({
       value={search}
       onChange={(e) => setSearch(e.target.value)}
     />
+
+<button
+  style={{
+    ...styles.primaryBtn,
+    marginLeft: "10px",
+    height: "42px",
+  }}
+  onClick={() => {}}
+>
+  Search
+</button>    
 
     {search.trim() && searchSuggestions.length > 0 && (
       <div style={styles.suggestionBox}>
@@ -1199,7 +1252,7 @@ style={{
   );
 }
 
-function CartPage({ cart, subtotal, delivery, total, decreaseQty, increaseQty, removeItem }) {
+function CartPage({ cart, subtotal, delivery, total, orderNote, setOrderNote, decreaseQty, increaseQty, removeItem }) {
   const navigate = useNavigate();
   return (
     <section style={styles.card}>
@@ -1264,6 +1317,19 @@ function CartPage({ cart, subtotal, delivery, total, decreaseQty, increaseQty, r
     <strong>Total:</strong> €{Number(total).toFixed(2)}
   </p>
 
+  <textarea
+  placeholder="Special requests (e.g. leave at reception, call on arrival)"
+  value={orderNote}
+  onChange={(e) => setOrderNote(e.target.value)}
+  style={{
+    width: "100%",
+    marginTop: "12px",
+    padding: "10px",
+    borderRadius: "8px",
+    border: "1px solid #d1d5db",
+  }}
+/>
+
   <button
     style={{ ...styles.primaryBtn, marginTop: "12px", width: "100%" }}
     onClick={() => navigate("/checkout")}
@@ -1309,8 +1375,18 @@ function CheckoutPage({
 
       {!currentUser && (
         <div style={styles.errorBox}>
-          You must log in before checking out.
-        </div>
+  You must log in before checking out.
+
+  <div style={{ marginTop: "8px" }}>
+    Don’t have an account?{" "}
+    <span
+      style={{ color: "#F97316", cursor: "pointer", fontWeight: "bold" }}
+      onClick={() => window.location.href = "/login"}
+    >
+      Register here
+    </span>
+  </div>
+</div>
       )}
 
 {currentUser && cart.length > 0 && (
@@ -1955,6 +2031,38 @@ function LoginPage({
   );
 }
 
+function LandingPage() {
+  return (
+    <section style={{ ...styles.card, textAlign: "center" }}>
+      
+      <h1 style={{ color: "#F97316" }}>
+        Drinks delivered to your door
+      </h1>
+
+      <p style={{ marginTop: "10px", fontSize: "16px" }}>
+        Fast island-wide delivery for customers and businesses.
+      </p>
+
+      <p style={{ marginTop: "6px", color: "#6b7280" }}>
+        Trade pricing available – buy single or by the case.
+      </p>
+
+      <button
+        style={{
+          ...styles.primaryBtn,
+          marginTop: "20px",
+          padding: "12px 20px",
+          fontSize: "16px",
+        }}
+        onClick={() => window.location.href = "/products"}
+      >
+        Shop Products
+      </button>
+
+    </section>
+  );
+}
+
 const styles = {
   page: {
     background: "#F9FAFB",
@@ -2267,6 +2375,20 @@ selectClean: {
   boxSizing: "border-box",
   display: "block",
 },
+
+footer: {
+  marginTop: "30px",
+  background: "#111827",
+  color: "#ffffff",
+  padding: "30px 20px",
+  borderRadius: "12px",
+},
+
+footerText: {
+  fontSize: "14px",
+  color: "#e5e7eb",
+},
+
 
 
 };
