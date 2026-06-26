@@ -1567,12 +1567,13 @@ function AddProductPage({ newProduct, setNewProduct, addProduct, message }) {
 
         <div style={styles.formRow}>
           <select
-            style={styles.inputClean}
-            value={newProduct.category}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, category: e.target.value })
-            }
-          >
+  style={styles.selectClean}
+  value={newProduct.category}
+  onChange={(e) =>
+    setNewProduct({ ...newProduct, category: e.target.value })
+  }
+>
+
             <option value="">Select category</option>
             <option value="soft drinks">Soft drinks</option>
             <option value="beer">Beer</option>
@@ -2209,10 +2210,24 @@ formRow: {
 
 inputClean: {
   width: "100%",
-  border: "none",
-  outline: "none",
+  padding: "10px",
+  borderRadius: "8px",
+  border: "1px solid #d1d5db",
   fontSize: "14px",
-  background: "transparent",
+  background: "#ffffff",
+  outline: "none",
+},
+
+
+selectClean: {
+  width: "100%",
+  padding: "10px",
+  borderRadius: "8px",
+  border: "1px solid #d1d5db",
+  fontSize: "14px",
+  background: "#ffffff",
+  appearance: "none",
+  outline: "none",
 },
 
 
