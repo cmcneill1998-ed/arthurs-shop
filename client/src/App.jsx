@@ -948,13 +948,9 @@ const [editPrices, setEditPrices] = useState({
 
 
   {/* DROPDOWN */}
-  <select
-    style={{
-      ...styles.input,
-      flex: 1,
-      height: "42px",
-      minWidth: "200px",
-    }}
+    <select
+  style={styles.input}
+
     value={category}
     onChange={(e) => setCategory(e.target.value)}
   >
@@ -1628,61 +1624,81 @@ function AccountPage({ isBar, isStaff, profileForm, setProfileForm, saveProfile,
 
       {message && <div style={styles.successBox}>{message}</div>}
 
-      <div style={styles.formGrid}>
-        <input
-          style={{ ...styles.input, width: "100%" }}
-          placeholder="Full name"
-          value={profileForm.fullName}
-          onChange={(e) => setProfileForm({ ...profileForm, fullName: e.target.value })}
-        />
-        <input
-          style={{ ...styles.input, width: "100%" }}
-          placeholder="Email"
-          value={profileForm.email}
-          onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
-        />
+      <div style={styles.formGridBox}>
+        <div style={styles.formRow}>
+          <input
+            style={styles.inputClean}
+            placeholder="Full name"
+            value={profileForm.fullName}
+            onChange={(e) => setProfileForm({ ...profileForm, fullName: e.target.value })}
+          />
+        </div>
 
-       {isBar ? (
-  <>
-    <input
-      style={{ ...styles.input, width: "100%" }}
-      placeholder="Company name"
-      value={profileForm.companyName}
-      onChange={(e) => setProfileForm({ ...profileForm, companyName: e.target.value })}
-    />
-    <input
-      style={{ ...styles.input, width: "100%" }}
-      placeholder="Business address"
-      value={profileForm.address}
-      onChange={(e) => setProfileForm({ ...profileForm, address: e.target.value })}
-    />
-    <input
-      style={{ ...styles.input, width: "100%" }}
-      placeholder="NIF"
-      value={profileForm.nif}
-      onChange={(e) => setProfileForm({ ...profileForm, nif: e.target.value })}
-    />
-  </>
-) : !isStaff ? (
-  <>
-    <input
-      style={{ ...styles.input, width: "100%" }}
-      placeholder="Hotel room"
-      value={profileForm.hotelRoom}
-      onChange={(e) => setProfileForm({ ...profileForm, hotelRoom: e.target.value })}
-    />
-    <input
-      style={{ ...styles.input, width: "100%" }}
-      placeholder="Hotel address"
-      value={profileForm.hotelAddress}
-      onChange={(e) => setProfileForm({ ...profileForm, hotelAddress: e.target.value })}
-    />
-  </>
-) : null}
-  
+        <div style={styles.formRow}>
+          <input
+            style={styles.inputClean}
+            placeholder="Email"
+            value={profileForm.email}
+            onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
+          />
+        </div>
+
+        {isBar ? (
+          <>
+            <div style={styles.formRow}>
+              <input
+                style={styles.inputClean}
+                placeholder="Company name"
+                value={profileForm.companyName}
+                onChange={(e) => setProfileForm({ ...profileForm, companyName: e.target.value })}
+              />
+            </div>
+
+            <div style={styles.formRow}>
+              <input
+                style={styles.inputClean}
+                placeholder="Business address"
+                value={profileForm.address}
+                onChange={(e) => setProfileForm({ ...profileForm, address: e.target.value })}
+              />
+            </div>
+
+            <div style={styles.formRow}>
+              <input
+                style={styles.inputClean}
+                placeholder="NIF"
+                value={profileForm.nif}
+                onChange={(e) => setProfileForm({ ...profileForm, nif: e.target.value })}
+              />
+            </div>
+          </>
+        ) : !isStaff ? (
+          <>
+            <div style={styles.formRow}>
+              <input
+                style={styles.inputClean}
+                placeholder="Hotel room"
+                value={profileForm.hotelRoom}
+                onChange={(e) => setProfileForm({ ...profileForm, hotelRoom: e.target.value })}
+              />
+            </div>
+
+            <div style={styles.formRow}>
+              <input
+                style={styles.inputClean}
+                placeholder="Hotel address"
+                value={profileForm.hotelAddress}
+                onChange={(e) => setProfileForm({ ...profileForm, hotelAddress: e.target.value })}
+              />
+            </div>
+          </>
+        ) : null}
       </div>
 
-      <button style={styles.primaryBtn} onClick={saveProfile}>
+      <button
+        style={{ ...styles.primaryBtn, marginTop: "16px", width: "100%" }}
+        onClick={saveProfile}
+      >
         Save My Details
       </button>
     </section>
@@ -1711,109 +1727,115 @@ function LoginPage({
         <>
           <h2 style={styles.sectionTitle}>Create Account</h2>
 
-          <div style={styles.formGrid}>
-            <select
-              style={styles.input}
-              value={registerForm.role}
-              onChange={(e) =>
-                setRegisterForm({ ...registerForm, role: e.target.value })
-              }
-            >
-              <option value="customer">Standard Customer</option>
-              <option value="bar">Bar Customer</option>
-            </select>
+          <div style={styles.formGridBox}>
+  <div style={styles.formRow}>
+    <select
+      style={styles.selectClean}
+      value={registerForm.role}
+      onChange={(e) =>
+        setRegisterForm({ ...registerForm, role: e.target.value })
+      }
+    >
+      <option value="customer">Standard Customer</option>
+      <option value="bar">Bar Customer</option>
+    </select>
+  </div>
 
-            <input
-              style={styles.input}
-              placeholder="Full name"
-              value={registerForm.fullName}
-              onChange={(e) =>
-                setRegisterForm({ ...registerForm, fullName: e.target.value })
-              }
-            />
+  <div style={styles.formRow}>
+    <input
+      style={styles.inputClean}
+      placeholder="Full name"
+      value={registerForm.fullName}
+      onChange={(e) =>
+        setRegisterForm({ ...registerForm, fullName: e.target.value })
+      }
+    />
+  </div>
 
-            <input
-              style={styles.input}
-              placeholder="Email"
-              value={registerForm.email}
-              onChange={(e) =>
-                setRegisterForm({ ...registerForm, email: e.target.value })
-              }
-            />
+  <div style={styles.formRow}>
+    <input
+      style={styles.inputClean}
+      placeholder="Email"
+      value={registerForm.email}
+      onChange={(e) =>
+        setRegisterForm({ ...registerForm, email: e.target.value })
+      }
+    />
+  </div>
 
-            <input
-              style={styles.input}
-              type="password"
-              placeholder="Password"
-              value={registerForm.password}
-              onChange={(e) =>
-                setRegisterForm({ ...registerForm, password: e.target.value })
-              }
-            />
+  <div style={styles.formRow}>
+    <input
+      style={styles.inputClean}
+      type="password"
+      placeholder="Password"
+      value={registerForm.password}
+      onChange={(e) =>
+        setRegisterForm({ ...registerForm, password: e.target.value })
+      }
+    />
+  </div>
 
-            {registerForm.role === "bar" ? (
-              <>
-                <input
-                  style={styles.input}
-                  placeholder="Company name"
-                  value={registerForm.companyName}
-                  onChange={(e) =>
-                    setRegisterForm({
-                      ...registerForm,
-                      companyName: e.target.value,
-                    })
-                  }
-                />
+  {registerForm.role === "bar" ? (
+    <>
+      <div style={styles.formRow}>
+        <input
+          style={styles.inputClean}
+          placeholder="Company name"
+          value={registerForm.companyName}
+          onChange={(e) =>
+            setRegisterForm({ ...registerForm, companyName: e.target.value })
+          }
+        />
+      </div>
 
-                <input
-                  style={styles.input}
-                  placeholder="Business address"
-                  value={registerForm.address}
-                  onChange={(e) =>
-                    setRegisterForm({
-                      ...registerForm,
-                      address: e.target.value,
-                    })
-                  }
-                />
+      <div style={styles.formRow}>
+        <input
+          style={styles.inputClean}
+          placeholder="Business address"
+          value={registerForm.address}
+          onChange={(e) =>
+            setRegisterForm({ ...registerForm, address: e.target.value })
+          }
+        />
+      </div>
 
-                <input
-                  style={styles.input}
-                  placeholder="NIF number"
-                  value={registerForm.nif}
-                  onChange={(e) =>
-                    setRegisterForm({ ...registerForm, nif: e.target.value })
-                  }
-                />
-              </>
-            ) : (
-              <>
-                <input
-                  style={styles.input}
-                  placeholder="Hotel room"
-                  value={registerForm.hotelRoom}
-                  onChange={(e) =>
-                    setRegisterForm({
-                      ...registerForm,
-                      hotelRoom: e.target.value,
-                    })
-                  }
-                />
+      <div style={styles.formRow}>
+        <input
+          style={styles.inputClean}
+          placeholder="NIF number"
+          value={registerForm.nif}
+          onChange={(e) =>
+            setRegisterForm({ ...registerForm, nif: e.target.value })
+          }
+        />
+      </div>
+    </>
+  ) : (
+    <>
+      <div style={styles.formRow}>
+        <input
+          style={styles.inputClean}
+          placeholder="Hotel room"
+          value={registerForm.hotelRoom}
+          onChange={(e) =>
+            setRegisterForm({ ...registerForm, hotelRoom: e.target.value })
+          }
+        />
+      </div>
 
-                <input
-                  style={styles.input}
-                  placeholder="Hotel address"
-                  value={registerForm.hotelAddress}
-                  onChange={(e) =>
-                    setRegisterForm({
-                      ...registerForm,
-                      hotelAddress: e.target.value,
-                    })
-                  }
-                />
-              </>
-            )}
-          </div>
+      <div style={styles.formRow}>
+        <input
+          style={styles.inputClean}
+          placeholder="Hotel address"
+          value={registerForm.hotelAddress}
+          onChange={(e) =>
+            setRegisterForm({ ...registerForm, hotelAddress: e.target.value })
+          }
+        />
+      </div>
+    </>
+  )}
+</div>
 
           <button
             style={{ ...styles.primaryBtn, marginTop: "20px" }}
@@ -2064,11 +2086,18 @@ header: {
   },
 
   input: {
-    padding: "10px",
-    borderRadius: "6px",
-    border: "1px solid #d1d5db",
-    width: "100%",
-  },
+  width: "100%",
+  padding: "10px",
+  borderRadius: "8px",
+  border: "1px solid #d1d5db",
+  fontSize: "14px",
+  background: "#ffffff",
+  color: "#111827",
+  outline: "none",
+  boxSizing: "border-box",   // ✅ fixes width mismatch
+  display: "block",
+},
+
 
   primaryBtn: {
     background: "#F97316",
