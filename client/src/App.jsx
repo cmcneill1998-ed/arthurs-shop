@@ -2195,6 +2195,7 @@ select: {
 
 formGridBox: {
   maxWidth: "420px",
+  width: "100%",
   margin: "0 auto",
   display: "flex",
   flexDirection: "column",
@@ -2206,6 +2207,8 @@ formRow: {
   border: "1px solid #e5e7eb",
   borderRadius: "10px",
   padding: "10px",
+  boxSizing: "border-box",
+  width: "100%",
 },
 
 inputClean: {
@@ -2218,7 +2221,6 @@ inputClean: {
   outline: "none",
 },
 
-
 selectClean: {
   width: "100%",
   padding: "10px",
@@ -2226,7 +2228,7 @@ selectClean: {
   border: "1px solid #d1d5db",
   fontSize: "14px",
   background: "#ffffff",
-  appearance: "none",
+  color: "#111827",       // ✅ THIS fixes invisible text
   outline: "none",
 },
 
