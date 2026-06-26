@@ -1554,48 +1554,64 @@ function AddProductPage({ newProduct, setNewProduct, addProduct, message }) {
 
       {message && <div style={styles.successBox}>{message}</div>}
 
-      <div style={styles.formGrid}>
-        <input
-          style={{ ...styles.input, width: "100%" }}
-          placeholder="Product name"
-          value={newProduct.name}
-          onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-        />
-        <select
-  style={{ ...styles.input, width: "100%" }}
-  value={newProduct.category}
-  onChange={(e) =>
-    setNewProduct({ ...newProduct, category: e.target.value })
-  }
->
-  <option value="">Select category</option>
-  <option value="soft drinks">Soft drinks</option>
-  <option value="beer">Beer</option>
-  <option value="wine">Wine</option>
-  <option value="spirits">Spirits</option>
-  <option value="snacks">Snacks</option>
-</select>
-        <input
-          style={styles.input}
-          placeholder="Retail price"
-          value={newProduct.retailPrice}
-          onChange={(e) => setNewProduct({ ...newProduct, retailPrice: e.target.value })}
-        />
-        <input
-          style={styles.input}
-          placeholder="Bar price"
-          value={newProduct.barPrice}
-          onChange={(e) => setNewProduct({ ...newProduct, barPrice: e.target.value })}
-        />
-        <input
-          style={styles.input}
-          placeholder="Description"
-          value={newProduct.description}
-          onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-        />
+      <div style={styles.formGridBox}>
+
+        <div style={styles.formRow}>
+          <input
+            style={styles.inputClean}
+            placeholder="Product name"
+            value={newProduct.name}
+            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+          />
+        </div>
+
+        <div style={styles.formRow}>
+          <select
+            style={styles.inputClean}
+            value={newProduct.category}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, category: e.target.value })
+            }
+          >
+            <option value="">Select category</option>
+            <option value="soft drinks">Soft drinks</option>
+            <option value="beer">Beer</option>
+            <option value="wine">Wine</option>
+            <option value="spirits">Spirits</option>
+            <option value="snacks">Snacks</option>
+          </select>
+        </div>
+
+        <div style={styles.formRow}>
+          <input
+            style={styles.inputClean}
+            placeholder="Retail price"
+            value={newProduct.retailPrice}
+            onChange={(e) => setNewProduct({ ...newProduct, retailPrice: e.target.value })}
+          />
+        </div>
+
+        <div style={styles.formRow}>
+          <input
+            style={styles.inputClean}
+            placeholder="Bar price"
+            value={newProduct.barPrice}
+            onChange={(e) => setNewProduct({ ...newProduct, barPrice: e.target.value })}
+          />
+        </div>
+
+        <div style={styles.formRow}>
+          <input
+            style={styles.inputClean}
+            placeholder="Description"
+            value={newProduct.description}
+            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+          />
+        </div>
+
       </div>
 
-      <button style={styles.primaryBtn} onClick={addProduct}>
+      <button style={{ ...styles.primaryBtn, marginTop: "16px", width: "100%" }} onClick={addProduct}>
         Add Product
       </button>
     </section>
@@ -2175,6 +2191,30 @@ select: {
   border: "1px solid #d1d5db",
   boxSizing: "border-box",
 },
+
+formGridBox: {
+  maxWidth: "420px",
+  margin: "0 auto",
+  display: "flex",
+  flexDirection: "column",
+  gap: "12px",
+},
+
+formRow: {
+  background: "#f9fafb",
+  border: "1px solid #e5e7eb",
+  borderRadius: "10px",
+  padding: "10px",
+},
+
+inputClean: {
+  width: "100%",
+  border: "none",
+  outline: "none",
+  fontSize: "14px",
+  background: "transparent",
+},
+
 
 };
 
