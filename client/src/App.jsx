@@ -523,9 +523,10 @@ const total = subtotal + delivery;
 setLastOrder({
   orderNumber,
   customerType: isBar ? "Bar Customer" : isStaff ? "Staff" : "Standard Customer",
-  delivery: "Free",
+  delivery: delivery > 0 ? `€${Number(delivery).toFixed(2)}` : "Free",
   total: Number(total).toFixed(2),
   items: cart,
+  note: orderNote,
 });
 
 fetch(`${API_BASE}/create-checkout-session`, {
@@ -558,14 +559,15 @@ fetch(`${API_BASE}/create-checkout-session`, {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        customerName: checkoutForm.contactName,
-        email: checkoutForm.email,
-        total: total,
-        items: cart,
-        role: currentUser.role,
-        hotelRoom: checkoutForm.hotelRoom || "",
-        hotelAddress: checkoutForm.hotelAddress || "",
-      }),
+  customerName: checkoutForm.contactName,
+  email: checkoutForm.email,
+  total: total,
+  items: cart,
+  role: currentUser.role,
+  hotelRoom: checkoutForm.hotelRoom || "",
+  hotelAddress: checkoutForm.hotelAddress || "",
+  note: orderNote,
+}),
     });
 
     console.log("✅ ORDER SAVED");
@@ -742,7 +744,7 @@ fetch(`${API_BASE}/create-checkout-session`, {
 
         <nav style={styles.nav}>
           <div style={styles.navLinks}>
-            <Link to="/products">Products</Link>
+            <Link style={styles.navLink} to="/products">Products</Link>
             <Link style={styles.navLink} to="/cart">Cart ({cart.reduce((total, item) => total + item.qty, 0)})</Link>
             <Link style={styles.navLink} to="/orders">Orders</Link>
             {currentUser && <Link style={styles.navLink} to="/account">Account</Link>}
@@ -807,17 +809,18 @@ setOrderNote={setOrderNote}
             path="/checkout"
             element={
               <CheckoutPage
-                currentUser={currentUser}
-                isBar={isBar}
-                isStaff={isStaff}
-                checkoutForm={checkoutForm}
-                setCheckoutForm={setCheckoutForm}
-                checkoutError={checkoutError}
-                placeOrder={placeOrder}
-                total={total}
-                cart={cart}
-                message={message}
-              />
+  currentUser={currentUser}
+  isBar={isBar}
+  isStaff={isStaff}
+  checkoutForm={checkoutForm}
+  setCheckoutForm={setCheckoutForm}
+  checkoutError={checkoutError}
+  placeOrder={placeOrder}
+  total={total}
+  cart={cart}
+  message={message}
+  setAuthMode={setAuthMode}
+/>
             }
           />
 
@@ -963,7 +966,9 @@ const [editPrices, setEditPrices] = useState({
       <h2 style={styles.sectionTitle}>Browse Products</h2>
 
       <div style={styles.searchRow}>
-  <div style={{ position: "relative", flexGrow: 1 }}>
+
+<div style={{ position: "relative", flexGrow: 1 }}>
+  <div style={{ display: "flex", gap: "8px" }}>
     <input
       style={styles.searchInput}
       placeholder="Search products"
@@ -971,38 +976,52 @@ const [editPrices, setEditPrices] = useState({
       onChange={(e) => setSearch(e.target.value)}
     />
 
-<button
-  style={{
-    ...styles.primaryBtn,
-    marginLeft: "10px",
-    height: "42px",
-  }}
-  onClick={() => {}}
->
-  Search
-</button>    
-
-    {search.trim() && searchSuggestions.length > 0 && (
-      <div style={styles.suggestionBox}>
-        {searchSuggestions.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            style={styles.suggestionItem}
-            onClick={() => setSearch(item.name)}
-          >
-            {item.name}
-          </button>
-        ))}
-      </div>
-    )}
+    <button
+      style={{
+        ...styles.primaryBtn,
+        height: "42px",
+        minWidth: "90px",
+      }}
+      onClick={() => setPage(1)}
+    >
+      Search
+    </button>
   </div>
+
+  {search.trim() && searchSuggestions.length > 0 && (
+    <div style={styles.suggestionBox}>
+      {searchSuggestions.map((item) => (
+        <button
+          key={item.id}
+          type="button"
+          style={styles.suggestionItem}
+          onClick={() => {
+            setSearch(item.name);
+            setPage(1);
+          }}
+        >
+          <strong>{item.name}</strong>
+          <span style={{ fontSize: "12px", color: "#6b7280" }}>
+            {item.description || item.category}
+          </span>
+          <span style={{ fontWeight: "bold", color: "#F97316" }}>
+            €{Number(getPrice(item)).toFixed(2)}
+          </span>
+        </button>
+      ))}
+    </div>
+  )}
+</div>
 
 
 
   {/* DROPDOWN */}
     <select
-  style={styles.input}
+  style={{
+    ...styles.input,
+    maxWidth: "220px",
+    height: "42px",
+  }}
 
     value={category}
     onChange={(e) => setCategory(e.target.value)}
@@ -1368,6 +1387,7 @@ function CheckoutPage({
   total,
   cart,
   message,
+  setAuthMode,
 }) {
   return (
     <section style={styles.card}>
@@ -1381,7 +1401,10 @@ function CheckoutPage({
     Don’t have an account?{" "}
     <span
       style={{ color: "#F97316", cursor: "pointer", fontWeight: "bold" }}
-      onClick={() => window.location.href = "/login"}
+      onClick={() => {
+  setAuthMode("register");
+  window.location.href = "/login";
+}}
     >
       Register here
     </span>
@@ -2389,6 +2412,32 @@ footerText: {
   color: "#e5e7eb",
 },
 
+suggestionBox: {
+  position: "absolute",
+  top: "48px",
+  left: 0,
+  right: 0,
+  background: "#ffffff",
+  border: "1px solid #e5e7eb",
+  borderRadius: "10px",
+  boxShadow: "0 10px 25px rgba(0,0,0,0.12)",
+  zIndex: 1000,
+  overflow: "hidden",
+},
+
+suggestionItem: {
+  width: "100%",
+  padding: "10px 12px",
+  border: "none",
+  borderBottom: "1px solid #f3f4f6",
+  background: "#ffffff",
+  cursor: "pointer",
+  textAlign: "left",
+  display: "grid",
+  gridTemplateColumns: "1fr auto",
+  gap: "4px 12px",
+  color: "#111827",
+},
 
 
 };

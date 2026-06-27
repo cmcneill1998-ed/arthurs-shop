@@ -37,7 +37,7 @@ async function ensureOrderItemsTable() {
       ALTER TABLE order_items
       ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0.5;
       ALTER TABLE orders
-ADD COLUMN IF NOT EXISTS customerNote
+ADD COLUMN IF NOT EXISTS customerNote TEXT DEFAULT '';
     `);
 
     console.log("✅ order_items table ready");
