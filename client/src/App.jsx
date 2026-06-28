@@ -829,17 +829,18 @@ setOrderNote={setOrderNote}
             path="/orders"
             element={
               <OrdersPage
-                currentUser={currentUser}
-                isStaff={isStaff}
-                orders={orders}
-                orderItems={orderItems}
-                loadItems={loadItems}
-                orderNotes={orderNotes}
-                setOrderNotes={setOrderNotes}
-                markDelivered={markDelivered}
-                message={message}
-                lastOrder={lastOrder}
-              />
+  currentUser={currentUser}
+  isStaff={isStaff}
+  orders={orders}
+  orderItems={orderItems}
+  loadItems={loadItems}
+  orderNotes={orderNotes}
+  setOrderNotes={setOrderNotes}
+  markDelivered={markDelivered}
+  message={message}
+  lastOrder={lastOrder}
+  reorderOrder={reorderOrder}
+/>
             }
           />
 
@@ -930,6 +931,56 @@ setOrderNote={setOrderNote}
       </div>
     </div>
   );
+}
+
+function reorderOrder(orderId) {
+  fetch(`${API_BASE}/order-items/${orderId}`)
+    .then((res) => {
+      if (!res.ok) throw new Error("Could not load previous order");
+      return res.json();
+    })
+    .then((items) => {
+      if (!Array.isArray(items) || items.length === 0) {
+        alert("No items found for this order");
+        return;
+      }
+
+      setCart((prevCart) => {
+        const updatedCart = [...prevCart];
+
+        items.forEach((item) => {
+          const matchedProduct = products.find(
+            (p) => p.name.toLowerCase() === String(item.productName || "").toLowerCase()
+          );
+
+          const cartItem = {
+            id: matchedProduct?.id || `${item.productName}-${Date.now()}`,
+            name: item.productName,
+            price: Number(item.price || matchedProduct?.retailPrice || 0),
+            qty: Number(item.quantity || 1),
+          };
+
+          const existing = updatedCart.find(
+            (cartProduct) =>
+              cartProduct.name.toLowerCase() === cartItem.name.toLowerCase()
+          );
+
+          if (existing) {
+            existing.qty += cartItem.qty;
+          } else {
+            updatedCart.push(cartItem);
+          }
+        });
+
+        return updatedCart;
+      });
+
+      alert("Previous order added to basket");
+      navigate("/cart");
+    })
+    .catch(() => {
+      alert("Could not reorder this order");
+    });
 }
 
 function ProductsPage({
@@ -1528,6 +1579,7 @@ function OrdersPage({
   markDelivered,
   message,
   lastOrder,
+  reorderOrder,
 }) {
   const [openOrders, setOpenOrders] = useState({});
 
@@ -1574,18 +1626,30 @@ function OrdersPage({
   </p>
 )}
 
-            <button
-              onClick={() => {
-                if (openOrders[order.id]) {
-                  setOpenOrders(prev => ({ ...prev, [order.id]: false }));
-                } else {
-                  loadItems(order.id);
-                  setOpenOrders(prev => ({ ...prev, [order.id]: true }));
-                }
-              }}
-            >
-              {openOrders[order.id] ? "Hide Items" : "View Items"}
-            </button>
+            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "10px" }}>
+  <button
+    style={styles.secondaryBtn}
+    onClick={() => {
+      if (openOrders[order.id]) {
+        setOpenOrders((prev) => ({ ...prev, [order.id]: false }));
+      } else {
+        loadItems(order.id);
+        setOpenOrders((prev) => ({ ...prev, [order.id]: true }));
+      }
+    }}
+  >
+    {openOrders[order.id] ? "Hide Items" : "View Items"}
+  </button>
+
+  {!isStaff && (
+    <button
+      style={styles.primaryBtn}
+      onClick={() => reorderOrder(order.id)}
+    >
+      Reorder
+    </button>
+  )}
+</div>
 
             {openOrders[order.id] &&
               Array.isArray(orderItems[order.id]) && (
