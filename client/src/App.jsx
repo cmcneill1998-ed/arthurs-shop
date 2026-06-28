@@ -703,6 +703,56 @@ fetch(`${API_BASE}/create-checkout-session`, {
       });
   }
 
+  function reorderOrder(orderId) {
+  fetch(`${API_BASE}/order-items/${orderId}`)
+    .then((res) => {
+      if (!res.ok) throw new Error("Could not load previous order");
+      return res.json();
+    })
+    .then((items) => {
+      if (!Array.isArray(items) || items.length === 0) {
+        alert("No items found for this order");
+        return;
+      }
+
+      setCart((prevCart) => {
+        const updatedCart = [...prevCart];
+
+        items.forEach((item) => {
+          const matchedProduct = products.find(
+            (p) => p.name.toLowerCase() === String(item.productName || "").toLowerCase()
+          );
+
+          const cartItem = {
+            id: matchedProduct?.id || `${item.productName}-${Date.now()}`,
+            name: item.productName,
+            price: Number(item.price || matchedProduct?.retailPrice || 0),
+            qty: Number(item.quantity || 1),
+          };
+
+          const existing = updatedCart.find(
+            (cartProduct) =>
+              cartProduct.name.toLowerCase() === cartItem.name.toLowerCase()
+          );
+
+          if (existing) {
+            existing.qty += cartItem.qty;
+          } else {
+            updatedCart.push(cartItem);
+          }
+        });
+
+        return updatedCart;
+      });
+
+      alert("Previous order added to basket");
+      navigate("/cart");
+    })
+    .catch(() => {
+      alert("Could not reorder this order");
+    });
+}
+
   return (
     <div style={styles.page}>
       <div style={styles.container}>
@@ -933,55 +983,7 @@ setOrderNote={setOrderNote}
   );
 }
 
-function reorderOrder(orderId) {
-  fetch(`${API_BASE}/order-items/${orderId}`)
-    .then((res) => {
-      if (!res.ok) throw new Error("Could not load previous order");
-      return res.json();
-    })
-    .then((items) => {
-      if (!Array.isArray(items) || items.length === 0) {
-        alert("No items found for this order");
-        return;
-      }
 
-      setCart((prevCart) => {
-        const updatedCart = [...prevCart];
-
-        items.forEach((item) => {
-          const matchedProduct = products.find(
-            (p) => p.name.toLowerCase() === String(item.productName || "").toLowerCase()
-          );
-
-          const cartItem = {
-            id: matchedProduct?.id || `${item.productName}-${Date.now()}`,
-            name: item.productName,
-            price: Number(item.price || matchedProduct?.retailPrice || 0),
-            qty: Number(item.quantity || 1),
-          };
-
-          const existing = updatedCart.find(
-            (cartProduct) =>
-              cartProduct.name.toLowerCase() === cartItem.name.toLowerCase()
-          );
-
-          if (existing) {
-            existing.qty += cartItem.qty;
-          } else {
-            updatedCart.push(cartItem);
-          }
-        });
-
-        return updatedCart;
-      });
-
-      alert("Previous order added to basket");
-      navigate("/cart");
-    })
-    .catch(() => {
-      alert("Could not reorder this order");
-    });
-}
 
 function ProductsPage({
   filteredProducts,
@@ -2129,6 +2131,7 @@ function LoginPage({
 }
 
 function LandingPage() {
+  const navigate = useNavigate();
   return (
     <section style={{ ...styles.card, textAlign: "center" }}>
       
