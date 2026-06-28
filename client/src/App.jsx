@@ -571,6 +571,7 @@ fetch(`${API_BASE}/create-checkout-session`, {
     });
 
     console.log("✅ ORDER SAVED");
+    setOrderNote("");
   } catch (err) {
     console.error("❌ ORDER SAVE FAILED:", err);
   }
@@ -1344,8 +1345,11 @@ function CartPage({ cart, subtotal, delivery, total, orderNote, setOrderNote, de
     width: "100%",
     marginTop: "12px",
     padding: "10px",
-    borderRadius: "8px",
+    borderRadius: "10px",
     border: "1px solid #d1d5db",
+    minHeight: "80px",
+    fontSize: "14px",
+    resize: "none",
   }}
 />
 
@@ -1563,6 +1567,12 @@ function OrdersPage({
 )}
 
 <p><strong>Total:</strong> €{Number(order.total || 0).toFixed(2)}</p>
+
+{order.customerNote && (
+  <p style={{ marginTop: "6px", fontStyle: "italic", color: "#374151" }}>
+    📝 <strong>Customer note:</strong> {order.customerNote}
+  </p>
+)}
 
             <button
               onClick={() => {
@@ -2077,7 +2087,7 @@ function LandingPage() {
           padding: "12px 20px",
           fontSize: "16px",
         }}
-        onClick={() => window.location.href = "/products"}
+        onClick={() => navigate("/products")}
       >
         Shop Products
       </button>
