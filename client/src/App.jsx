@@ -60,6 +60,7 @@ const [password, setPassword] = useState("");
   const [search, setSearch] = useState("");
   const [isResetMode, setIsResetMode] = useState(false);
   const [category, setCategory] = useState("All");
+  const [sortBy, setSortBy] = useState("default");
   const [page, setPage] = useState(1);
   const [authMode, setAuthMode] = useState("login");
 
@@ -233,18 +234,30 @@ function getPrice(product) {
 }
 
   const filteredProducts = useMemo(() => {
-    return products.filter((p) => {
-      const q = search.toLowerCase();
-      const matchesSearch =
-        p.name.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q);
+  let results = products.filter((p) => {
+    const q = search.toLowerCase();
 
-      const matchesCategory = category === "All" || p.category === category;
+    const matchesSearch =
+      p.name.toLowerCase().includes(q) ||
+      p.category.toLowerCase().includes(q) ||
+      p.description.toLowerCase().includes(q);
 
-      return matchesSearch && matchesCategory;
-    });
-  }, [products, search, category]);
+    const matchesCategory =
+      category === "All" || p.category === category;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  if (sortBy === "priceLow") {
+    results.sort((a, b) => getPrice(a) - getPrice(b));
+  }
+
+  if (sortBy === "priceHigh") {
+    results.sort((a, b) => getPrice(b) - getPrice(a));
+  }
+
+  return results;
+}, [products, search, category, sortBy]);
 
   const searchSuggestions = useMemo(() => {
     if (!search.trim()) return [];
@@ -1086,6 +1099,20 @@ const [editPrices, setEditPrices] = useState({
       <option key={c}>{c}</option>
     ))}
   </select>
+
+  <select
+  style={{
+    ...styles.input,
+    maxWidth: "220px",
+    height: "42px",
+  }}
+  value={sortBy}
+  onChange={(e) => setSortBy(e.target.value)}
+>
+  <option value="default">Sort Products</option>
+  <option value="priceLow">Price Low → High</option>
+  <option value="priceHigh">Price High → Low</option>
+</select>
 </div>
 
       <div style={styles.resultsInfo}>
@@ -2345,11 +2372,12 @@ header: {
     fontWeight: "bold",
   },
 
+ 
   productGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
-    gap: "14px",
-  },
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+  gap: "14px",
+},
 
   productCard: {
     border: "1px solid #e5e7eb",
@@ -2547,22 +2575,18 @@ suggestionItem: {
 
 productImageWrap: {
   width: "100%",
-  height: "120px",
+  height: "100px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  overflow: "hidden",
-  marginBottom: "10px",
 },
-
 
 productImage: {
-  width: "auto",
-  height: "100px",
-  maxWidth: "100%",
+  maxHeight: "90px",
+  maxWidth: "90%",
   objectFit: "contain",
-  display: "block",
 },
+
 
 
 
