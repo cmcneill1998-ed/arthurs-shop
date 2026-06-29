@@ -969,9 +969,11 @@ setOrderNote={setOrderNote}
               )
             }
           />
+
+           <Route path="/legal-notice" element={<LegalNoticePage />} />
         </Routes>
 
-        <Route path="/legal-notice" element={<LegalNoticePage />} />
+       
 
         <footer style={styles.footer}>
   <div style={{ maxWidth: "1000px", margin: "0 auto", textAlign: "center" }}>
