@@ -1226,10 +1226,14 @@ style={{
   {/* IMAGE */}
   <div style={styles.productImageWrap}>
     <img
-      src="/products/placeholder.png"
+      src={`/products/${p.name
+  .toLowerCase()
+  .replace(/\s+/g, "-")
+  .replace(/[^a-z0-9-]/g, "")}.jpg`}
+onError={(e) => {
+  e.target.src = "/products/placeholder.png";
+}}
 
-      alt={p.name}
-      style={styles.productImage}
     />
   </div>
 
@@ -2540,6 +2544,21 @@ suggestionItem: {
   gridTemplateColumns: "1fr auto",
   gap: "4px 12px",
   color: "#111827",
+},
+
+productImageWrap: {
+  width: "100%",
+  height: "90px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  marginBottom: "8px",
+},
+
+productImage: {
+  maxHeight: "80px",
+  maxWidth: "80px",
+  objectFit: "contain",
 },
 
 
