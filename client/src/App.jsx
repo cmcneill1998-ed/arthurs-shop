@@ -1233,6 +1233,8 @@ style={{
 onError={(e) => {
   e.target.src = "/products/placeholder.png";
 }}
+alt={p.name}
+style={styles.productImage}
 
     />
   </div>
@@ -2359,6 +2361,7 @@ header: {
     padding: "14px",
     textAlign: "center",
     background: "#ffffff",
+    overflow: "hidden",
   },
 
   categoryTag: {
@@ -2548,18 +2551,23 @@ suggestionItem: {
 
 productImageWrap: {
   width: "100%",
-  height: "90px",
+  height: "120px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  marginBottom: "8px",
+  overflow: "hidden",
+  marginBottom: "10px",
 },
 
+
 productImage: {
-  maxHeight: "80px",
-  maxWidth: "80px",
+  width: "auto",
+  height: "100px",
+  maxWidth: "100%",
   objectFit: "contain",
+  display: "block",
 },
+
 
 
 };
