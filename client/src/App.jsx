@@ -1227,9 +1227,7 @@ style={{
   <div style={styles.productImageWrap}>
     <img
       src="/products/placeholder.png"
-onError={(e) => {
-  e.target.src = "/products/placeholder.png";
-}}
+
       alt={p.name}
       style={styles.productImage}
     />
