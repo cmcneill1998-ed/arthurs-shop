@@ -1226,13 +1226,7 @@ style={{
   {/* IMAGE */}
   <div style={styles.productImageWrap}>
     <img
-  src={`/products/${p.name
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")}.jpg?v=${Date.now()}`}
-  onError={(e) => {
-    e.target.src = "/products/placeholder.png";
-  }}
+  src="/products/Aperol.jpg"
   alt={p.name}
   style={styles.productImage}
 />
