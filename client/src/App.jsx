@@ -1038,6 +1038,21 @@ const [editPrices, setEditPrices] = useState({
     <section style={styles.card}>
       <h2 style={styles.sectionTitle}>Browse Products</h2>
 
+      <div
+  style={{
+    background: "#DCFCE7",
+    border: "1px solid #16A34A",
+    color: "#166534",
+    padding: "12px",
+    borderRadius: "10px",
+    marginBottom: "20px",
+    textAlign: "center",
+    fontWeight: "bold",
+  }}
+>
+  🚚 Same-day delivery before 12pm • Orders under €20 incur a €5 delivery charge
+</div>
+
       <div style={styles.searchRow}>
 
 <div style={{ position: "relative", flexGrow: 1 }}>
