@@ -141,6 +141,7 @@ const [password, setPassword] = useState("");
             name: p.name || "Unnamed product",
             category: p.category || "Uncategorised",
             description: p.description || "",
+            image: p.image || "",
             retailPrice: Number(p.retailprice ?? p.retailPrice ?? p.price ?? 0),
             barPrice: Number(
   p.barprice ??
@@ -665,6 +666,7 @@ fetch(`${API_BASE}/create-checkout-session`, {
             name: p.name || "Unnamed product",
             category: p.category || "Uncategorised",
             description: p.description || "",
+            image: p.image || "",
             retailPrice: Number(p.retailprice ?? p.retailPrice ?? p.price ?? 0),
             barPrice: Number(
   p.barprice ??
@@ -1221,76 +1223,83 @@ style={{
       <div style={styles.productGrid}>
   {currentProducts.map((p) => (
     <div key={p.id} style={styles.productCard}>
-      <div>
-        <p style={styles.categoryTag}>{p.category}</p>
-        <h3 style={styles.productTitle}>{p.name}</h3>
-        <p style={styles.desc}>{p.description || " "}</p>
-      </div>
+  {/* IMAGE */}
+  <div style={styles.productImageWrap}>
+    <img
+      src="/products/placeholder.png"
+onError={(e) => {
+  e.target.src = "/products/placeholder.png";
+}}
+      alt={p.name}
+      style={styles.productImage}
+    />
+  </div>
 
-      <div>
-        <p style={styles.price}>€{Number(getPrice(p)).toFixed(2)}</p>
-        <p style={styles.smallText}>
-          {isBar ? "Bar discount applied" : ""}
-        </p>
-      </div>
+  {/* TEXT */}
+  <div>
+    <p style={styles.categoryTag}>{p.category}</p>
+    <h3 style={styles.productTitle}>{p.name}</h3>
+    <p style={styles.desc}>{p.description || " "}</p>
+  </div>
 
-      <div
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px",
-    marginTop: "10px",
-  }}
->
-  <button
-    style={styles.primaryBtn}
-    onClick={() => addToCart(p)}
-  >
-    Add to Basket
-  </button>
+  {/* PRICE */}
+  <div>
+    <p style={styles.price}>
+      €{Number(getPrice(p)).toFixed(2)}
+    </p>
+    {isBar && <p style={styles.smallText}>Bar discount applied</p>}
+  </div>
 
-  {isStaff && (
+  {/* BUTTONS */}
+  <div style={{ marginTop: "10px" }}>
     <button
-      style={styles.removeBtn}
-      onClick={() => {
-        if (!window.confirm(`Delete ${p.name}?`)) return;
-
-        fetch(`${API_BASE}/products/delete`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ id: p.id }),
-        })
-          .then((res) => {
-            if (!res.ok) throw new Error();
-            window.location.reload();
-          })
-          .catch(() => alert("Failed to delete product"));
-      }}
+      style={{ ...styles.primaryBtn, width: "100%" }}
+      onClick={() => addToCart(p)}
     >
-      Delete Product
+      Add to Basket
     </button>
-  )}
 
-  {isStaff && (
-    <button
-      style={styles.secondaryBtn}
-      onClick={() => {
-        setEditingProduct(p);
-        setEditPrices({
-          retailPrice: Number(p.retailPrice || 0).toFixed(2),
-          barPrice: Number(p.barPrice || 0).toFixed(2),
-        });
-      }}
-    >
-      Edit Price
-    </button>
-  )}
+    {isStaff && (
+      <div style={{ marginTop: "6px" }}>
+        <button
+          style={{ ...styles.secondaryBtn, width: "100%", marginBottom: "6px" }}
+          onClick={() => {
+            setEditingProduct(p);
+            setEditPrices({
+              retailPrice: Number(p.retailPrice || 0).toFixed(2),
+              barPrice: Number(p.barPrice || 0).toFixed(2),
+            });
+          }}
+        >
+          Edit Price
+        </button>
+
+        <button
+          style={{ ...styles.removeBtn, width: "100%" }}
+          onClick={() => {
+            if (!window.confirm(`Delete ${p.name}?`)) return;
+
+            fetch(`${API_BASE}/products/delete`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id: p.id }),
+            })
+              .then((res) => {
+                if (!res.ok) throw new Error();
+                window.location.reload();
+              })
+              .catch(() => alert("Failed to delete product"));
+          }}
+        >
+          Delete Product
+        </button>
+      </div>
+    )}
+  </div>
 </div>
-    </div>
-  ))}
-</div>
+
+  ))} 
+  </div>
 
       <div style={styles.paginationWrap}>
         <button
@@ -1628,7 +1637,15 @@ function OrdersPage({
   </p>
 )}
 
-            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "10px" }}>
+            <div
+  style={{
+    display: "flex",
+    gap: "10px",
+    flexWrap: "wrap",
+    marginTop: "12px",
+    justifyContent: "center",   // ✅ centers buttons
+  }}
+>
   <button
     style={styles.secondaryBtn}
     onClick={() => {
@@ -2161,6 +2178,17 @@ function LandingPage() {
 
     </section>
   );
+}
+
+function getProductImage(product) {
+  if (product.image) return product.image;
+
+  const safeName = product.name
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9\-]/g, "");
+
+  return `/products/${safeName}.jpg`;
 }
 
 const styles = {
