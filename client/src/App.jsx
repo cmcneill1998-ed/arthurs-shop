@@ -1229,13 +1229,14 @@ style={{
   src={`/products/${p.name
     .toLowerCase()
     .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")}.jpg`}
+    .replace(/[^a-z0-9-]/g, "")}.jpg?v=${Date.now()}`}
   onError={(e) => {
     e.target.src = "/products/placeholder.png";
   }}
   alt={p.name}
   style={styles.productImage}
 />
+
 
 <p style={{ fontSize: "10px", color: "red" }}>
   {p.name
