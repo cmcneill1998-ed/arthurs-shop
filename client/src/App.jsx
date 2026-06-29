@@ -971,6 +971,8 @@ setOrderNote={setOrderNote}
           />
         </Routes>
 
+        <Route path="/legal-notice" element={<LegalNoticePage />} />
+
         <footer style={styles.footer}>
   <div style={{ maxWidth: "1000px", margin: "0 auto", textAlign: "center" }}>
     
@@ -988,6 +990,23 @@ setOrderNote={setOrderNote}
     <p style={{ ...styles.footerText, marginTop: "10px" }}>
       Opening hours: Mon–Sat 10:00–20:00 | Sun 10:00–16:00
     </p>
+
+    <div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    gap: "20px",
+    flexWrap: "wrap",
+    marginTop: "20px",
+  }}
+>
+  <Link style={{ color: "#fff" }} to="/legal-notice">Legal Notice</Link>
+  <Link style={{ color: "#fff" }} to="/privacy-policy">Privacy Policy</Link>
+  <Link style={{ color: "#fff" }} to="/cookie-policy">Cookie Policy</Link>
+  <Link style={{ color: "#fff" }} to="/terms">Terms & Conditions</Link>
+  <Link style={{ color: "#fff" }} to="/alcohol-policy">Alcohol Policy</Link>
+  <Link style={{ color: "#fff" }} to="/delivery">Delivery & Returns</Link>
+</div>
 
     <p style={{ fontSize: "12px", marginTop: "12px", color: "#6b7280" }}>
       © 2026 Arthurs Off Licence. All rights reserved.
@@ -1284,6 +1303,7 @@ style={{
   {/* TEXT */}
   <div>
     <p style={styles.categoryTag}>{p.category}</p>
+    
     <h3 style={styles.productTitle}>{p.name}</h3>
     <p style={styles.desc}>{p.description || " "}</p>
   </div>
@@ -1367,6 +1387,22 @@ style={{
             </button>
           ))}
         </div>
+
+        <button
+  style={{
+    ...styles.primaryBtn,
+    margin: "20px auto",
+    display: "block",
+  }}
+  onClick={() =>
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    })
+  }
+>
+  ↑ Back to Top
+</button>
 
         <button
           style={styles.paginationBtn}
@@ -2193,6 +2229,15 @@ function LoginPage({
   );
 }
 
+function LegalNoticePage() {
+  return (
+    <section style={styles.card}>
+      <h2>Legal Notice</h2>
+      <p>Legal information for Arthurs Off Licence.</p>
+    </section>
+  );
+}
+
 function LandingPage() {
   const navigate = useNavigate();
   return (
@@ -2259,6 +2304,60 @@ function LandingPage() {
   >
     ✅ Island-wide delivery • ✅ Bar pricing available • ✅ Secure Stripe payments
   </p>
+
+  <div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    gap: "20px",
+    flexWrap: "wrap",
+    marginTop: "30px",
+  }}
+>
+  <div
+    style={{
+      background: "rgba(255,255,255,0.15)",
+      padding: "15px",
+      borderRadius: "10px",
+      minWidth: "180px",
+    }}
+  >
+    🍺 Beer
+  </div>
+
+  <div
+    style={{
+      background: "rgba(255,255,255,0.15)",
+      padding: "15px",
+      borderRadius: "10px",
+      minWidth: "180px",
+    }}
+  >
+    🍷 Wine
+  </div>
+
+  <div
+    style={{
+      background: "rgba(255,255,255,0.15)",
+      padding: "15px",
+      borderRadius: "10px",
+      minWidth: "180px",
+    }}
+  >
+    🥃 Spirits
+  </div>
+
+  <div
+    style={{
+      background: "rgba(255,255,255,0.15)",
+      padding: "15px",
+      borderRadius: "10px",
+      minWidth: "180px",
+    }}
+  >
+    🥤 Soft Drinks
+  </div>
+</div>
 </section>
   );
 }
@@ -2272,6 +2371,15 @@ function getProductImage(product) {
     .replace(/[^a-z0-9\-]/g, "");
 
   return `/products/${safeName}.jpg`;
+}
+
+function LegalNoticePage() {
+  return (
+    <section style={styles.card}>
+      <h2>Legal Notice</h2>
+      ...
+    </section>
+  );
 }
 
 const styles = {
