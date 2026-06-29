@@ -1236,6 +1236,13 @@ style={{
   alt={p.name}
   style={styles.productImage}
 />
+
+<p style={{ fontSize: "10px", color: "red" }}>
+  {p.name
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")}.jpg
+</p>
   </div>
 
   {/* TEXT */}
