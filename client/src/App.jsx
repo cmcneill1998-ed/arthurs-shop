@@ -1226,18 +1226,13 @@ style={{
   {/* IMAGE */}
   <div style={styles.productImageWrap}>
     <img
-  src="/products/Aperol.jpg"
+  src={`/products/${p.name.replace(/\s+/g, "-")}.jpg`}
+  onError={(e) => {
+    e.target.src = "/products/placeholder.png";
+  }}
   alt={p.name}
   style={styles.productImage}
 />
-
-
-<p style={{ fontSize: "10px", color: "red" }}>
-  {p.name
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")}.jpg
-</p>
   </div>
 
   {/* TEXT */}
