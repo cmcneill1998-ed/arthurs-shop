@@ -836,20 +836,22 @@ fetch(`${API_BASE}/create-checkout-session`, {
   path="/products"
   element={
     <ProductsPage
-      filteredProducts={filteredProducts}
-      categories={categories}
-      category={category}
-      setCategory={setCategory}
-      search={search}
-      setSearch={setSearch}
-      searchSuggestions={searchSuggestions}
-      addToCart={addToCart}
-      getPrice={getPrice}
-      isBar={isBar}
-      isStaff={isStaff}
-      page={page}
-      setPage={setPage}
-    />
+  filteredProducts={filteredProducts}
+  categories={categories}
+  category={category}
+  setCategory={setCategory}
+  search={search}
+  setSearch={setSearch}
+  searchSuggestions={searchSuggestions}
+  addToCart={addToCart}
+  getPrice={getPrice}
+  isBar={isBar}
+  isStaff={isStaff}
+  page={page}
+  setPage={setPage}
+  sortBy={sortBy}
+  setSortBy={setSortBy}
+/>
   }
 />
 
@@ -1014,6 +1016,8 @@ function ProductsPage({
   isStaff,
   page,
   setPage,
+  sortBy,
+  setSortBy,
 }) {
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE));
   const startIndex = (page - 1) * PRODUCTS_PER_PAGE;
@@ -2177,33 +2181,70 @@ function LoginPage({
 function LandingPage() {
   const navigate = useNavigate();
   return (
-    <section style={{ ...styles.card, textAlign: "center" }}>
-      
-      <h1 style={{ color: "#F97316" }}>
-        Drinks delivered to your door
-      </h1>
+    <section
+  style={{
+    ...styles.card,
+    textAlign: "center",
+    padding: "60px 20px",
+    background:
+      "linear-gradient(135deg, #F97316 0%, #EA580C 100%)",
+    color: "#fff",
+  }}
+>
+  <h1
+    style={{
+      fontSize: "42px",
+      marginBottom: "12px",
+      color: "#fff",
+    }}
+  >
+    Arthurs Off Licence
+  </h1>
 
-      <p style={{ marginTop: "10px", fontSize: "16px" }}>
-        Fast island-wide delivery for customers and businesses.
-      </p>
+  <p
+    style={{
+      fontSize: "20px",
+      marginBottom: "20px",
+      maxWidth: "700px",
+      margin: "0 auto 20px auto",
+    }}
+  >
+    Beer, Wine, Spirits & Soft Drinks delivered across Mallorca.
+  </p>
 
-      <p style={{ marginTop: "6px", color: "#6b7280" }}>
-        Trade pricing available – buy single or by the case.
-      </p>
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      gap: "12px",
+      flexWrap: "wrap",
+    }}
+  >
+    <button
+      style={styles.primaryBtn}
+      onClick={() => navigate("/products")}
+    >
+      Shop Now
+    </button>
 
-      <button
-        style={{
-          ...styles.primaryBtn,
-          marginTop: "20px",
-          padding: "12px 20px",
-          fontSize: "16px",
-        }}
-        onClick={() => navigate("/products")}
-      >
-        Shop Products
-      </button>
+    <button
+      style={styles.secondaryBtn}
+      onClick={() => navigate("/login")}
+    >
+      Login / Register
+    </button>
+  </div>
 
-    </section>
+  <p
+    style={{
+      marginTop: "25px",
+      fontSize: "14px",
+      opacity: 0.9,
+    }}
+  >
+    ✅ Island-wide delivery • ✅ Bar pricing available • ✅ Secure Stripe payments
+  </p>
+</section>
   );
 }
 
