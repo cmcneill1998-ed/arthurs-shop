@@ -2375,14 +2375,6 @@ function getProductImage(product) {
   return `/products/${safeName}.jpg`;
 }
 
-function LegalNoticePage() {
-  return (
-    <section style={styles.card}>
-      <h2>Legal Notice</h2>
-      ...
-    </section>
-  );
-}
 
 const styles = {
   page: {
