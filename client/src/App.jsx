@@ -2,6 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { Routes, Route, Link, Navigate, useNavigate } from "react-router-dom";
 import logo from "./image.png";
 import Orders from "./Orders";
+import LegalNoticePage from "./pages/LegalNoticePage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import CookiePolicyPage from "./pages/CookiePolicyPage";
+import TermsPage from "./pages/TermsPage";
+import AlcoholPolicyPage from "./pages/AlcoholPolicyPage";
+import DeliveryPage from "./pages/DeliveryPage";
 
 
 const API_BASE = "https://arthurs-shop.onrender.com";
@@ -773,7 +779,16 @@ fetch(`${API_BASE}/create-checkout-session`, {
       <div style={styles.container}>
         <header style={styles.header}>
           <div style={styles.brandWrap}>
-            <img src={logo} alt="Arthurs Off Licence logo" style={styles.logo} />
+            <Link to="/">
+  <img
+    src={logo}
+    alt="Arthurs Off Licence logo"
+    style={{
+      ...styles.logo,
+      cursor: "pointer",
+    }}
+  />
+</Link>
             <div style={{
   textAlign: "center",
   flex: 1,
@@ -971,6 +986,11 @@ setOrderNote={setOrderNote}
           />
 
            <Route path="/legal-notice" element={<LegalNoticePage />} />
+<Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+<Route path="/cookie-policy" element={<CookiePolicyPage />} />
+<Route path="/terms" element={<TermsPage />} />
+<Route path="/alcohol-policy" element={<AlcoholPolicyPage />} />
+<Route path="/delivery" element={<DeliveryPage />} />
         </Routes>
 
        

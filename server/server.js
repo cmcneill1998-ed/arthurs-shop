@@ -225,7 +225,7 @@ VALUES ($1,$2,$3,$4,$5,$6,'Pending','',$7) RETURNING id`,
   <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; padding: 20px; color: #1f2937;">
 
     <div style="text-align:center; margin-bottom: 15px;">
-      <img src="https://arthurs-off-licence.vercel.app/image.png"
+      <img src="https://arthurs-shop.vercel.app/logo.png"
            alt="Arthurs Off Licence"
            style="width: 180px; margin-bottom: 5px;" />
       <p style="font-size: 13px; color: #16A34A; margin: 0;">
