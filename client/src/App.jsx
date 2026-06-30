@@ -1735,6 +1735,10 @@ function OrdersPage({
 
 <p><strong>Total:</strong> €{Number(order.total || 0).toFixed(2)}</p>
 
+<p>
+  <strong>Status:</strong> {order.status || "Pending"}
+</p>
+
 {order.customerNote && (
   <p style={{ marginTop: "6px", fontStyle: "italic", color: "#374151" }}>
     📝 <strong>Customer note:</strong> {order.customerNote}
@@ -2251,14 +2255,6 @@ function LoginPage({
   );
 }
 
-function LegalNoticePage() {
-  return (
-    <section style={styles.card}>
-      <h2>Legal Notice</h2>
-      <p>Legal information for Arthurs Off Licence.</p>
-    </section>
-  );
-}
 
 function LandingPage() {
   const navigate = useNavigate();
