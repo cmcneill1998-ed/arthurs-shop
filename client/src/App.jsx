@@ -2765,6 +2765,16 @@ productImage: {
   objectFit: "contain",
 },
 
+orderCard: {
+  background: "#ffffff",
+  border: "1px solid #e5e7eb",
+  borderRadius: "12px",
+  padding: "20px",
+  marginBottom: "20px",
+  textAlign: "center",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+},
+
 
 
 
