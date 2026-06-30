@@ -356,12 +356,13 @@ app.get("/orders", async (req, res) => {
     if (role === "staff") {
       const result = await db.query("SELECT * FROM orders ORDER BY id DESC");
 
-      const formatted = result.rows.map(order => ({
-        ...order,
-        customerName: order.customername,
-        hotelRoom: order.hotelroom,
-        hotelAddress: order.hoteladdress,
-      }));
+     const formatted = result.rows.map(order => ({
+  ...order,
+  customerName: order.customername,
+  hotelRoom: order.hotelroom,
+  hotelAddress: order.hoteladdress,
+  customerNote: order.customernote,
+}));
 
       return res.json(formatted);
     }
@@ -372,11 +373,12 @@ app.get("/orders", async (req, res) => {
     );
 
     const formatted = result.rows.map(order => ({
-      ...order,
-      customerName: order.customername,
-      hotelRoom: order.hotelroom,
-      hotelAddress: order.hoteladdress,
-    }));
+  ...order,
+  customerName: order.customername,
+  hotelRoom: order.hotelroom,
+  hotelAddress: order.hoteladdress,
+  customerNote: order.customernote,
+}));
 
     res.json(formatted);
 
