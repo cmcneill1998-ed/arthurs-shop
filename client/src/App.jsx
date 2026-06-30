@@ -2553,14 +2553,18 @@ header: {
   gap: "14px",
 },
 
-  productCard: {
-    border: "1px solid #e5e7eb",
-    borderRadius: "12px",
-    padding: "14px",
-    textAlign: "center",
-    background: "#ffffff",
-    overflow: "hidden",
-  },
+productCard: {
+  border: "1px solid #e5e7eb",
+  borderRadius: "12px",
+  padding: "14px",
+  textAlign: "center",
+  background: "#ffffff",
+  overflow: "hidden",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  minHeight: "320px",
+},
 
   categoryTag: {
     color: "#16A34A",
@@ -2771,6 +2775,24 @@ orderCard: {
   boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
 },
 
+desc: {
+  minHeight: "50px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  textAlign: "center",
+},
+
+productTitle: {
+  minHeight: "60px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  textAlign: "center",
+  fontSize: "18px",
+  fontWeight: "bold",
+  margin: "10px 0",
+},
 
 
 
