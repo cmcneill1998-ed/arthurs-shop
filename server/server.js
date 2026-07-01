@@ -178,26 +178,35 @@ app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log("LOGIN ATTEMPT");
+    console.log("EMAIL:", email);
+    console.log("PASSWORD:", password);
+
     const result = await db.query(
       `
       SELECT *
       FROM users
-      WHERE email = $1
-      AND password = $2
+      WHERE LOWER(email) = LOWER($1)
       `,
-      [
-        email.toLowerCase().trim(),
-        password.trim(),
-      ]
+      [email.trim()]
     );
 
     if (result.rows.length === 0) {
       return res.status(401).json({
-        error: "Invalid login",
+        error: "Email not found",
       });
     }
 
-    res.json(result.rows[0]);
+    const user = result.rows[0];
+
+    if (String(user.password).trim() !== String(password).trim()) {
+      return res.status(401).json({
+        error: "Password incorrect",
+      });
+    }
+
+    res.json(user);
+
   } catch (err) {
     console.error(err);
     res.status(500).send("Login failed");
