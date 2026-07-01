@@ -115,6 +115,8 @@ const [password, setPassword] = useState("");
     description: "",
   });
 
+  const [showSuggestions, setShowSuggestions] = useState(true);
+
   const role = currentUser?.role || "customer";
   const isBar = role === "bar";
   const isStaff = role === "staff";
@@ -1070,10 +1072,23 @@ function ProductsPage({
   const startIndex = (page - 1) * PRODUCTS_PER_PAGE;
   const currentProducts = filteredProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
 
-  const visiblePages = [];
-  for (let i = Math.max(1, page - 2); i <= Math.min(totalPages, page + 2); i += 1) {
+const visiblePages = [];
+
+if (totalPages <= 3) {
+  for (let i = 1; i <= totalPages; i++) {
     visiblePages.push(i);
   }
+} else {
+  let start = Math.max(1, page - 1);
+
+  if (start + 2 > totalPages) {
+    start = totalPages - 2;
+  }
+
+  for (let i = start; i < start + 3; i++) {
+    visiblePages.push(i);
+  }
+}
 
   const [editingProduct, setEditingProduct] = useState(null);
 const [editPrices, setEditPrices] = useState({
@@ -1105,28 +1120,34 @@ const [editPrices, setEditPrices] = useState({
 <div style={{ position: "relative", flexGrow: 1 }}>
   <div style={{ display: "flex", gap: "8px" }}>
     <input
-      style={styles.searchInput}
-      placeholder="Search products"
-      value={search}
-      onChange={(e) => {
-  setSearch(e.target.value);
-  setPage(1);
-}}
-    />
+  style={styles.searchInput}
+  placeholder="Search products"
+  value={search}
+  onChange={(e) => {
+    setSearch(e.target.value);
+    setShowSuggestions(true);
+  }}
+/>
 
-    <button
-      style={{
-        ...styles.primaryBtn,
-        height: "42px",
-        minWidth: "90px",
-      }}
-      onClick={() => setPage(1)}
-    >
-      Search
-    </button>
+   <button
+  style={{
+    ...styles.primaryBtn,
+    height: "42px",
+    minWidth: "90px",
+  }}
+  onClick={() => {
+    setPage(1);
+    setShowSuggestions(false);
+  }}
+>
+  Search
+</button>
+
   </div>
 
-  {search.trim() && searchSuggestions.length > 0 && (
+  {showSuggestions &&
+  search.trim() &&
+  searchSuggestions.length > 0 && (
     <div style={styles.suggestionBox}>
       {searchSuggestions.map((item) => (
         <button
@@ -1134,9 +1155,11 @@ const [editPrices, setEditPrices] = useState({
           type="button"
           style={styles.suggestionItem}
           onClick={() => {
-            setSearch(item.name);
-            setPage(1);
-          }}
+  setSearch(item.name);
+  setPage(1);
+  setShowSuggestions(false);
+}}
+
         >
           <strong>{item.name}</strong>
           <span style={{ fontSize: "12px", color: "#6b7280" }}>
