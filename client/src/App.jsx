@@ -12,7 +12,7 @@ import DeliveryPage from "./pages/DeliveryPage";
 
 const API_BASE = "https://arthurs-shop.onrender.com";
 
-const PRODUCTS_PER_PAGE = 24;
+const PRODUCTS_PER_PAGE = 12;
 
 export default function App() {
   const navigate = useNavigate();
