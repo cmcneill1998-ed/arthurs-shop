@@ -2473,9 +2473,9 @@ const styles = {
   },
 
   container: {
-    maxWidth: "1360px",
-    margin: "0 auto",
-  },
+  maxWidth: "1500px",
+  margin: "0 auto",
+},
 
 header: {
   background: "#ffffff",
@@ -2502,28 +2502,30 @@ header: {
 nav: {
   background: "#ffffff",
   borderRadius: "12px",
-  padding: "12px 16px",
+  padding: "8px 12px",
   marginBottom: "20px",
   display: "flex",
+  justifyContent: "space-between",
   alignItems: "center",
-  gap: "10px",
   border: "1px solid #e5e7eb",
 },
 
  navLinks: {
   display: "flex",
-  gap: "8px",
-  flexWrap: "wrap",
+  gap: "6px",
+  alignItems: "center",
 },
 
   navLink: {
   color: "#ffffff",
   textDecoration: "none",
   fontWeight: "600",
-  fontSize: "13px",
-  padding: "6px 10px",
+  fontSize: "12px",
+  padding: "5px 8px",
   borderRadius: "6px",
   background: "#16A34A",
+  display: "inline-block",
+  whiteSpace: "nowrap",
 },
 
   navActions: {
@@ -2547,11 +2549,12 @@ primaryNavBtn: {
   background: "#F97316",
   color: "#ffffff",
   borderRadius: "6px",
-  padding: "6px 10px",
+  padding: "5px 8px",
   fontWeight: "600",
-  fontSize: "13px",
+  fontSize: "12px",
   textDecoration: "none",
   display: "inline-block",
+  whiteSpace: "nowrap",
 },
 
  logo: {
