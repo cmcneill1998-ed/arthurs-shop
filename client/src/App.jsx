@@ -330,46 +330,80 @@ function getPrice(product) {
       }
     }
 
-    const newUser = {
-      id: Date.now(),
-      ...registerForm,
-    };
+    fetch(`${API_BASE}/register`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(registerForm),
+})
+  .then(async (res) => {
+    const data = await res.json();
 
-    setUsers((prev) => [...prev, newUser]);
-    setCurrentUser(newUser);
-    setMessage(
-      `Account created as ${
-        registerForm.role === "bar" ? "Bar Customer" : "Standard Customer"
-      }.`
+    if (!res.ok) {
+      throw new Error(data.error || "Register failed");
+    }
+
+    setCurrentUser(data);
+
+    localStorage.setItem(
+      "arthurs_currentUser",
+      JSON.stringify(data)
     );
+
+    setMessage(
+      registerForm.role === "bar"
+        ? "Bar account created."
+        : "Customer account created."
+    );
+
     navigate("/");
+  })
+  .catch((err) => {
+    setMessage(err.message);
+  });
   }
 
  function login() {
   resetMessages();
 
-  console.log("LOGIN FORM", loginForm);
-console.log("USERS", users);
-  const foundUser = users.find(
-    (u) =>
-      u.email.toLowerCase() === loginForm.email.toLowerCase() &&
-      u.password === loginForm.password
-  );
+  fetch(`${API_BASE}/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: loginForm.email,
+      password: loginForm.password,
+    }),
+  })
+    .then(async (res) => {
+      const data = await res.json();
 
-  if (!foundUser) {
-    setMessage("Login details not recognised.");
-    return;
-  }
+      if (!res.ok) {
+        throw new Error("Login details not recognised.");
+      }
 
-  setCurrentUser(foundUser);
-  setMessage(
-  foundUser.role === "bar"
-    ? "Logged in as Bar Customer."
-    : foundUser.role === "staff"
-    ? "Logged in as Staff."
-    : "Logged in as Retail Customer."
-);
-  navigate("/");
+      setCurrentUser(data);
+
+      localStorage.setItem(
+        "arthurs_currentUser",
+        JSON.stringify(data)
+      );
+
+      setMessage(
+        data.role === "bar"
+          ? "Logged in as Bar Customer."
+          : data.role === "staff"
+          ? "Logged in as Staff."
+          : "Logged in as Retail Customer."
+      );
+
+      navigate("/");
+    })
+    .catch((err) => {
+      setMessage(err.message);
+    });
 }
 
 function resetPassword() {
