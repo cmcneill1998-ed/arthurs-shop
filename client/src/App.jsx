@@ -115,7 +115,7 @@ const [password, setPassword] = useState("");
     description: "",
   });
 
-  const [showSuggestions, setShowSuggestions] = useState(true);
+  
 
   const role = currentUser?.role || "customer";
   const isBar = role === "bar";
@@ -1095,6 +1095,8 @@ const [editPrices, setEditPrices] = useState({
   retailPrice: "",
   barPrice: "",
 });
+
+const [showSuggestions, setShowSuggestions] = useState(true);
 
   return (
     <section style={styles.card}>
