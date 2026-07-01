@@ -12,7 +12,7 @@ import DeliveryPage from "./pages/DeliveryPage";
 
 const API_BASE = "https://arthurs-shop.onrender.com";
 
-const PRODUCTS_PER_PAGE = 50;
+const PRODUCTS_PER_PAGE = 24;
 
 export default function App() {
   const navigate = useNavigate();
@@ -1416,7 +1416,17 @@ style={{
           ))}
         </div>
 
+       
+
         <button
+          style={styles.paginationBtn}
+          onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
+          disabled={page === totalPages}
+        >
+          Next →
+        </button>
+      
+       <button
   style={{
     ...styles.primaryBtn,
     margin: "20px auto",
@@ -1431,15 +1441,7 @@ style={{
 >
   ↑ Back to Top
 </button>
-
-        <button
-          style={styles.paginationBtn}
-          onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
-          disabled={page === totalPages}
-        >
-          Next →
-        </button>
-      </div>
+</div>
     </section>
   );
 }
@@ -2415,19 +2417,20 @@ header: {
   padding: "20px",
   marginBottom: "20px",
   display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
   flexWrap: "wrap",
-  gap: "15px",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: "20px",
   borderTop: "6px solid #16A34A",
   boxShadow: "0 6px 16px rgba(0,0,0,0.05)",
 },
 
  brandWrap: {
   display: "flex",
+  flexDirection: "column",
   alignItems: "center",
-  gap: "16px",
-  flex: 1,
+  textAlign: "center",
+  width: "100%",
 },
 
 nav: {
@@ -2515,14 +2518,16 @@ nav: {
     marginBottom: "16px",
   },
 
-  userBox: {
+ userBox: {
   background: "#DCFCE7",
   border: "1px solid #16A34A",
   borderRadius: "10px",
   padding: "10px 12px",
   fontSize: "13px",
+  textAlign: "center",
   width: "100%",
-  maxWidth: "250px",
+  maxWidth: "300px",
+  margin: "0 auto",
 },
 
   card: {
@@ -2595,10 +2600,11 @@ productCard: {
 
   paginationWrap: {
   display: "flex",
+  flexWrap: "wrap",
   justifyContent: "center",
+  alignItems: "center",
   gap: "10px",
   marginTop: "20px",
-  flexWrap: "wrap",
 },
 
   paginationBtn: {
@@ -2655,11 +2661,10 @@ productCard: {
 
   
 searchRow: {
-  display: "flex",
+  display: "grid",
+  gridTemplateColumns: "1fr",
   gap: "12px",
-  alignItems: "center",
   marginBottom: "20px",
-  flexWrap: "wrap",
 },
 
 
