@@ -40,6 +40,8 @@ async function ensureOrderItemsTable() {
 ADD COLUMN IF NOT EXISTS customerNote TEXT DEFAULT '';
     `);
 
+    
+
     console.log("✅ order_items table ready");
   } catch (err) {
     console.error("❌ Failed to create/update order_items table:", err);
@@ -63,6 +65,19 @@ app.get("/products", async (req, res) => {
   }
 });
 
+
+app.get("/check-users", async (req, res) => {
+  try {
+    const result = await db.query(
+      "SELECT * FROM users"
+    );
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+});
 
 // =========================
 // STRIPE CHECKOUT
