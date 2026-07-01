@@ -325,6 +325,8 @@ function getPrice(product) {
  function login() {
   resetMessages();
 
+  console.log("LOGIN FORM", loginForm);
+console.log("USERS", users);
   const foundUser = users.find(
     (u) =>
       u.email.toLowerCase() === loginForm.email.toLowerCase() &&
