@@ -1146,6 +1146,7 @@ const [editPrices, setEditPrices] = useState({
       ))}
     </div>
   )}
+  </div>
 </div>
 
 
@@ -1160,9 +1161,11 @@ const [editPrices, setEditPrices] = useState({
 >
   <select
     style={{
-      ...styles.input,
-      flex: 1,
+      width: "50%",
       height: "42px",
+      borderRadius: "8px",
+      border: "1px solid #d1d5db",
+      padding: "10px",
     }}
     value={category}
     onChange={(e) => setCategory(e.target.value)}
@@ -1174,9 +1177,11 @@ const [editPrices, setEditPrices] = useState({
 
   <select
     style={{
-      ...styles.input,
-      flex: 1,
+      width: "50%",
       height: "42px",
+      borderRadius: "8px",
+      border: "1px solid #d1d5db",
+      padding: "10px",
     }}
     value={sortBy}
     onChange={(e) => setSortBy(e.target.value)}
