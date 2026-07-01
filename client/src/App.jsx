@@ -335,7 +335,13 @@ function getPrice(product) {
   }
 
   setCurrentUser(foundUser);
-  setMessage(`Logged in as ${foundUser.role} customer.`);
+  setMessage(
+  foundUser.role === "bar"
+    ? "Logged in as Bar Customer."
+    : foundUser.role === "staff"
+    ? "Logged in as Staff."
+    : "Logged in as Retail Customer."
+);
   navigate("/");
 }
 
@@ -1017,7 +1023,7 @@ setOrderNote={setOrderNote}
   style={{
     display: "flex",
     justifyContent: "center",
-    gap: "20px",
+    gap: "12px",
     flexWrap: "wrap",
     marginTop: "20px",
   }}
@@ -2244,10 +2250,7 @@ function LoginPage({
     Click this button if you have forgotten your password and want to reset it.
   </p>
 
-  <p style={{ marginTop: 12, fontSize: 12, color: "#6b7280" }}>
-    Staff demo login: <strong>staff@arthurs.test</strong> /{" "}
-    <strong>demo123</strong>
-  </p>
+  
 </>
 
       )}
@@ -2327,7 +2330,7 @@ function LandingPage() {
   style={{
     display: "flex",
     justifyContent: "center",
-    gap: "20px",
+    gap: "12px",
     flexWrap: "wrap",
     marginTop: "30px",
   }}
@@ -2414,6 +2417,8 @@ header: {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
+  flexWrap: "wrap",
+  gap: "15px",
   borderTop: "6px solid #16A34A",
   boxShadow: "0 6px 16px rgba(0,0,0,0.05)",
 },
@@ -2425,22 +2430,24 @@ header: {
   flex: 1,
 },
 
-  nav: {
-    background: "#ffffff",
-    borderRadius: "12px",
-    padding: "12px 16px",
-    marginBottom: "20px",
-    display: "flex",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-    border: "1px solid #e5e7eb",
-  },
+nav: {
+  background: "#ffffff",
+  borderRadius: "12px",
+  padding: "12px 16px",
+  marginBottom: "20px",
+  display: "flex",
+  justifyContent: "space-between",
+  flexWrap: "wrap",
+  gap: "10px",
+  border: "1px solid #e5e7eb",
+},
 
   navLinks: {
-    display: "flex",
-    gap: "8px",
-    flexWrap: "wrap",
-  },
+  display: "flex",
+  gap: "8px",
+  flexWrap: "wrap",
+  justifyContent: "center",
+},
 
   navLink: {
     color: "#ffffff",
@@ -2477,9 +2484,11 @@ header: {
     textDecoration: "none",
   },
 
-  logo: {
-    width: "240px",
-  },
+ logo: {
+  width: "100%",
+  maxWidth: "240px",
+  height: "auto",
+},
 
   kicker: {
     color: "#16A34A",
@@ -2507,12 +2516,14 @@ header: {
   },
 
   userBox: {
-    background: "#DCFCE7",
-    border: "1px solid #16A34A",
-    borderRadius: "10px",
-    padding: "10px 12px",
-    fontSize: "13px",
-  },
+  background: "#DCFCE7",
+  border: "1px solid #16A34A",
+  borderRadius: "10px",
+  padding: "10px 12px",
+  fontSize: "13px",
+  width: "100%",
+  maxWidth: "250px",
+},
 
   card: {
     background: "#ffffff",
@@ -2549,7 +2560,7 @@ header: {
  
   productGrid: {
   display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
   gap: "14px",
 },
 
@@ -2583,11 +2594,12 @@ productCard: {
   },
 
   paginationWrap: {
-    display: "flex",
-    justifyContent: "center",
-    gap: "10px",
-    marginTop: "20px",
-  },
+  display: "flex",
+  justifyContent: "center",
+  gap: "10px",
+  marginTop: "20px",
+  flexWrap: "wrap",
+},
 
   paginationBtn: {
   padding: "8px 14px",
@@ -2647,7 +2659,9 @@ searchRow: {
   gap: "12px",
   alignItems: "center",
   marginBottom: "20px",
+  flexWrap: "wrap",
 },
+
 
 searchInput: {
   width: "100%",
