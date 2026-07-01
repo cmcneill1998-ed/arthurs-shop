@@ -1108,7 +1108,10 @@ const [editPrices, setEditPrices] = useState({
       style={styles.searchInput}
       placeholder="Search products"
       value={search}
-      onChange={(e) => setSearch(e.target.value)}
+      onChange={(e) => {
+  setSearch(e.target.value);
+  setPage(1);
+}}
     />
 
     <button
@@ -2758,7 +2761,10 @@ suggestionBox: {
   boxShadow: "0 10px 25px rgba(0,0,0,0.12)",
   zIndex: 1000,
   overflow: "hidden",
+  maxHeight: "220px",
+  overflowY: "auto",
 },
+
 
 suggestionItem: {
   width: "100%",
