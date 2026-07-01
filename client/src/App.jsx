@@ -30,6 +30,29 @@ export default function App() {
       hotelRoom: "",
       hotelAddress: "",
     },
+
+    {
+      id: 2,
+      role: "bar",
+      fullName: "Charlotte",
+      email: "mcneill1992spam@hotmail.com",
+      password: "123",
+      CompanyName: "123",
+      address: "123",
+      nif: "123", 
+      
+    },
+
+    {
+      id: 3,
+      role: "customer",
+      fullName: "Charlotte",
+      email: "s2328389@students.ncl-coll.ac.uk",
+      password: "123",
+      hotelRoom: "123",
+      hotelAddress: "123",
+      
+    }
   ];
 
 const [email, setEmail] = useState("");
