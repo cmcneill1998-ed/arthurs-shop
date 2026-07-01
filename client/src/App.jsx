@@ -2543,7 +2543,7 @@ nav: {
     fontWeight: "bold",
   },
 
-  primaryNavBtn: {
+primaryNavBtn: {
   background: "#F97316",
   color: "#ffffff",
   borderRadius: "6px",
@@ -2551,6 +2551,7 @@ nav: {
   fontWeight: "600",
   fontSize: "13px",
   textDecoration: "none",
+  display: "inline-block",
 },
 
  logo: {
