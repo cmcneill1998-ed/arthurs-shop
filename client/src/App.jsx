@@ -2516,7 +2516,7 @@ nav: {
   flexWrap: "wrap",
 },
 
-  nnavLink: {
+  navLink: {
   color: "#ffffff",
   textDecoration: "none",
   fontWeight: "600",
