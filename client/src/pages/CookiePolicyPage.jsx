@@ -1,7 +1,16 @@
 export default function CookiePolicyPage() {
   return (
     <div style={{ padding: "30px", maxWidth: "1000px", margin: "0 auto" }}>
-      <h1>Cookie Policy</h1>
+      <h1
+  style={{
+    color: "#111827",
+    fontSize: "36px",
+    fontWeight: "700",
+    marginBottom: "20px",
+  }}
+>
+  Cookie Policy
+</h1>
 
       <p>
         This website may use cookies to improve functionality and user

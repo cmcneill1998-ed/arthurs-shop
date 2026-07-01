@@ -2181,7 +2181,24 @@ function LoginPage({
         />
       </div>
     </>
+    
   )}
+
+  <div
+  style={{
+    marginTop: "10px",
+    padding: "12px",
+    background: "#f9fafb",
+    border: "1px solid #e5e7eb",
+    borderRadius: "8px",
+    fontSize: "13px",
+    color: "#374151",
+  }}
+>
+  {registerForm.role === "bar"
+    ? "Please enter your company name, delivery address and NIF number to register and validate access to bar customer pricing."
+    : "Please enter a hotel room number and hotel address so deliveries can be correctly located."}
+</div>
 </div>
 
           <button
@@ -2419,6 +2436,16 @@ function LandingPage() {
   >
     🥤 Soft Drinks
   </div>
+  <div
+  style={{
+    background: "rgba(255,255,255,0.15)",
+    padding: "15px",
+    borderRadius: "10px",
+    minWidth: "180px",
+  }}
+>
+  🍿 Snacks
+</div>
 </div>
 </section>
   );
@@ -2479,16 +2506,16 @@ nav: {
   marginBottom: "20px",
   display: "flex",
   justifyContent: "space-between",
-  flexWrap: "wrap",
+  alignItems: "center",
   gap: "10px",
   border: "1px solid #e5e7eb",
 },
 
-  navLinks: {
+ navLinks: {
   display: "flex",
   gap: "8px",
   flexWrap: "wrap",
-  justifyContent: "center",
+  flex: 1,
 },
 
   navLink: {

@@ -1,7 +1,16 @@
 export default function LegalNoticePage() {
   return (
     <div style={{ padding: "30px", maxWidth: "1000px", margin: "0 auto" }}>
-      <h1>Legal Notice</h1>
+      <h1
+  style={{
+    color: "#111827",
+    fontSize: "36px",
+    fontWeight: "700",
+    marginBottom: "20px",
+  }}
+>
+  Legal Notice
+</h1>
 
       <p>
         Arthurs Off Licence is an independent drinks retailer operating in

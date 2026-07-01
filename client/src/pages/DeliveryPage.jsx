@@ -1,7 +1,16 @@
 export default function DeliveryPage() {
   return (
     <div style={{ padding: "30px", maxWidth: "1000px", margin: "0 auto" }}>
-      <h1>Delivery & Returns</h1>
+      <h1
+  style={{
+    color: "#111827",
+    fontSize: "36px",
+    fontWeight: "700",
+    marginBottom: "20px",
+  }}
+>
+  Delivery & Returns
+</h1>
 
       <p>
         Orders placed before 12:00 PM are normally delivered the same day.
