@@ -32,6 +32,8 @@ async function ensureOrderItemsTable() {
       );
     `);
 
+    
+
     // ✅ THIS FIXES YOUR ERROR
     await db.query(`
       ALTER TABLE order_items
@@ -42,9 +44,37 @@ ADD COLUMN IF NOT EXISTS customerNote TEXT DEFAULT '';
 
     
 
+    
+
     console.log("✅ order_items table ready");
   } catch (err) {
     console.error("❌ Failed to create/update order_items table:", err);
+  }
+}
+
+// =========================
+// USERS TABLE
+// =========================
+async function ensureUsersTable() {
+  try {
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        role VARCHAR(20) NOT NULL,
+        fullname TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        nif TEXT,
+        companyname TEXT,
+        address TEXT,
+        hotelroom TEXT,
+        hoteladdress TEXT
+      );
+    `);
+
+    console.log("✅ users table ready");
+  } catch (err) {
+    console.error("❌ users table failed:", err);
   }
 }
 
@@ -68,14 +98,109 @@ app.get("/products", async (req, res) => {
 
 app.get("/check-users", async (req, res) => {
   try {
-    const result = await db.query(
-      "SELECT * FROM users"
-    );
-
+    const result = await db.query("SELECT * FROM users");
     res.json(result.rows);
   } catch (err) {
     console.error(err);
     res.status(500).send(err.message);
+  }
+});
+
+// =========================
+// REGISTER
+// =========================
+app.post("/register", async (req, res) => {
+  try {
+    const {
+      role,
+      fullName,
+      email,
+      password,
+      nif,
+      companyName,
+      address,
+      hotelRoom,
+      hotelAddress,
+    } = req.body;
+
+    const existing = await db.query(
+      "SELECT id FROM users WHERE email = $1",
+      [email.toLowerCase()]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.status(400).json({
+        error: "Email already exists",
+      });
+    }
+
+    const result = await db.query(
+      `
+      INSERT INTO users
+      (
+        role,
+        fullname,
+        email,
+        password,
+        nif,
+        companyname,
+        address,
+        hotelroom,
+        hoteladdress
+      )
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+      RETURNING *
+      `,
+      [
+        role,
+        fullName,
+        email.toLowerCase(),
+        password,
+        nif,
+        companyName,
+        address,
+        hotelRoom,
+        hotelAddress,
+      ]
+    );
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Register failed");
+  }
+});
+
+// =========================
+// LOGIN
+// =========================
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const result = await db.query(
+      `
+      SELECT *
+      FROM users
+      WHERE email = $1
+      AND password = $2
+      `,
+      [
+        email.toLowerCase().trim(),
+        password.trim(),
+      ]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({
+        error: "Invalid login",
+      });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Login failed");
   }
 });
 
@@ -562,6 +687,7 @@ app.get("/", (req, res) => {
 });
 
 ensureOrderItemsTable();   
+ensureUsersTable();
 
 app.listen(process.env.PORT || 10000, () => {
   console.log("Server running ✅");
