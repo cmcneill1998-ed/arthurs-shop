@@ -1151,13 +1151,19 @@ const [editPrices, setEditPrices] = useState({
 
 
   {/* DROPDOWN */}
-    <select
+    <div
   style={{
-    ...styles.input,
-    maxWidth: "220px",
-    height: "42px",
+    display: "flex",
+    gap: "10px",
+    width: "100%",
   }}
-
+>
+  <select
+    style={{
+      ...styles.input,
+      flex: 1,
+      height: "42px",
+    }}
     value={category}
     onChange={(e) => setCategory(e.target.value)}
   >
@@ -1167,18 +1173,18 @@ const [editPrices, setEditPrices] = useState({
   </select>
 
   <select
-  style={{
-    ...styles.input,
-    maxWidth: "220px",
-    height: "42px",
-  }}
-  value={sortBy}
-  onChange={(e) => setSortBy(e.target.value)}
->
-  <option value="default">Sort Products</option>
-  <option value="priceLow">Price Low → High</option>
-  <option value="priceHigh">Price High → Low</option>
-</select>
+    style={{
+      ...styles.input,
+      flex: 1,
+      height: "42px",
+    }}
+    value={sortBy}
+    onChange={(e) => setSortBy(e.target.value)}
+  >
+    <option value="default">Sort Products</option>
+    <option value="priceLow">Price Low → High</option>
+    <option value="priceHigh">Price High → Low</option>
+  </select>
 </div>
 
       <div style={styles.resultsInfo}>
@@ -2598,14 +2604,7 @@ productCard: {
     color: "#6b7280",
   },
 
-  paginationWrap: {
-  display: "flex",
-  flexWrap: "wrap",
-  justifyContent: "center",
-  alignItems: "center",
-  gap: "10px",
-  marginTop: "20px",
-},
+  
 
   paginationBtn: {
   padding: "8px 14px",
@@ -2811,6 +2810,15 @@ productTitle: {
   fontSize: "18px",
   fontWeight: "bold",
   margin: "10px 0",
+},
+
+paginationWrap: {
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: "10px",
+  marginTop: "20px",
 },
 
 
