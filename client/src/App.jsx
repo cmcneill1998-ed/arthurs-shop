@@ -2505,7 +2505,6 @@ nav: {
   padding: "12px 16px",
   marginBottom: "20px",
   display: "flex",
-  justifyContent: "space-between",
   alignItems: "center",
   gap: "10px",
   border: "1px solid #e5e7eb",
@@ -2515,7 +2514,6 @@ nav: {
   display: "flex",
   gap: "8px",
   flexWrap: "wrap",
-  flex: 1,
 },
 
   navLink: {
@@ -2528,10 +2526,10 @@ nav: {
   },
 
   navActions: {
-    display: "flex",
-    gap: "10px",
-    alignItems: "center",
-  },
+  marginLeft: "auto",
+  display: "flex",
+  alignItems: "center",
+},
 
   // ✅ FIXED LOGOUT BUTTON
   secondaryBtn: {
