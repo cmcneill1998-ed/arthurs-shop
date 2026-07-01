@@ -2516,14 +2516,15 @@ nav: {
   flexWrap: "wrap",
 },
 
-  navLink: {
-    color: "#ffffff",
-    textDecoration: "none",
-    fontWeight: "bold",
-    padding: "8px 12px",
-    borderRadius: "6px",
-    background: "#16A34A",
-  },
+  nnavLink: {
+  color: "#ffffff",
+  textDecoration: "none",
+  fontWeight: "600",
+  fontSize: "13px",
+  padding: "6px 10px",
+  borderRadius: "6px",
+  background: "#16A34A",
+},
 
   navActions: {
   marginLeft: "auto",
@@ -2543,13 +2544,14 @@ nav: {
   },
 
   primaryNavBtn: {
-    background: "#F97316",
-    color: "#ffffff",
-    borderRadius: "6px",
-    padding: "10px 14px",
-    fontWeight: "bold",
-    textDecoration: "none",
-  },
+  background: "#F97316",
+  color: "#ffffff",
+  borderRadius: "6px",
+  padding: "6px 10px",
+  fontWeight: "600",
+  fontSize: "13px",
+  textDecoration: "none",
+},
 
  logo: {
   width: "100%",
