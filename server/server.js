@@ -581,6 +581,18 @@ app.get("/check-orders", async (req, res) => {
   }
 });
 
+app.get("/product-names", async (req, res) => {
+  try {
+    const result = await db.query(
+      "SELECT name FROM products ORDER BY name ASC"
+    );
+
+    res.json(result.rows.map(r => r.name));
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
 
 // =========================
 // UPDATE ORDER (STAFF BUTTON)

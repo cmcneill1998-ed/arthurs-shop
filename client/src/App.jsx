@@ -876,18 +876,9 @@ fetch(`${API_BASE}/create-checkout-session`, {
           </div>
 
           <div style={styles.userBox}>
-            <strong>User type:</strong>{" "}
-            {isStaff ? "Staff" : isBar ? "Bar Customer" : currentUser ? "Standard Customer" : "Guest"}
-            <div style={{ marginTop: 6, fontSize: 12 }}>
-              {currentUser
-                ? isStaff
-                  ? "Internal account"
-                  : isBar
-                  ? "Bar discount pricing"
-                  : "Standard customer pricing"
-                : "Not logged in"}
-            </div>
-          </div>
+  <strong>User type:</strong>{" "}
+  {isStaff ? "Staff" : isBar ? "Bar Customer" : currentUser ? "Standard Customer" : "Guest"}
+</div>
         </header>
 
         <nav style={styles.nav}>
@@ -1417,7 +1408,10 @@ style={{
   {/* IMAGE */}
   <div style={styles.productImageWrap}>
     <img
-  src={`/products/${p.name.replace(/\s+/g, "-")}.jpg`}
+  src={`/products/${p.name
+  .toLowerCase()
+  .replace(/\s+/g, "-")
+  .replace(/[^a-z0-9-]/g, "")}.jpg`}
   onError={(e) => {
     e.target.src = "/products/placeholder.png";
   }}
