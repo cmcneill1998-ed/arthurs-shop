@@ -1408,15 +1408,11 @@ style={{
   {/* IMAGE */}
   <div style={styles.productImageWrap}>
     <img
- src={`/products/${p.name
-  .toLowerCase()
-  .replace(/\s+/g, "-")
-  .replace(/[^a-z0-9-]/g, "")}.jpg`}
+ src={`/products/${p.name.replace(/\s+/g, "-")}.jpg`}
   onError={(e) => {
     e.target.src = "/products/placeholder.png";
   }}
   alt={p.name}
-title={`/products/${p.name.replace(/\s+/g, "-")}.jpg`}
   style={styles.productImage}
 />
   </div>
