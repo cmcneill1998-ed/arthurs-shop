@@ -1416,6 +1416,7 @@ style={{
     e.target.src = "/products/placeholder.png";
   }}
   alt={p.name}
+title={`/products/${p.name.replace(/\s+/g, "-")}.jpg`}
   style={styles.productImage}
 />
   </div>
