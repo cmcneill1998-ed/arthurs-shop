@@ -1408,7 +1408,7 @@ style={{
   {/* IMAGE */}
   <div style={styles.productImageWrap}>
     <img
-  src={`/products/${p.name
+ src={`/products/${p.name
   .toLowerCase()
   .replace(/\s+/g, "-")
   .replace(/[^a-z0-9-]/g, "")}.jpg`}
