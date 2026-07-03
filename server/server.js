@@ -680,14 +680,21 @@ app.post("/products/add", async (req, res) => {
 });
 
 app.post("/products/update", async (req, res) => {
-  const { id, retailPrice, barPrice } = req.body;
+  const { id, name, category, retailPrice, barPrice, description } = req.body;
 
   try {
     await db.query(
-      `UPDATE products
-       SET retailprice = $1, barprice = $2
-       WHERE id = $3`,
-      [retailPrice, barPrice, id]
+      `
+      UPDATE products
+      SET 
+        name = $1,
+        category = $2,
+        retailprice = $3,
+        barprice = $4,
+        description = $5
+      WHERE id = $6
+      `,
+      [name, category, retailPrice, barPrice, description, id]
     );
 
     res.json({ success: true });
@@ -697,6 +704,22 @@ app.post("/products/update", async (req, res) => {
   }
 });
 
+const fs = require("fs");
+const path = require("path");
+async function runMigration() {
+  try {
+    const sql = fs.readFileSync(
+      path.join(__dirname, "product_updates.sql"),
+      "utf8"
+    );
+
+    await db.query(sql);
+
+    console.log("✅ Product updates complete");
+  } catch (err) {
+    console.error("❌ Migration failed", err);
+  }
+}
 
 
 
@@ -709,6 +732,7 @@ app.get("/", (req, res) => {
 
 ensureOrderItemsTable();   
 ensureUsersTable();
+runMigration();
 
 app.listen(process.env.PORT || 10000, () => {
   console.log("Server running ✅");
