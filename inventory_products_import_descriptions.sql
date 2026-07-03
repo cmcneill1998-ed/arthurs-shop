@@ -346,7 +346,7 @@ INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES
 INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Sarria Verdejo', 'Wine & Cava', 4.95, 4.95, 'White wine');
 INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Vina Sol', 'Wine & Cava', 6.95, 6.5, 'Wine');
 INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Whispering Angel', 'Wine & Cava', 22.0, 22.0, 'Rosé wine');
-INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Biciclette Pesci', 'Wine & Cava', 2.95, 2.95, 'Sparkling wine');
+INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Biciclette Pesci 200ml', 'Wine & Cava', 2.95, 2.95, 'Sparkling wine');
 INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Biciclette Pesci 3x200ml', 'Wine & Cava', 8.0, 8.0, 'Sparkling wine');
 INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Canella', 'Wine & Cava', 2.95, 2.95, 'Sparkling wine');
 INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Canella 24x200ml', 'Wine & Cava', 8.0, 8.0, 'Sparkling wine');
@@ -390,9 +390,9 @@ INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES
 INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Limoncello Ferrone 3L', 'Liquors', 18.9, 18.95, 'Lemon liqueur');
 INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Caiman Love 3L Plastic', 'Liquors', 19.5, 16.95, 'Sparkling wine');
 INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Absenta', 'Miniatures', 2.5, 2.5, 'Miniature spirit');
-INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Absolut Blue', 'Miniatures', 2.5, 2.5, 'Miniature spirit');
-INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Absolut Mandarin', 'Miniatures', 2.5, 2.5, 'Miniature spirit');
-INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Absolut Peach', 'Miniatures', 2.5, 2.5, 'Miniature spirit');
+INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Absolut Blue 50', 'Miniatures', 2.5, 2.5, 'Miniature spirit');
+INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Absolut Mandarin 50', 'Miniatures', 2.5, 2.5, 'Miniature spirit');
+INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Absolut Peach 50', 'Miniatures', 2.5, 2.5, 'Miniature spirit');
 INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Absolut Pear', 'Miniatures', 2.5, 2.5, 'Miniature spirit');
 INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Absolut Raspberry', 'Miniatures', 2.5, 2.5, 'Miniature spirit');
 INSERT INTO products (name, category, retailPrice, barPrice, description) VALUES ('Absolut Vanilla', 'Miniatures', 2.5, 2.5, 'Miniature spirit');
