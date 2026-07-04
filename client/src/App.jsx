@@ -1141,7 +1141,10 @@ if (totalPages <= 3) {
 }
 
   const [editingProduct, setEditingProduct] = useState(null);
-const [editPrices, setEditPrices] = useState({
+const [editProduct, setEditProduct] = useState({
+  name: "",
+  category: "",
+  description: "",
   retailPrice: "",
   barPrice: "",
 });
@@ -1294,71 +1297,89 @@ const [showSuggestions, setShowSuggestions] = useState(true);
         background: "#ffffff",
         padding: "20px",
         borderRadius: "12px",
-        width: "300px",
+        width: "340px",
         boxSizing: "border-box",
         maxWidth: "90%",
         boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
       }}
     >
       <h3 style={{ marginTop: 0, color: "#F97316" }}>
-        Edit Prices
+        Edit Product
       </h3>
 
-     <p style={{ fontWeight: "bold", marginBottom: "10px" }}>
-  {editingProduct.name}
-</p>
+      <p style={{ fontSize: "13px", marginBottom: "4px" }}>
+        Product name
+      </p>
+      <input
+        style={styles.input}
+        value={editProduct.name}
+        onChange={(e) =>
+          setEditProduct({
+            ...editProduct,
+            name: e.target.value,
+          })
+        }
+      />
 
-<p style={{ fontSize: "13px", marginBottom: "4px" }}>
-  Retail price
-</p>
-<input
-  style={{
-  width: "92%",
-  boxSizing: "border-box",
-  padding: "8px",
-  borderRadius: "6px",
-  border: "1px solid #d1d5db",
-  margin: "0 auto 12px auto",
-  display: "block",
-  background: "#ffffff",
-  color: "#111827",
-}}
+      <p style={{ fontSize: "13px", marginBottom: "4px" }}>
+        Category
+      </p>
+      <input
+        style={styles.input}
+        value={editProduct.category}
+        onChange={(e) =>
+          setEditProduct({
+            ...editProduct,
+            category: e.target.value,
+          })
+        }
+      />
 
-  value={editPrices.retailPrice}
-  onChange={(e) =>
-    setEditPrices({
-      ...editPrices,
-      retailPrice: e.target.value,
-    })
-  }
-/>
+      <p style={{ fontSize: "13px", marginBottom: "4px" }}>
+        Description
+      </p>
+      <textarea
+        style={{
+          ...styles.input,
+          minHeight: "70px",
+          resize: "none",
+        }}
+        value={editProduct.description}
+        onChange={(e) =>
+          setEditProduct({
+            ...editProduct,
+            description: e.target.value,
+          })
+        }
+      />
 
-<p style={{ fontSize: "13px", marginBottom: "4px" }}>
-  Bar price
-</p>
-<input
-style={{
-  width: "92%",
-  boxSizing: "border-box",
-  padding: "8px",
-  borderRadius: "6px",
-  border: "1px solid #d1d5db",
-  margin: "0 auto 12px auto",
-  display: "block",
-  background: "#ffffff",
-  color: "#111827",
-  outline: "none",
-}}
+      <p style={{ fontSize: "13px", marginBottom: "4px" }}>
+        Retail price
+      </p>
+      <input
+        style={styles.input}
+        value={editProduct.retailPrice}
+        onChange={(e) =>
+          setEditProduct({
+            ...editProduct,
+            retailPrice: e.target.value,
+          })
+        }
+      />
 
-  value={editPrices.barPrice}
-  onChange={(e) =>
-    setEditPrices({
-      ...editPrices,
-      barPrice: e.target.value,
-    })
-  }
-/>
-
+      <p style={{ fontSize: "13px", marginBottom: "4px" }}>
+        Bar price
+      </p>
+      <input
+        style={styles.input}
+        value={editProduct.barPrice}
+        onChange={(e) =>
+          setEditProduct({
+            ...editProduct,
+            barPrice: e.target.value,
+          })
+        }
+      />
 
       <div style={{ display: "flex", gap: "8px", marginTop: "12px" }}>
         <button
@@ -1371,8 +1392,11 @@ style={{
               },
               body: JSON.stringify({
                 id: editingProduct.id,
-                retailPrice: Number(editPrices.retailPrice),
-                barPrice: Number(editPrices.barPrice),
+                name: editProduct.name,
+                category: editProduct.category,
+                description: editProduct.description,
+                retailPrice: Number(editProduct.retailPrice),
+                barPrice: Number(editProduct.barPrice),
               }),
             })
               .then((res) => {
@@ -1389,7 +1413,10 @@ style={{
           style={styles.secondaryBtn}
           onClick={() => {
             setEditingProduct(null);
-            setEditPrices({
+            setEditProduct({
+              name: "",
+              category: "",
+              description: "",
               retailPrice: "",
               barPrice: "",
             });
@@ -1445,17 +1472,20 @@ style={{
     {isStaff && (
       <div style={{ marginTop: "6px" }}>
         <button
-          style={{ ...styles.secondaryBtn, width: "100%", marginBottom: "6px" }}
-          onClick={() => {
-            setEditingProduct(p);
-            setEditPrices({
-              retailPrice: Number(p.retailPrice || 0).toFixed(2),
-              barPrice: Number(p.barPrice || 0).toFixed(2),
-            });
-          }}
-        >
-          Edit Price
-        </button>
+  style={{ ...styles.secondaryBtn, width: "100%", marginBottom: "6px" }}
+  onClick={() => {
+    setEditingProduct(p);
+    setEditProduct({
+      name: p.name || "",
+      category: p.category || "",
+      description: p.description || "",
+      retailPrice: Number(p.retailPrice || 0).toFixed(2),
+      barPrice: Number(p.barPrice || 0).toFixed(2),
+    });
+  }}
+>
+  Edit Product
+</button>
 
         <button
           style={{ ...styles.removeBtn, width: "100%" }}

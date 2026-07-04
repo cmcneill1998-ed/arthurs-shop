@@ -76,6 +76,48 @@ async function ensureUsersTable() {
   } catch (err) {
     console.error("❌ users table failed:", err);
   }
+
+  async function ensureStaffUser() {
+  try {
+    await db.query(`
+      INSERT INTO users
+      (
+        role,
+        fullname,
+        email,
+        password,
+        nif,
+        companyname,
+        address,
+        hotelroom,
+        hoteladdress
+      )
+      VALUES
+      (
+        'staff',
+        'Arthurs Staff',
+        'staff@arthurs.test',
+        'demo123',
+        '',
+        'Arthurs',
+        'Store Address',
+        '',
+        ''
+      )
+      ON CONFLICT (email)
+      DO UPDATE SET
+        role = 'staff',
+        fullname = 'Arthurs Staff',
+        password = 'demo123',
+        companyname = 'Arthurs',
+        address = 'Store Address';
+    `);
+
+    console.log("✅ staff user ready");
+  } catch (err) {
+    console.error("❌ staff user failed:", err);
+  }
+}
 }
 
 
@@ -687,14 +729,21 @@ app.post("/products/update", async (req, res) => {
       `
       UPDATE products
       SET 
-        name = $1,
-        category = $2,
-        retailprice = $3,
-        barprice = $4,
-        description = $5
+        name = COALESCE($1, name),
+        category = COALESCE($2, category),
+        retailprice = COALESCE($3, retailprice),
+        barprice = COALESCE($4, barprice),
+        description = COALESCE($5, description)
       WHERE id = $6
       `,
-      [name, category, retailPrice, barPrice, description, id]
+      [
+        name ?? null,
+        category ?? null,
+        retailPrice === undefined ? null : Number(retailPrice),
+        barPrice === undefined ? null : Number(barPrice),
+        description ?? null,
+        id
+      ]
     );
 
     res.json({ success: true });
@@ -703,23 +752,6 @@ app.post("/products/update", async (req, res) => {
     res.status(500).send("Update failed");
   }
 });
-
-const fs = require("fs");
-const path = require("path");
-async function runMigration() {
-  try {
-    const sql = fs.readFileSync(
-      path.join(__dirname, "product_updates.sql"),
-      "utf8"
-    );
-
-    await db.query(sql);
-
-    console.log("✅ Product updates complete");
-  } catch (err) {
-    console.error("❌ Migration failed", err);
-  }
-}
 
 
 
@@ -732,7 +764,7 @@ app.get("/", (req, res) => {
 
 ensureOrderItemsTable();   
 ensureUsersTable();
-runMigration();
+ensureStaffUser();
 
 app.listen(process.env.PORT || 10000, () => {
   console.log("Server running ✅");
