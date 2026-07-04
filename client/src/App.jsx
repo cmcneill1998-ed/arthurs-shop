@@ -254,7 +254,28 @@ function refreshOrders() {
     setPage(1);
   }, [search, category]);
 
-  const categories = ["All", ...new Set(products.map((p) => p.category))];
+  const defaultCategories = [
+  "beer",
+  "wine",
+  "spirits",
+  "liqueurs",
+  "soft drinks",
+  "snacks",
+  "miniatures",
+];
+
+const categories = [
+  "All",
+  ...new Set([
+    ...defaultCategories,
+    ...products.flatMap((p) =>
+      String(p.category || "")
+        .split(",")
+        .map((c) => c.trim())
+        .filter(Boolean)
+    ),
+  ]),
+];
 
 function getPrice(product) {
   const price = isBar
@@ -273,8 +294,13 @@ function getPrice(product) {
       p.category.toLowerCase().includes(q) ||
       p.description.toLowerCase().includes(q);
 
-    const matchesCategory =
-      category === "All" || p.category === category;
+    const productCategories = String(p.category || "")
+  .split(",")
+  .map((c) => c.trim().toLowerCase());
+
+const matchesCategory =
+  category === "All" ||
+  productCategories.includes(category.toLowerCase());
 
     return matchesSearch && matchesCategory;
   });
@@ -1151,6 +1177,16 @@ const [editProduct, setEditProduct] = useState({
 
 const [showSuggestions, setShowSuggestions] = useState(true);
 
+const editableCategories = [
+  "beer",
+  "wine",
+  "spirits",
+  "liqueurs",
+  "soft drinks",
+  "snacks",
+  "miniatures",
+];
+
   return (
     <section style={styles.card}>
       <h2 style={styles.sectionTitle}>Browse Products</h2>
@@ -1322,18 +1358,64 @@ const [showSuggestions, setShowSuggestions] = useState(true);
       />
 
       <p style={{ fontSize: "13px", marginBottom: "4px" }}>
-        Category
-      </p>
-      <input
-        style={styles.input}
-        value={editProduct.category}
-        onChange={(e) =>
-          setEditProduct({
-            ...editProduct,
-            category: e.target.value,
-          })
-        }
-      />
+  Categories
+</p>
+
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "6px",
+    marginBottom: "10px",
+  }}
+>
+  {editableCategories.map((cat) => {
+    const selectedCategories = String(editProduct.category || "")
+      .split(",")
+      .map((c) => c.trim().toLowerCase())
+      .filter(Boolean);
+
+    const checked = selectedCategories.includes(cat.toLowerCase());
+
+    return (
+      <label
+        key={cat}
+        style={{
+          fontSize: "13px",
+          display: "flex",
+          gap: "6px",
+          alignItems: "center",
+          background: "#f9fafb",
+          padding: "6px",
+          borderRadius: "6px",
+          border: "1px solid #e5e7eb",
+        }}
+      >
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => {
+            let updated = [...selectedCategories];
+
+            if (e.target.checked) {
+              updated.push(cat);
+            } else {
+              updated = updated.filter(
+                (item) => item.toLowerCase() !== cat.toLowerCase()
+              );
+            }
+
+            setEditProduct({
+              ...editProduct,
+              category: [...new Set(updated)].join(", "),
+            });
+          }}
+        />
+        {cat}
+      </label>
+    );
+  })}
+</div>
 
       <p style={{ fontSize: "13px", marginBottom: "4px" }}>
         Description
