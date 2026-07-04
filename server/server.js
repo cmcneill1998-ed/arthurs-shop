@@ -55,6 +55,9 @@ ADD COLUMN IF NOT EXISTS customerNote TEXT DEFAULT '';
 // =========================
 // USERS TABLE
 // =========================
+// =========================
+// USERS TABLE
+// =========================
 async function ensureUsersTable() {
   try {
     await db.query(`
@@ -76,6 +79,50 @@ async function ensureUsersTable() {
   } catch (err) {
     console.error("❌ users table failed:", err);
   }
+}
+
+async function ensureStaffUser() {
+  try {
+    await db.query(`
+      INSERT INTO users
+      (
+        role,
+        fullname,
+        email,
+        password,
+        nif,
+        companyname,
+        address,
+        hotelroom,
+        hoteladdress
+      )
+      VALUES
+      (
+        'staff',
+        'Arthurs Staff',
+        'staff@arthurs.test',
+        'demo123',
+        '',
+        'Arthurs',
+        'Store Address',
+        '',
+        ''
+      )
+      ON CONFLICT (email)
+      DO UPDATE SET
+        role = 'staff',
+        fullname = 'Arthurs Staff',
+        password = 'demo123',
+        companyname = 'Arthurs',
+        address = 'Store Address';
+    `);
+
+    console.log("✅ staff user ready");
+  } catch (err) {
+    console.error("❌ staff user failed:", err);
+  }
+}
+
 
   async function ensureStaffUser() {
   try {
@@ -118,7 +165,7 @@ async function ensureUsersTable() {
     console.error("❌ staff user failed:", err);
   }
 }
-}
+
 
 
 
