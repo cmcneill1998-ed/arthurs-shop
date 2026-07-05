@@ -173,7 +173,7 @@ const [password, setPassword] = useState("");
   ? data.map((p, index) => ({
       id: p.id ?? index + 1,
       name: p.name || "Unnamed product",
-      category: p.category || "Uncategorised",
+      category: p.category || "",
       description: p.description || "",
       image: p.image || "",
       productgroup: p.productgroup || p.productGroup || "",
@@ -814,7 +814,7 @@ fetch(`${API_BASE}/create-checkout-session`, {
         ? data.map((p, index) => ({
             id: p.id ?? index + 1,
             name: p.name || "Unnamed product",
-            category: p.category || "Uncategorised",
+            category: p.category || "",
             description: p.description || "",
             image: p.image || "",
             productgroup: p.productgroup || p.productGroup || "",
@@ -1462,7 +1462,7 @@ if (totalPages <= 3) {
 
     return v;
   })
-  .filter(Boolean);
+  .filter((c) => c && c !== "Uncategorised")
 
     const checked = selectedCategories.includes(
   cat.toLowerCase()
