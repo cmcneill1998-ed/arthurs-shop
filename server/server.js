@@ -267,11 +267,20 @@ app.post("/register", async (req, res) => {
       ]
     );
 
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Register failed");
-  }
+    const user = result.rows[0];
+
+res.json({
+  ...user,
+  fullName: user.fullname,
+  companyName: user.companyname,
+  hotelRoom: user.hotelroom,
+  hotelAddress: user.hoteladdress,
+});
+
+} catch (err) {
+  console.error(err);
+  res.status(500).send("Register failed");
+}
 });
 
 // =========================
@@ -302,13 +311,19 @@ app.post("/login", async (req, res) => {
 
     const user = result.rows[0];
 
-    if (String(user.password).trim() !== String(password).trim()) {
-      return res.status(401).json({
-        error: "Password incorrect",
-      });
-    }
+if (String(user.password).trim() !== String(password).trim()) {
+  return res.status(401).json({
+    error: "Password incorrect",
+  });
+}
 
-    res.json(user);
+res.json({
+  ...user,
+  fullName: user.fullname,
+  companyName: user.companyname,
+  hotelRoom: user.hotelroom,
+  hotelAddress: user.hoteladdress,
+});
 
   } catch (err) {
     console.error(err);
