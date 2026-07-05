@@ -584,6 +584,87 @@ VALUES ($1,$2,$3,$4,$5,$6,'Pending','',$7) RETURNING id`,
       });
 
       console.log("📧 Email sent:", emailResult);
+
+      await resend.emails.send({
+  from: "Arthurs <orders@arthursofflicence.com>",
+  to: "arthursofflicence@gmail.com",
+  subject: `🚨 NEW ORDER #${orderId}`,
+  html: `
+    <div style="font-family: Arial, sans-serif; max-width:600px; margin:auto;">
+
+      <h2 style="color:#F97316;">
+        🚨 New Order Received
+      </h2>
+
+      <p><strong>Order ID:</strong> ${orderId}</p>
+      <p><strong>Customer:</strong> ${customerName}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
+
+      ${
+        hotelRoom
+          ? `<p><strong>Room:</strong> ${hotelRoom}</p>`
+          : ""
+      }
+
+      ${
+        hotelAddress
+          ? `<p><strong>Address:</strong> ${hotelAddress}</p>`
+          : ""
+      }
+
+      <hr>
+
+      ${items
+        .map((item) => {
+          const qty = item.qty || item.quantity || 1;
+
+          const price = Number(
+            item.price ??
+            item.retailPrice ??
+            item.retailprice ??
+            item.barPrice ??
+            item.barprice ??
+            0
+          );
+
+          return `
+            <p>
+              ${item.name} x${qty}
+              - €${(price * qty).toFixed(2)}
+            </p>
+          `;
+        })
+        .join("")}
+
+      <hr>
+
+      <h3>Total: €${Number(total).toFixed(2)}</h3>
+
+      ${
+        note
+          ? `<p><strong>Customer Note:</strong> ${note}</p>`
+          : ""
+      }
+
+      <div style="margin-top:20px;">
+  <a
+    href="https://arthursofflicence.com/orders"
+    style="
+      background:#F97316;
+      color:#ffffff;
+      padding:10px 16px;
+      border-radius:8px;
+      text-decoration:none;
+      display:inline-block;
+    "
+  >
+    View Orders Dashboard
+  </a>
+</div>
+    </div>
+  `,
+});
     } catch (emailErr) {
       console.error("❌ Email failed:", emailErr);
     }
