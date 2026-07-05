@@ -1875,23 +1875,70 @@ if (totalPages <= 3) {
 
     {isStaff && (
       <div style={{ marginTop: "6px" }}>
-        <button
-  style={{ ...styles.secondaryBtn, width: "100%", marginBottom: "6px" }}
-  onClick={() => {
-    setEditingProduct(p);
-    setEditProduct({
-  name: p.name || "",
-  category: p.category || "",
-  description: p.description || "",
-  retailPrice: Number(p.retailPrice || p.retailprice || 0).toFixed(2),
-  barPrice: Number(p.barPrice || p.barprice || 0).toFixed(2),
-  productGroup: p.productGroup || p.productgroup || "",
-  variant: p.variant || "",
-});
-  }}
->
-  Edit Product
-</button>
+        {p.variants && p.variants.length > 1 ? (
+  <>
+    {p.variants.map((variant) => (
+      <button
+        key={variant.id}
+        style={{
+          ...styles.secondaryBtn,
+          width: "100%",
+          marginBottom: "6px",
+        }}
+        onClick={() => {
+          setEditingProduct(variant);
+
+          setEditProduct({
+            name: variant.name || "",
+            category: variant.category || "",
+            description: variant.description || "",
+            retailPrice: Number(
+              variant.retailPrice || variant.retailprice || 0
+            ).toFixed(2),
+            barPrice: Number(
+              variant.barPrice || variant.barprice || 0
+            ).toFixed(2),
+            productGroup:
+              variant.productGroup ||
+              variant.productgroup ||
+              "",
+            variant: variant.variant || "",
+          });
+        }}
+      >
+        Edit {variant.variant || variant.name}
+      </button>
+    ))}
+  </>
+) : (
+  <button
+    style={{
+      ...styles.secondaryBtn,
+      width: "100%",
+      marginBottom: "6px",
+    }}
+    onClick={() => {
+      setEditingProduct(p);
+
+      setEditProduct({
+        name: p.name || "",
+        category: p.category || "",
+        description: p.description || "",
+        retailPrice: Number(
+          p.retailPrice || p.retailprice || 0
+        ).toFixed(2),
+        barPrice: Number(
+          p.barPrice || p.barprice || 0
+        ).toFixed(2),
+        productGroup:
+          p.productGroup || p.productgroup || "",
+        variant: p.variant || "",
+      });
+    }}
+  >
+    Edit Product
+  </button>
+)}
 
         <button
           style={{ ...styles.removeBtn, width: "100%" }}
