@@ -227,12 +227,14 @@ app.post("/register", async (req, res) => {
     } = req.body;
 
     const existing = await db.query(
-      "SELECT id FROM users WHERE email = $1",
-      [email.toLowerCase()]
-    );
+  "SELECT * FROM users WHERE email = $1",
+  [email.toLowerCase()]
+);
 
-    console.log("REGISTER EMAIL:", email);
-console.log("EXISTING:", existing.rows);
+console.log("REGISTER EMAIL:", email.toLowerCase());
+console.log("MATCHES:", existing.rows);
+
+    
     if (existing.rows.length > 0) {
       return res.status(400).json({
         error: "Email already exists",
