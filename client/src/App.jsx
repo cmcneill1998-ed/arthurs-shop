@@ -258,23 +258,13 @@ function refreshOrders() {
     setPage(1);
   }, [search, category]);
 
- const normalizeCategory = (cat) => {
-  const value = String(cat || "").trim().toLowerCase();
-
- if (clean === "spirit") return "spirits";
-if (clean === "spirits") return "spirits";
-
-if (clean === "liquor") return "liqueurs";
-if (clean === "liquors") return "liqueurs";
-if (clean === "liqueurs") return "liqueurs";
-
-  return cat;
-};
-
 const normalizeCategory = (cat) => {
   const value = String(cat || "").trim().toLowerCase();
 
-  if (["liquors", "liqueurs", "liquor"].includes(value))
+  if (["spirit", "spirits"].includes(value))
+    return "Spirits";
+
+  if (["liquor", "liquors", "liqueurs"].includes(value))
     return "Liqueurs";
 
   if (["miniature", "miniatures"].includes(value))
