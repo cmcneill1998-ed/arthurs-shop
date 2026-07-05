@@ -1209,19 +1209,14 @@ function ProductsPage({
 const [showSuggestions, setShowSuggestions] = useState(true);
 
 const editableCategories = [
-  "Wine & Cava",
-  "Liquors",
-  "Liqueurs",
-  "Spirits",
-  "Plastic Litres",
-  "Miniatures",
-  "Beers",
-  "Ciders",
-  "Alco-pop",
-  "Soft Drinks",
-  "Frozen Food",
-  "Dried Food",
-  "Sweets",
+  ...new Set(
+    filteredProducts.flatMap((p) =>
+      String(p.category || "")
+        .split(",")
+        .map((c) => c.trim())
+        .filter(Boolean)
+    )
+  ),
 ];
 
 const [viewProduct, setViewProduct] = useState(null);
