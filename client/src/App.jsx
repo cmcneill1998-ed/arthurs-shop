@@ -1207,19 +1207,19 @@ function ProductsPage({
 const [showSuggestions, setShowSuggestions] = useState(true);
 
 const editableCategories = [
-  "Beer",
   "Wine & Cava",
-  "Spirits",
+  "Liquors",
   "Liqueurs",
-  "Soft Drinks",
+  "Spirits",
+  "Plastic Litres",
   "Miniatures",
+  "Beers",
   "Ciders",
   "Alco-pop",
-  "Plastic Litres",
+  "Soft Drinks",
   "Frozen Food",
   "Dried Food",
   "Sweets",
-  "Others",
 ];
 
 const [viewProduct, setViewProduct] = useState(null);
@@ -2398,7 +2398,6 @@ function AddProductPage({ newProduct, setNewProduct, addProduct, message }) {
 <option value="Frozen Food">Frozen Food</option>
 <option value="Dried Food">Dried Food</option>
 <option value="Sweets">Sweets</option>
-<option value="Others">Others</option>
 </select>
         </div>
 
@@ -2432,7 +2431,7 @@ function AddProductPage({ newProduct, setNewProduct, addProduct, message }) {
         <div style={styles.formRow}>
   <input
     style={styles.inputClean}
-    placeholder="Product group e.g. miniature-bundle or johnnie-walker"
+    placeholder="Product group e.g. miniature-bundle - OPTIONAL IF NOT BUNDLE"
     value={newProduct.productGroup}
     onChange={(e) =>
       setNewProduct({ ...newProduct, productGroup: e.target.value })
@@ -2443,7 +2442,7 @@ function AddProductPage({ newProduct, setNewProduct, addProduct, message }) {
 <div style={styles.formRow}>
   <input
     style={styles.inputClean}
-    placeholder="Variant / Size e.g. 10 Miniatures or Red Label 70cl"
+    placeholder="Variant / Size e.g. 10 Miniatures - OPTIONAL IF NOT BUNDLE"
     value={newProduct.variant}
     onChange={(e) =>
       setNewProduct({ ...newProduct, variant: e.target.value })
