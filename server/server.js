@@ -231,6 +231,8 @@ app.post("/register", async (req, res) => {
       [email.toLowerCase()]
     );
 
+    console.log("REGISTER EMAIL:", email);
+console.log("EXISTING:", existing.rows);
     if (existing.rows.length > 0) {
       return res.status(400).json({
         error: "Email already exists",
