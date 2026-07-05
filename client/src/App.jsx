@@ -258,27 +258,15 @@ function refreshOrders() {
     setPage(1);
   }, [search, category]);
 
-  const defaultCategories = [
-  "beer",
-  "wine",
-  "spirits",
-  "liqueurs",
-  "soft drinks",
-  "snacks",
-  "miniatures",
-];
-
-const categories = [
+ const categories = [
   "All",
-  ...new Set([
-    ...defaultCategories,
-    ...products.flatMap((p) =>
-      String(p.category || "")
-        .split(",")
-        .map((c) => c.trim())
-        .filter(Boolean)
-    ),
-  ]),
+  "Beer",
+  "Wine",
+  "Spirits",
+  "Liqueurs",
+  "Soft Drinks",
+  "Snacks",
+  "Miniatures",
 ];
 
 function getPrice(product) {
@@ -298,13 +286,33 @@ function getPrice(product) {
       p.category.toLowerCase().includes(q) ||
       p.description.toLowerCase().includes(q);
 
-    const productCategories = String(p.category || "")
+   
+   
+      const normalizeCategory = (value) => {
+  const clean = String(value || "")
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (clean === "liquors" || clean === "liquor") return "liqueurs";
+  if (clean === "soft drink") return "soft drinks";
+  if (clean === "beers") return "beer";
+  if (clean === "wines") return "wine";
+  if (clean === "miniature") return "miniatures";
+
+  return clean;
+};
+
+const productCategories = String(p.category || "")
   .split(",")
-  .map((c) => c.trim().toLowerCase());
+  .map((c) => normalizeCategory(c));
+
+const selectedCategory = normalizeCategory(category);
 
 const matchesCategory =
   category === "All" ||
-  productCategories.includes(category.toLowerCase());
+  productCategories.includes(selectedCategory);
 
     return matchesSearch && matchesCategory;
   });
