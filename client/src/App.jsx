@@ -3013,7 +3013,14 @@ function LandingPage() {
 function getProductImage(product) {
   if (product.image) return product.image;
 
-  return `/products/${product.name.replace(/\s+/g, "-")}.jpg`;
+  const cleanName = String(product.name || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9 ]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+
+  return `/products/${cleanName}.jpg`;
 }
 
 
