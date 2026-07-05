@@ -261,10 +261,12 @@ function refreshOrders() {
  const normalizeCategory = (cat) => {
   const value = String(cat || "").trim().toLowerCase();
 
-  if (["liquors", "liqueurs", "liquor"].includes(value)) return "Liqueurs";
-  if (["miniature", "miniatures"].includes(value)) return "Miniatures";
-  if (["beer", "beers"].includes(value)) return "Beer";
-  if (["soft drink", "soft drinks"].includes(value)) return "Soft Drinks";
+ if (clean === "spirit") return "spirits";
+if (clean === "spirits") return "spirits";
+
+if (clean === "liquor") return "liqueurs";
+if (clean === "liquors") return "liqueurs";
+if (clean === "liqueurs") return "liqueurs";
 
   return cat;
 };
