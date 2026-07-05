@@ -532,21 +532,42 @@ setLoginForm({
     navigate("/");
   }
 
-  function saveProfile() {
-    if (!currentUser) return;
+function saveProfile() {
+  if (!currentUser) return;
 
-    const updatedUser = {
-      ...currentUser,
+  fetch(`${API_BASE}/users/update`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: currentUser.email,
       ...profileForm,
-    };
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error();
+      return res.json();
+    })
+    .then(() => {
+      const updatedUser = {
+        ...currentUser,
+        ...profileForm,
+      };
 
-    setUsers((prev) =>
-      prev.map((u) => (u.id === currentUser.id ? updatedUser : u))
-    );
-    setCurrentUser(updatedUser);
-    setMessage("Your details were updated.");
-  }
+      setCurrentUser(updatedUser);
 
+      localStorage.setItem(
+        "arthurs_currentUser",
+        JSON.stringify(updatedUser)
+      );
+
+      setMessage("Your details were updated.");
+    })
+    .catch(() => {
+      setMessage("Failed to save details.");
+    });
+}
   function addToCart(product) {
     const existing = cart.find((item) => item.id === product.id);
 

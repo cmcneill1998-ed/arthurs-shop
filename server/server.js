@@ -943,28 +943,45 @@ ensureStaffUser();
 ensureProductVariantColumns();
 
 
-app.get("/fix-spirit-categories", async (req, res) => {
+app.post("/users/update", async (req, res) => {
+  const {
+    email,
+    fullName,
+    companyName,
+    address,
+    nif,
+    hotelRoom,
+    hotelAddress,
+  } = req.body;
+
   try {
+    await db.query(
+      `
+      UPDATE users
+      SET
+        fullname = $1,
+        companyname = $2,
+        address = $3,
+        nif = $4,
+        hotelroom = $5,
+        hoteladdress = $6
+      WHERE email = $7
+      `,
+      [
+        fullName,
+        companyName || "",
+        address || "",
+        nif || "",
+        hotelRoom || "",
+        hotelAddress || "",
+        email,
+      ]
+    );
 
-    // existing Spirits update
-
-    await db.query(`
-      UPDATE products
-      SET category = 'Liqueurs, Spirits'
-      WHERE LOWER(name) = 'anis jordi perello tres caires';
-
-      UPDATE products
-      SET category = REPLACE(category, 'Spiritss', 'Spirits');
-
-      UPDATE products
-      SET category = REPLACE(category, 'Liqueurs, Liqueurs', 'Liqueurs');
-    `);
-
-    res.send("Spirit categories fixed");
-
+    res.json({ success: true });
   } catch (err) {
     console.error(err);
-    res.status(500).send(err.message);
+    res.status(500).send("Failed");
   }
 });
 
