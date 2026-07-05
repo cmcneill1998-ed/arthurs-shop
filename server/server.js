@@ -942,6 +942,38 @@ ensureUsersTable();
 ensureStaffUser();
 ensureProductVariantColumns();
 
+app.get("/fix-categories", async (req, res) => {
+  try {
+    await db.query(`
+      UPDATE products
+      SET category = REPLACE(category, 'Liquors', 'Liqueurs');
+
+      UPDATE products
+      SET category = REPLACE(category, 'liquors', 'Liqueurs');
+
+      UPDATE products
+      SET category = REPLACE(category, 'liqueurs', 'Liqueurs');
+
+      UPDATE products
+      SET category = REPLACE(category, 'spirit', 'Spirits');
+
+      UPDATE products
+      SET category = REPLACE(category, 'spirits', 'Spirits');
+
+      UPDATE products
+      SET category = REPLACE(category, 'miniatures', 'Miniatures');
+
+      UPDATE products
+      SET category = REPLACE(category, 'Others', '');
+    `);
+
+    res.send("Categories fixed");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+});
+
 app.listen(process.env.PORT || 10000, () => {
   console.log("Server running ✅");
 });
