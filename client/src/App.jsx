@@ -269,6 +269,24 @@ function refreshOrders() {
   return cat;
 };
 
+const normalizeCategory = (cat) => {
+  const value = String(cat || "").trim().toLowerCase();
+
+  if (["liquors", "liqueurs", "liquor"].includes(value))
+    return "Liqueurs";
+
+  if (["miniature", "miniatures"].includes(value))
+    return "Miniatures";
+
+  if (["beer", "beers"].includes(value))
+    return "Beer";
+
+  if (["soft drink", "soft drinks"].includes(value))
+    return "Soft Drinks";
+
+  return cat;
+};
+
 const categories = [
   "All",
   ...new Set(
@@ -1189,13 +1207,19 @@ function ProductsPage({
 const [showSuggestions, setShowSuggestions] = useState(true);
 
 const editableCategories = [
-  "beer",
-  "wine",
-  "spirits",
-  "liqueurs",
-  "soft drinks",
-  "snacks",
-  "miniatures",
+  "Beer",
+  "Wine & Cava",
+  "Spirits",
+  "Liqueurs",
+  "Soft Drinks",
+  "Miniatures",
+  "Ciders",
+  "Alco-pop",
+  "Plastic Litres",
+  "Frozen Food",
+  "Dried Food",
+  "Sweets",
+  "Others",
 ];
 
 const [viewProduct, setViewProduct] = useState(null);
@@ -2362,13 +2386,19 @@ function AddProductPage({ newProduct, setNewProduct, addProduct, message }) {
   }
 >
   <option value="" disabled hidden>Select category</option>
-<option value="soft drinks">Soft drinks</option>
-<option value="beer">Beer</option>
-<option value="wine">Wine</option>
-<option value="spirits">Spirits</option>
-<option value="liqueurs">Liqueurs</option>
-<option value="snacks">Snacks</option>
-<option value="miniatures">Miniatures</option>
+<option value="Beer">Beer</option>
+<option value="Wine & Cava">Wine & Cava</option>
+<option value="Spirits">Spirits</option>
+<option value="Liqueurs">Liqueurs</option>
+<option value="Soft Drinks">Soft Drinks</option>
+<option value="Miniatures">Miniatures</option>
+<option value="Ciders">Ciders</option>
+<option value="Alco-pop">Alco-pop</option>
+<option value="Plastic Litres">Plastic Litres</option>
+<option value="Frozen Food">Frozen Food</option>
+<option value="Dried Food">Dried Food</option>
+<option value="Sweets">Sweets</option>
+<option value="Others">Others</option>
 </select>
         </div>
 
