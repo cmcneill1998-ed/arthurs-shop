@@ -130,13 +130,15 @@ const [password, setPassword] = useState("");
     hotelAddress: "",
   });
 
-  const [newProduct, setNewProduct] = useState({
-    name: "",
-    category: "",
-    retailPrice: "",
-    barPrice: "",
-    description: "",
-  });
+ const [newProduct, setNewProduct] = useState({
+  name: "",
+  category: "",
+  retailPrice: "",
+  barPrice: "",
+  description: "",
+  productGroup: "",
+  variant: "",
+});
 
   
 
@@ -673,7 +675,8 @@ fetch(`${API_BASE}/create-checkout-session`, {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
+      
+ body: JSON.stringify({
   customerName: checkoutForm.contactName,
   email: checkoutForm.email,
   total: total,
@@ -749,13 +752,15 @@ fetch(`${API_BASE}/create-checkout-session`, {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      name: newProduct.name,
-      category: newProduct.category,
-      retailPrice: Number(newProduct.retailPrice),
-      barPrice: Number(newProduct.barPrice),
-      description: newProduct.description || "",
-    }),
+   body: JSON.stringify({
+  name: newProduct.name,
+  category: newProduct.category,
+  retailPrice: Number(newProduct.retailPrice),
+  barPrice: Number(newProduct.barPrice),
+  description: newProduct.description || "",
+  productGroup: newProduct.productGroup || "",
+  variant: newProduct.variant || "",
+}),
   })
     .then((res) => {
       if (!res.ok) throw new Error("Add product failed");
@@ -764,12 +769,14 @@ fetch(`${API_BASE}/create-checkout-session`, {
     .then(() => {
       setMessage("Product added.");
       setNewProduct({
-        name: "",
-        category: "",
-        retailPrice: "",
-        barPrice: "",
-        description: "",
-      });
+  name: "",
+  category: "",
+  retailPrice: "",
+  barPrice: "",
+  description: "",
+  productGroup: "",
+  variant: "",
+});
       return fetch(`${API_BASE}/products`);
     })
     .then((res) => res.json())
@@ -781,6 +788,8 @@ fetch(`${API_BASE}/create-checkout-session`, {
             category: p.category || "Uncategorised",
             description: p.description || "",
             image: p.image || "",
+            productgroup: p.productgroup || p.productGroup || "",
+            variant: p.variant || "",
             retailPrice: Number(p.retailprice ?? p.retailPrice ?? p.price ?? 0),
             barPrice: Number(
   p.barprice ??
@@ -1559,12 +1568,14 @@ if (totalPages <= 3) {
           onClick={() => {
             setEditingProduct(null);
             setEditProduct({
-              name: "",
-              category: "",
-              description: "",
-              retailPrice: "",
-              barPrice: "",
-            });
+  name: "",
+  category: "",
+  description: "",
+  retailPrice: "",
+  barPrice: "",
+  productGroup: "",
+  variant: "",
+});
           }}
         >
           Cancel
@@ -1591,27 +1602,35 @@ if (totalPages <= 3) {
     }}
   >
     <div
-      style={{
-        background: "#fff",
-        borderRadius: "14px",
-        padding: "20px",
-        maxWidth: "420px",
-        width: "100%",
-        boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
-      }}
-    >
+  style={{
+    position: "relative",
+    background: "#fff",
+    borderRadius: "14px",
+    padding: "20px",
+    maxWidth: "420px",
+    width: "100%",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
+  }}
+>
       <button
         onClick={() => {
           setViewProduct(null);
           setSelectedVariant(null);
         }}
         style={{
-          float: "right",
-          border: "none",
-          background: "transparent",
-          fontSize: "22px",
-          cursor: "pointer",
-        }}
+  position: "absolute",
+  top: "10px",
+  right: "10px",
+  width: "35px",
+  height: "35px",
+  borderRadius: "999px",
+  border: "1px solid #d1d5db",
+  background: "#ffffff",
+  color: "#111827",
+  fontSize: "22px",
+  fontWeight: "bold",
+  cursor: "pointer",
+}}
       >
         ×
       </button>
@@ -1763,7 +1782,7 @@ if (totalPages <= 3) {
       boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
     }}
   >
-    👁
+    🔍
   </button>
 </div>
 
@@ -2327,11 +2346,13 @@ function AddProductPage({ newProduct, setNewProduct, addProduct, message }) {
   }
 >
   <option value="" disabled hidden>Select category</option>
-  <option value="soft drinks">Soft drinks</option>
-  <option value="beer">Beer</option>
-  <option value="wine">Wine</option>
-  <option value="spirits">Spirits</option>
-  <option value="snacks">Snacks</option>
+<option value="soft drinks">Soft drinks</option>
+<option value="beer">Beer</option>
+<option value="wine">Wine</option>
+<option value="spirits">Spirits</option>
+<option value="liqueurs">Liqueurs</option>
+<option value="snacks">Snacks</option>
+<option value="miniatures">Miniatures</option>
 </select>
         </div>
 
@@ -2361,6 +2382,28 @@ function AddProductPage({ newProduct, setNewProduct, addProduct, message }) {
             onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
           />
         </div>
+
+        <div style={styles.formRow}>
+  <input
+    style={styles.inputClean}
+    placeholder="Product group e.g. miniature-bundle or johnnie-walker"
+    value={newProduct.productGroup}
+    onChange={(e) =>
+      setNewProduct({ ...newProduct, productGroup: e.target.value })
+    }
+  />
+</div>
+
+<div style={styles.formRow}>
+  <input
+    style={styles.inputClean}
+    placeholder="Variant / Size e.g. 10 Miniatures or Red Label 70cl"
+    value={newProduct.variant}
+    onChange={(e) =>
+      setNewProduct({ ...newProduct, variant: e.target.value })
+    }
+  />
+</div>
 
       </div>
 
@@ -2755,7 +2798,7 @@ function LandingPage() {
       margin: "0 auto 20px auto",
     }}
   >
-    Beer, Wine, Spirits & Soft Drinks delivered across Mallorca.
+    Beer, Wine, Spirits & Soft Drinks delivered across Santa Ponsa.
   </p>
 
   <div
@@ -2788,7 +2831,7 @@ function LandingPage() {
       opacity: 0.9,
     }}
   >
-    ✅ Island-wide delivery • ✅ Bar pricing available • ✅ Secure Stripe payments
+    ✅ 24-hour delivery • ✅ Competitive Pricing • ✅ Secure payments & emails
   </p>
 
   <div
@@ -2830,7 +2873,7 @@ function LandingPage() {
       minWidth: "180px",
     }}
   >
-    🥃 Spirits
+    🍹 Spirits
   </div>
 
   <div
