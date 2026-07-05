@@ -1199,14 +1199,18 @@ function ProductsPage({
 const [showSuggestions, setShowSuggestions] = useState(true);
 
 const editableCategories = [
-  ...new Set(
-    filteredProducts.flatMap((p) =>
-      String(p.category || "")
-        .split(",")
-        .map((c) => c.trim())
-        .filter(Boolean)
-    )
-  ),
+  "Beer",
+  "Wine & Cava",
+  "Spirits",
+  "Liqueurs",
+  "Soft Drinks",
+  "Miniatures",
+  "Ciders",
+  "Alco-pop",
+  "Plastic Litres",
+  "Frozen Food",
+  "Dried Food",
+  "Sweets",
 ];
 
 const [viewProduct, setViewProduct] = useState(null);
@@ -1443,11 +1447,27 @@ if (totalPages <= 3) {
 >
   {editableCategories.map((cat) => {
     const selectedCategories = String(editProduct.category || "")
-      .split(",")
-      .map((c) => c.trim().toLowerCase())
-      .filter(Boolean);
+  .split(",")
+  .map((c) => {
+    const v = c.trim().toLowerCase();
 
-    const checked = selectedCategories.includes(cat.toLowerCase());
+    if (["liquor", "liquors", "liqueurs"].includes(v))
+      return "liqueurs";
+
+    if (["spirit", "spirits"].includes(v))
+      return "spirits";
+
+    if (["miniature", "miniatures"].includes(v))
+      return "miniatures";
+
+    return v;
+  })
+  .filter(Boolean);
+
+    const checked = selectedCategories.includes(
+  cat.toLowerCase()
+);
+
 
     return (
       <label
