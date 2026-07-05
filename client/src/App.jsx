@@ -260,13 +260,15 @@ function refreshOrders() {
 
  const categories = [
   "All",
-  "Beer",
-  "Wine",
-  "Spirits",
-  "Liqueurs",
-  "Soft Drinks",
-  "Snacks",
-  "Miniatures",
+  ...new Set([
+    ...defaultCategories,
+    ...products.flatMap((p) =>
+      String(p.category || "")
+        .split(",")
+        .map((c) => c.trim())
+        .filter(Boolean)
+    ),
+  ]),
 ];
 
 function getPrice(product) {
