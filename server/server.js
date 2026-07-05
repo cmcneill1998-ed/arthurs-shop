@@ -166,6 +166,20 @@ async function ensureStaffUser() {
   }
 }
 
+async function ensureProductVariantColumns() {
+  try {
+    await db.query(`
+      ALTER TABLE products
+      ADD COLUMN IF NOT EXISTS productgroup TEXT DEFAULT '',
+      ADD COLUMN IF NOT EXISTS variant TEXT DEFAULT '';
+    `);
+
+    console.log("✅ product variant columns ready");
+  } catch (err) {
+    console.error("❌ product variant columns failed:", err);
+  }
+}
+
 
 
 
@@ -752,13 +766,32 @@ app.post("/products/delete", async (req, res) => {
 });
 
 app.post("/products/add", async (req, res) => {
-  const { name, category, retailPrice, barPrice, description } = req.body;
+  const {
+    name,
+    category,
+    retailPrice,
+    barPrice,
+    description,
+    productGroup,
+    variant,
+  } = req.body;
 
   try {
     await db.query(
-      `INSERT INTO products (name, category, retailprice, barprice, description)
-       VALUES ($1, $2, $3, $4, $5)`,
-      [name, category, retailPrice, barPrice, description]
+      `
+      INSERT INTO products 
+      (name, category, retailprice, barprice, description, productgroup, variant)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `,
+      [
+        name,
+        category,
+        retailPrice,
+        barPrice,
+        description,
+        productGroup || "",
+        variant || "",
+      ]
     );
 
     res.json({ success: true });
@@ -769,7 +802,16 @@ app.post("/products/add", async (req, res) => {
 });
 
 app.post("/products/update", async (req, res) => {
-  const { id, name, category, retailPrice, barPrice, description } = req.body;
+  const {
+    id,
+    name,
+    category,
+    retailPrice,
+    barPrice,
+    description,
+    productGroup,
+    variant,
+  } = req.body;
 
   try {
     await db.query(
@@ -780,8 +822,10 @@ app.post("/products/update", async (req, res) => {
         category = COALESCE($2, category),
         retailprice = COALESCE($3, retailprice),
         barprice = COALESCE($4, barprice),
-        description = COALESCE($5, description)
-      WHERE id = $6
+        description = COALESCE($5, description),
+        productgroup = COALESCE($6, productgroup),
+        variant = COALESCE($7, variant)
+      WHERE id = $8
       `,
       [
         name ?? null,
@@ -789,7 +833,9 @@ app.post("/products/update", async (req, res) => {
         retailPrice === undefined ? null : Number(retailPrice),
         barPrice === undefined ? null : Number(barPrice),
         description ?? null,
-        id
+        productGroup ?? null,
+        variant ?? null,
+        id,
       ]
     );
 
@@ -799,6 +845,7 @@ app.post("/products/update", async (req, res) => {
     res.status(500).send("Update failed");
   }
 });
+
 
 
 
@@ -812,6 +859,7 @@ app.get("/", (req, res) => {
 ensureOrderItemsTable();   
 ensureUsersTable();
 ensureStaffUser();
+ensureProductVariantColumns();
 
 app.listen(process.env.PORT || 10000, () => {
   console.log("Server running ✅");

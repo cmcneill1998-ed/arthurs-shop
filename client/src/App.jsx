@@ -168,22 +168,24 @@ const [password, setPassword] = useState("");
     })
     .then((data) => {
       const cleanProducts = Array.isArray(data)
-        ? data.map((p, index) => ({
-            id: p.id ?? index + 1,
-            name: p.name || "Unnamed product",
-            category: p.category || "Uncategorised",
-            description: p.description || "",
-            image: p.image || "",
-            retailPrice: Number(p.retailprice ?? p.retailPrice ?? p.price ?? 0),
-            barPrice: Number(
-  p.barprice ??
-  p.barPrice ??
-  p.retailprice ??
-  p.retailPrice ??
-  0
-),
-          }))
-        : [];
+  ? data.map((p, index) => ({
+      id: p.id ?? index + 1,
+      name: p.name || "Unnamed product",
+      category: p.category || "Uncategorised",
+      description: p.description || "",
+      image: p.image || "",
+      productgroup: p.productgroup || p.productGroup || "",
+      variant: p.variant || "",
+      retailPrice: Number(p.retailprice ?? p.retailPrice ?? p.price ?? 0),
+      barPrice: Number(
+        p.barprice ??
+        p.barPrice ??
+        p.retailprice ??
+        p.retailPrice ??
+        0
+      ),
+    }))
+  : [];
 
       setProducts(cleanProducts);
     })
@@ -1144,9 +1146,61 @@ function ProductsPage({
   sortBy,
   setSortBy,
 }) {
-  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE));
-  const startIndex = (page - 1) * PRODUCTS_PER_PAGE;
-  const currentProducts = filteredProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
+  
+
+  const [editProduct, setEditProduct] = useState({
+  name: "",
+  category: "",
+  description: "",
+  retailPrice: "",
+  barPrice: "",
+  productGroup: "",
+  variant: "",
+});
+
+const [showSuggestions, setShowSuggestions] = useState(true);
+
+const editableCategories = [
+  "beer",
+  "wine",
+  "spirits",
+  "liqueurs",
+  "soft drinks",
+  "snacks",
+  "miniatures",
+];
+
+const [viewProduct, setViewProduct] = useState(null);
+const [selectedVariant, setSelectedVariant] = useState(null);
+
+const getProductKey = (product) => {
+  if (product.productgroup && product.productgroup.trim() !== "") {
+    return product.productgroup.trim().toLowerCase();
+  }
+
+  return product.name.trim().toLowerCase();
+};
+
+const groupedProducts = Object.values(
+  filteredProducts.reduce((acc, product) => {
+    const key = getProductKey(product);
+
+    if (!acc[key]) {
+      acc[key] = {
+        ...product,
+        variants: [],
+      };
+    }
+
+    acc[key].variants.push(product);
+
+    return acc;
+  }, {})
+);
+
+const totalPages = Math.max(1, Math.ceil(groupedProducts.length / PRODUCTS_PER_PAGE));
+const startIndex = (page - 1) * PRODUCTS_PER_PAGE;
+const currentProducts = groupedProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
 
 const visiblePages = [];
 
@@ -1165,27 +1219,6 @@ if (totalPages <= 3) {
     visiblePages.push(i);
   }
 }
-
-  const [editingProduct, setEditingProduct] = useState(null);
-const [editProduct, setEditProduct] = useState({
-  name: "",
-  category: "",
-  description: "",
-  retailPrice: "",
-  barPrice: "",
-});
-
-const [showSuggestions, setShowSuggestions] = useState(true);
-
-const editableCategories = [
-  "beer",
-  "wine",
-  "spirits",
-  "liqueurs",
-  "soft drinks",
-  "snacks",
-  "miniatures",
-];
 
   return (
     <section style={styles.card}>
@@ -1310,8 +1343,8 @@ const editableCategories = [
 </div>
 
       <div style={styles.resultsInfo}>
-        Showing {currentProducts.length} of {filteredProducts.length} products
-      </div>
+  Showing {currentProducts.length} of {groupedProducts.length} products
+</div>
 
       {editingProduct && (
   <div
@@ -1436,6 +1469,34 @@ const editableCategories = [
       />
 
       <p style={{ fontSize: "13px", marginBottom: "4px" }}>
+  Product Group
+</p>
+<input
+  style={styles.input}
+  value={editProduct.productGroup || ""}
+  onChange={(e) =>
+    setEditProduct({
+      ...editProduct,
+      productGroup: e.target.value,
+    })
+  }
+/>
+
+<p style={{ fontSize: "13px", marginBottom: "4px" }}>
+  Variant / Size
+</p>
+<input
+  style={styles.input}
+  value={editProduct.variant || ""}
+  onChange={(e) =>
+    setEditProduct({
+      ...editProduct,
+      variant: e.target.value,
+    })
+  }
+/>
+
+      <p style={{ fontSize: "13px", marginBottom: "4px" }}>
         Retail price
       </p>
       <input
@@ -1473,13 +1534,15 @@ const editableCategories = [
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                id: editingProduct.id,
-                name: editProduct.name,
-                category: editProduct.category,
-                description: editProduct.description,
-                retailPrice: Number(editProduct.retailPrice),
-                barPrice: Number(editProduct.barPrice),
-              }),
+  id: editingProduct.id,
+  name: editProduct.name,
+  category: editProduct.category,
+  description: editProduct.description,
+  retailPrice: Number(editProduct.retailPrice),
+  barPrice: Number(editProduct.barPrice),
+  productGroup: editProduct.productGroup,
+  variant: editProduct.variant,
+}),
             })
               .then((res) => {
                 if (!res.ok) throw new Error();
@@ -1511,20 +1574,200 @@ const editableCategories = [
   </div>
 )}
 
+{viewProduct && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: "rgba(0,0,0,0.45)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 9999,
+      padding: "15px",
+    }}
+  >
+    <div
+      style={{
+        background: "#fff",
+        borderRadius: "14px",
+        padding: "20px",
+        maxWidth: "420px",
+        width: "100%",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
+      }}
+    >
+      <button
+        onClick={() => {
+          setViewProduct(null);
+          setSelectedVariant(null);
+        }}
+        style={{
+          float: "right",
+          border: "none",
+          background: "transparent",
+          fontSize: "22px",
+          cursor: "pointer",
+        }}
+      >
+        ×
+      </button>
+
+      <h2 style={{ color: "#F97316", marginTop: 0 }}>
+        {viewProduct.name}
+      </h2>
+
+      <img
+        src={`/products/${viewProduct.name
+          .toLowerCase()
+          .replace(/\s+/g, "-")
+          .replace(/[^a-z0-9-]/g, "")}.jpg`}
+        onError={(e) => {
+          e.target.src = "/products/placeholder.png";
+        }}
+        alt={viewProduct.name}
+        style={{
+          width: "100%",
+          height: "220px",
+          objectFit: "contain",
+          marginBottom: "12px",
+        }}
+      />
+
+      {viewProduct.description && (
+        <p style={{ color: "#4b5563", fontSize: "14px" }}>
+          {viewProduct.description}
+        </p>
+      )}
+
+      {viewProduct.variants && viewProduct.variants.length > 1 && (
+        <>
+          <p style={{ fontWeight: "bold", marginBottom: "6px" }}>
+            Choose option
+          </p>
+
+          <select
+            style={{
+              ...styles.input,
+              marginBottom: "12px",
+            }}
+            value={selectedVariant?.id || ""}
+            onChange={(e) => {
+              const picked = viewProduct.variants.find(
+                (v) => String(v.id) === String(e.target.value)
+              );
+              setSelectedVariant(picked);
+            }}
+          >
+            {viewProduct.variants.map((variant) => (
+  <option key={variant.id} value={variant.id}>
+    {variant.variant || variant.name} - €
+    {Number(
+      isStaff || isBar
+        ? variant.barPrice || variant.barprice || variant.retailPrice || variant.retailprice
+        : variant.retailPrice || variant.retailprice
+    ).toFixed(2)}
+  </option>
+))}
+          </select>
+        </>
+      )}
+
+      <h3 style={{ marginTop: "8px" }}>
+        €
+        {Number(
+          user?.role === "staff" || user?.role === "bar"
+            ? selectedVariant?.barPrice ||
+                selectedVariant?.barprice ||
+                selectedVariant?.retailPrice ||
+                selectedVariant?.retailprice ||
+                viewProduct.barPrice ||
+                viewProduct.barprice ||
+                viewProduct.retailPrice ||
+                viewProduct.retailprice
+            : selectedVariant?.retailPrice ||
+                selectedVariant?.retailprice ||
+                viewProduct.retailPrice ||
+                viewProduct.retailprice
+        ).toFixed(2)}
+      </h3>
+
+      <button
+        style={{
+          ...styles.primaryBtn,
+          width: "100%",
+          marginTop: "10px",
+        }}
+        onClick={() => {
+  const itemToAdd = selectedVariant || viewProduct;
+
+  addToCart({
+    ...itemToAdd,
+    name:
+      itemToAdd.variant && itemToAdd.variant.trim() !== ""
+        ? `${viewProduct.name} - ${itemToAdd.variant}`
+        : itemToAdd.name,
+  });
+
+  setViewProduct(null);
+  setSelectedVariant(null);
+}}
+      >
+        Add to Basket
+      </button>
+    </div>
+  </div>
+)}
+
       <div style={styles.productGrid}>
   {currentProducts.map((p) => (
     <div key={p.id} style={styles.productCard}>
   {/* IMAGE */}
-  <div style={styles.productImageWrap}>
-    <img
- src={`/products/${p.name.replace(/\s+/g, "-")}.jpg`}
-  onError={(e) => {
-    e.target.src = "/products/placeholder.png";
-  }}
-  alt={p.name}
-  style={styles.productImage}
-/>
-  </div>
+ 
+ 
+  <div style={{ ...styles.productImageWrap, position: "relative" }}>
+  <img
+    src={getProductImage(p)}
+    onError={(e) => {
+      e.target.src = "/products/placeholder.png";
+    }}
+    alt={p.name}
+    style={{
+      ...styles.productImage,
+      cursor: "pointer",
+    }}
+    onClick={() => {
+      setViewProduct(p);
+      setSelectedVariant(p.variants?.[0] || p);
+    }}
+  />
+
+  <button
+    type="button"
+    onClick={() => {
+      setViewProduct(p);
+      setSelectedVariant(p.variants?.[0] || p);
+    }}
+    style={{
+      position: "absolute",
+      top: "4px",
+      right: "4px",
+      border: "none",
+      background: "#ffffff",
+      borderRadius: "999px",
+      padding: "5px 7px",
+      cursor: "pointer",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+    }}
+  >
+    👁
+  </button>
+</div>
+
+
 
   {/* TEXT */}
   <div>
@@ -1558,12 +1801,14 @@ const editableCategories = [
   onClick={() => {
     setEditingProduct(p);
     setEditProduct({
-      name: p.name || "",
-      category: p.category || "",
-      description: p.description || "",
-      retailPrice: Number(p.retailPrice || 0).toFixed(2),
-      barPrice: Number(p.barPrice || 0).toFixed(2),
-    });
+  name: p.name || "",
+  category: p.category || "",
+  description: p.description || "",
+  retailPrice: Number(p.retailPrice || p.retailprice || 0).toFixed(2),
+  barPrice: Number(p.barPrice || p.barprice || 0).toFixed(2),
+  productGroup: p.productGroup || p.productgroup || "",
+  variant: p.variant || "",
+});
   }}
 >
   Edit Product
