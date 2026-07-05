@@ -362,10 +362,7 @@ const matchesCategory =
       return;
     }
 
-    if (users.some((u) => u.email.toLowerCase() === registerForm.email.toLowerCase())) {
-      setMessage("That email is already registered. Use login instead.");
-      return;
-    }
+   
 
     if (registerForm.role === "bar") {
       if (!registerForm.nif || !registerForm.companyName || !registerForm.address) {
