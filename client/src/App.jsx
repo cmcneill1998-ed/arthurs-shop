@@ -286,6 +286,12 @@ const categories = [
       String(p.category || "")
         .split(",")
         .map((c) => normalizeCategory(c))
+        .filter(
+          (c) =>
+            c &&
+            c.toLowerCase() !== "uncategorised" &&
+            c.toLowerCase() !== "spiritss"
+        )
     )
   ),
 ];
@@ -309,21 +315,7 @@ function getPrice(product) {
 
    
    
-      const normalizeCategory = (value) => {
-  const clean = String(value || "")
-    .toLowerCase()
-    .replace(/&/g, "and")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  if (clean === "liquors" || clean === "liquor") return "liqueurs";
-  if (clean === "soft drink") return "soft drinks";
-  if (clean === "beers") return "beer";
-  if (clean === "wines") return "wine";
-  if (clean === "miniature") return "miniatures";
-
-  return clean;
-};
+      
 
 const productCategories = String(p.category || "")
   .split(",")
