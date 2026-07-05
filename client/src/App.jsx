@@ -1146,17 +1146,17 @@ function ProductsPage({
   sortBy,
   setSortBy,
 }) {
-  
+  const [editingProduct, setEditingProduct] = useState(null);
 
   const [editProduct, setEditProduct] = useState({
-  name: "",
-  category: "",
-  description: "",
-  retailPrice: "",
-  barPrice: "",
-  productGroup: "",
-  variant: "",
-});
+    name: "",
+    category: "",
+    description: "",
+    retailPrice: "",
+    barPrice: "",
+    productGroup: "",
+    variant: "",
+  });
 
 const [showSuggestions, setShowSuggestions] = useState(true);
 
@@ -1679,20 +1679,20 @@ if (totalPages <= 3) {
       <h3 style={{ marginTop: "8px" }}>
         €
         {Number(
-          user?.role === "staff" || user?.role === "bar"
-            ? selectedVariant?.barPrice ||
-                selectedVariant?.barprice ||
-                selectedVariant?.retailPrice ||
-                selectedVariant?.retailprice ||
-                viewProduct.barPrice ||
-                viewProduct.barprice ||
-                viewProduct.retailPrice ||
-                viewProduct.retailprice
-            : selectedVariant?.retailPrice ||
-                selectedVariant?.retailprice ||
-                viewProduct.retailPrice ||
-                viewProduct.retailprice
-        ).toFixed(2)}
+  isStaff || isBar
+    ? selectedVariant?.barPrice ||
+        selectedVariant?.barprice ||
+        selectedVariant?.retailPrice ||
+        selectedVariant?.retailprice ||
+        viewProduct.barPrice ||
+        viewProduct.barprice ||
+        viewProduct.retailPrice ||
+        viewProduct.retailprice
+    : selectedVariant?.retailPrice ||
+        selectedVariant?.retailprice ||
+        viewProduct.retailPrice ||
+        viewProduct.retailprice
+).toFixed(2)}
       </h3>
 
       <button
