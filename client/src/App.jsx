@@ -1649,10 +1649,7 @@ if (totalPages <= 3) {
       </h2>
 
       <img
-        src={`/products/${viewProduct.name
-          .toLowerCase()
-          .replace(/\s+/g, "-")
-          .replace(/[^a-z0-9-]/g, "")}.jpg`}
+        src={getProductImage(viewProduct)}
         onError={(e) => {
           e.target.src = "/products/placeholder.png";
         }}
@@ -2913,12 +2910,7 @@ function LandingPage() {
 function getProductImage(product) {
   if (product.image) return product.image;
 
-  const safeName = product.name
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9\-]/g, "");
-
-  return `/products/${safeName}.jpg`;
+  return `/products/${product.name.replace(/\s+/g, "-")}.jpg`;
 }
 
 
