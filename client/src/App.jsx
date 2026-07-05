@@ -261,7 +261,6 @@ function refreshOrders() {
  const categories = [
   "All",
   ...new Set([
-    ...defaultCategories,
     ...products.flatMap((p) =>
       String(p.category || "")
         .split(",")
