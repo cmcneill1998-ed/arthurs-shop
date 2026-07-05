@@ -258,16 +258,26 @@ function refreshOrders() {
     setPage(1);
   }, [search, category]);
 
- const categories = [
+ const normalizeCategory = (cat) => {
+  const value = String(cat || "").trim().toLowerCase();
+
+  if (["liquors", "liqueurs", "liquor"].includes(value)) return "Liqueurs";
+  if (["miniature", "miniatures"].includes(value)) return "Miniatures";
+  if (["beer", "beers"].includes(value)) return "Beer";
+  if (["soft drink", "soft drinks"].includes(value)) return "Soft Drinks";
+
+  return cat;
+};
+
+const categories = [
   "All",
-  ...new Set([
-    ...products.flatMap((p) =>
+  ...new Set(
+    products.flatMap((p) =>
       String(p.category || "")
         .split(",")
-        .map((c) => c.trim())
-        .filter(Boolean)
-    ),
-  ]),
+        .map((c) => normalizeCategory(c))
+    )
+  ),
 ];
 
 function getPrice(product) {
