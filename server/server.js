@@ -1004,6 +1004,34 @@ app.post("/users/update", async (req, res) => {
   }
 });
 
+
+app.get("/load-descriptions", async (req, res) => {
+  try {
+    await db.query(`
+      UPDATE products p
+      SET description = v.description
+      FROM (
+        VALUES
+
+        ('Anis del Mono Dulce', 'A sweet Spanish anise liqueur with a smooth liquorice-style flavour. Best served chilled, over ice, or as a traditional after-dinner drink.'),
+        ('Anis del Mono Secas', 'A dry Spanish anise liqueur with a clean, aromatic finish. A classic choice for sipping neat or serving chilled.'),
+        ('Anis Jordi Perello Tres Caires', 'A traditional Mallorcan-style anise drink with herbal and liquorice notes. Ideal as a digestif or served chilled after a meal.'),
+        ('Malibu', 'A Caribbean coconut liqueur with sweet tropical flavour. Perfect for piña coladas, rum-style cocktails and summer mixers.'),
+        ('Hendricks', 'A premium Scottish gin known for cucumber and rose botanical notes. Smooth, refreshing and ideal with tonic and cucumber garnish.'),
+        ('Baileys', 'A rich Irish cream liqueur blended with whiskey and dairy cream. Enjoy over ice, in coffee or in dessert-style drinks.')
+
+      ) AS v(name, description)
+      WHERE LOWER(TRIM(p.name)) = LOWER(TRIM(v.name));
+    `);
+
+    res.send("Descriptions loaded");
+  } catch (err) {
+    console.error("❌ Description load failed:", err);
+    res.status(500).send(err.message);
+  }
+});
+
+
 app.listen(process.env.PORT || 10000, () => {
   console.log("Server running ✅");
 });
