@@ -1013,12 +1013,42 @@ app.get("/load-descriptions", async (req, res) => {
       FROM (
         VALUES
 
-        ('Anis del Mono Dulce', 'A sweet Spanish anise liqueur with a smooth liquorice-style flavour. Best served chilled, over ice, or as a traditional after-dinner drink.'),
-        ('Anis del Mono Secas', 'A dry Spanish anise liqueur with a clean, aromatic finish. A classic choice for sipping neat or serving chilled.'),
-        ('Anis Jordi Perello Tres Caires', 'A traditional Mallorcan-style anise drink with herbal and liquorice notes. Ideal as a digestif or served chilled after a meal.'),
-        ('Malibu', 'A Caribbean coconut liqueur with sweet tropical flavour. Perfect for piña coladas, rum-style cocktails and summer mixers.'),
-        ('Hendricks', 'A premium Scottish gin known for cucumber and rose botanical notes. Smooth, refreshing and ideal with tonic and cucumber garnish.'),
-        ('Baileys', 'A rich Irish cream liqueur blended with whiskey and dairy cream. Enjoy over ice, in coffee or in dessert-style drinks.')
+        ('Bombay Sapphire', 'A premium gin with bright citrus, juniper and aromatic botanical flavours. Perfect for gin and tonic, martinis and mixed drinks.'),
+('Tanqueray', 'A classic London dry gin with bold juniper and crisp citrus notes. Perfect for gin and tonic, martinis and cocktails.'),
+('Nordes', 'A Galician gin with fresh floral, fruit and herbal notes. Smooth, aromatic and excellent with tonic.'),
+('Brockmans', 'A fruity premium gin with berry, citrus and botanical notes. Best served with tonic and fresh berries.'),
+('Beefeater', 'A classic London dry gin with juniper, citrus and traditional botanical notes. Ideal for gin and tonic and classic cocktails.'),
+('Gordons', 'A well-known London dry gin with bold juniper and citrus character. Perfect for simple gin and tonic serves.'),
+('Larios', 'A Spanish gin with fresh citrus and juniper notes. Works well with tonic and lemon garnish.'),
+('Mare', 'A Mediterranean gin with herbal, citrus and savoury botanicals. Ideal for premium gin and tonic serves.'),
+('Tanqueray 10', 'A premium gin made with fresh citrus fruits and refined botanicals. Excellent for martinis and premium gin serves.'),
+
+('Absolut Blue', 'A classic Swedish vodka with a clean, smooth and crisp finish. Perfect for mixers, martinis and vodka cocktails.'),
+('Grey Goose', 'A premium French vodka with a refined smooth finish. Excellent neat, over ice or in cocktails.'),
+('Belvedere', 'A premium Polish vodka with a rich and silky texture. Ideal for premium vodka serves and cocktails.'),
+('Smirnoff Blue', 'A stronger vodka with a clean and bold spirit character. Ideal for mixers and classic vodka serves.'),
+('Russian Standard', 'A classic Russian vodka with a smooth, clean finish. Great for chilled serves and cocktails.'),
+
+('Bacardi', 'A light white rum with a smooth and clean flavour profile. Perfect for mojitos and classic rum cocktails.'),
+('Bacardi Gold', 'A golden rum with vanilla, caramel and oak notes. Great for cola mixers and tropical drinks.'),
+('Captain Morgan Spiced', 'A spiced rum with vanilla, caramel and warming spice flavours. Perfect with cola or ginger beer.'),
+('Kraken', 'A black spiced rum with bold molasses, vanilla and spice notes. Excellent in dark rum cocktails.'),
+('Sailor Jerry', 'A spiced rum with vanilla, cinnamon and rich sweetness. Ideal with cola and party serves.'),
+('Havana Club 3', 'A Cuban white rum with smooth vanilla and light oak character. Perfect for mojitos and daiquiris.'),
+('Havana Club 7', 'A premium Cuban rum with deep oak, vanilla and spice notes. Best enjoyed neat or over ice.'),
+
+('Jack Daniels', 'A classic Tennessee whiskey with vanilla and oak notes. Great with cola or over ice.'),
+('Jameson', 'A smooth Irish whiskey with vanilla and gentle spice character. Perfect neat or mixed with ginger ale.'),
+('Chivas Regal', 'A premium blended Scotch whisky with honey, fruit and oak notes. Excellent neat or over ice.'),
+('Glenfiddich', 'A Speyside single malt with pear, oak and malt flavours. Best enjoyed neat or with water.'),
+('Johnny Walker Black Label', 'A premium blended Scotch with smoky malt and rich oak notes. Ideal neat or in premium highballs.'),
+
+('Baileys', 'A rich Irish cream liqueur blended with whiskey and dairy cream. Enjoy over ice or in coffee.'),
+('Malibu', 'A Caribbean coconut liqueur with sweet tropical flavour. Perfect for piña coladas and summer cocktails.'),
+('Licor 43', 'A Spanish vanilla and citrus liqueur with smooth sweet spice notes. Great with milk, coffee or cola.'),
+('Jagermeister', 'A German herbal liqueur with spice and botanical flavours. Best served ice cold.'),
+('Amaretto Disaronno', 'A classic Italian almond-flavoured liqueur with marzipan and vanilla notes. Enjoy over ice or in cocktails.'),
+('Cointreau', 'A premium orange liqueur with bright citrus flavour and a clean finish. Essential for margaritas and classic cocktails.')
 
       ) AS v(name, description)
       WHERE LOWER(TRIM(p.name)) = LOWER(TRIM(v.name));
