@@ -1280,6 +1280,31 @@ if (totalPages <= 3) {
   }
 }
 
+const getVariantPrice = (product) => {
+  const price = isStaff || isBar
+    ? product.barPrice || product.barprice || product.retailPrice || product.retailprice || 0
+    : product.retailPrice || product.retailprice || 0;
+
+  return Number(price || 0);
+};
+
+const getCheapestVariant = (product) => {
+  const variants = product.variants && product.variants.length > 0
+    ? product.variants
+    : [product];
+
+  return variants.reduce((cheapest, current) => {
+    return getVariantPrice(current) < getVariantPrice(cheapest)
+      ? current
+      : cheapest;
+  }, variants[0]);
+};
+
+const getDisplayPrice = (product) => {
+  return getVariantPrice(getCheapestVariant(product));
+};
+
+
   return (
     <section style={styles.card}>
       <h2 style={styles.sectionTitle}>Browse Products</h2>
@@ -1863,7 +1888,7 @@ if (totalPages <= 3) {
   {/* PRICE */}
   <div>
     <p style={styles.price}>
-      €{Number(getPrice(p)).toFixed(2)}
+      From €{Number(getDisplayPrice(p)).toFixed(2)}
     </p>
     {isBar && <p style={styles.smallText}>Bar discount applied</p>}
   </div>
@@ -1872,7 +1897,17 @@ if (totalPages <= 3) {
   <div style={{ marginTop: "10px" }}>
     <button
       style={{ ...styles.primaryBtn, width: "100%" }}
-      onClick={() => addToCart(p)}
+      onClick={() => {
+  const cheapestVariant = getCheapestVariant(p);
+
+  addToCart({
+    ...cheapestVariant,
+    name:
+      cheapestVariant.variant && cheapestVariant.variant.trim() !== ""
+        ? `${p.name} - ${cheapestVariant.variant}`
+        : cheapestVariant.name,
+  });
+}}
     >
       Add to Basket
     </button>
