@@ -1004,78 +1004,45 @@ app.post("/users/update", async (req, res) => {
   }
 });
 
-app.get("/load-descriptions", async (req, res) => {
+app.get("/missing-descriptions", async (req, res) => {
   try {
-    await db.query(`
-      UPDATE products p
-      SET description = v.description
-      FROM (
-        VALUES
-
-        ('Asbach', 'A German brandy with smooth oak and fruit notes. Ideal served neat, over ice or in classic brandy cocktails.'),
-('Carlos I', 'A premium Spanish brandy with rich oak, dried fruit and vanilla flavours. Best enjoyed neat after dinner.'),
-('Cardinal Mendoza', 'A premium Spanish brandy matured in sherry casks with rich raisin, oak and spice notes.'),
-('Lepanto', 'A luxury Spanish brandy with elegant oak, dried fruit and warming spice character.'),
-('Magno', 'A smooth Spanish brandy with caramel and oak notes. Excellent over ice or with cola.'),
-('Soberano', 'A classic Spanish brandy with mellow oak and fruit flavours. Great as an after dinner drink.'),
-('Torres 5', 'A smooth Spanish brandy with balanced oak and fruit character. Perfect neat or mixed.'),
-('Torres 10', 'A well-aged Spanish brandy with vanilla, oak and dried fruit notes. Ideal for sipping.'),
-
-('Amarula', 'A cream liqueur made from African marula fruit with smooth caramel and vanilla notes.'),
-('Chambord', 'A premium French raspberry liqueur with berry, vanilla and honey flavours.'),
-('Dooleys Toffee', 'A creamy toffee flavoured liqueur with sweet caramel notes. Ideal over ice or in desserts.'),
-('Passoa', 'A passion fruit liqueur bursting with tropical sweetness. Great for fruity cocktails.'),
-('Tia Maria', 'A coffee liqueur with rich roasted flavour and smooth sweetness. Perfect in espresso martinis.'),
-('Midori Litre', 'A famous melon liqueur with vibrant colour and sweet fruit flavour. Popular in cocktails.'),
-
-('Galliano', 'An Italian herbal and vanilla liqueur with a distinctive golden colour and aromatic finish.'),
-('Aperol', 'A bright orange Italian aperitif with bittersweet citrus and herbal flavours. Essential for Aperol Spritz.'),
-('Averna', 'A traditional Italian amaro with citrus, herbs and caramel notes. Excellent as a digestif.'),
-('Ramazotti', 'An Italian herbal liqueur with orange peel, spice and aromatic botanical flavours.'),
-
-('Grappa Barbero', 'An Italian grape spirit with robust flavour and warming finish. Traditionally served after meals.'),
-('Aquavit Aalborg Jubilemus', 'A Scandinavian spirit flavoured with caraway and herbs. Best served chilled.'),
-
-('After Blue', 'A vibrant blue flavoured liqueur designed for shots and party cocktails.'),
-('After Red', 'A red fruit flavoured liqueur with sweet berry character. Popular served chilled.'),
-('Blue Curacao Ban', 'A bright blue orange flavoured liqueur often used in tropical cocktails.'),
-('Cherry Brandy Ban', 'A sweet cherry flavoured liqueur ideal for cocktails and desserts.'),
-('Coconut Liquer', 'A tropical coconut liqueur with smooth sweet flavour. Great in exotic cocktails.'),
-('Banana Liquer', 'A banana flavoured liqueur with ripe fruit sweetness. Perfect for tropical mixed drinks.'),
-
-('Creme de Cassis Dijon', 'A rich blackcurrant liqueur with deep berry flavour. Traditionally used in Kir and Kir Royale cocktails.'),
-('Advocaat Verpooten', 'A traditional egg liqueur with creamy vanilla richness. Popular during festive occasions.'),
-('Drambuie', 'A whisky liqueur combining honey, herbs and spice with Scotch whisky.'),
-('Fernet Branca', 'A bold Italian digestif with bitter herbs, mint and spice. Best served chilled after meals.'),
-
-('Ouzo 12', 'A Greek anise spirit with liquorice and herbal character. Enjoy chilled or diluted with water.'),
-('Ricard', 'A famous French pastis with intense anise and herbal flavours. Traditionally mixed with cold water.'),
-('Pernod', 'A classic anise spirit known for its liquorice and aromatic herbal flavour.'),
-('Anis Jordi Perello Tres Caires', 'A traditional Mallorcan anise spirit with smooth liquorice notes.'),
-('Licor Hierbas Pazo', 'A herbal liqueur infused with aromatic botanicals and Mediterranean herbs.'),
-
-('Puree Bora Bora Mango plastic', 'A mango fruit puree with rich tropical flavour. Ideal for cocktails, smoothies and desserts.'),
-('Puree Bora Bora Fresa plastic', 'A strawberry fruit puree with authentic berry flavour and smooth texture.'),
-('Bora Bora Flor De Sauco', 'An elderflower syrup with floral sweetness perfect for spritzes and cocktails.'),
-('Bora Bora Goma', 'A gomme syrup used to sweeten cocktails while adding smooth texture.'),
-('Bora Bora Vanilla', 'A vanilla syrup with sweet creamy flavour ideal for coffee and cocktails.'),
-
-('Banana Caiman', 'A banana syrup with tropical fruit sweetness. Excellent for cocktails and dessert drinks.'),
-('Blackcurrant Caiman', 'A blackcurrant syrup packed with rich berry flavour.'),
-('Green Apple Caiman', 'A green apple syrup with crisp sweet fruit notes.'),
-('Grenadina Caiman', 'A classic grenadine syrup with bright red fruit flavour.'),
-('Lime Caiman', 'A lime syrup delivering refreshing citrus flavour for drinks and cocktails.'),
-('Maracuya Caiman', 'A passion fruit syrup with tropical sweetness and zingy fruit flavour.'),
-('Peach Caiman', 'A peach syrup with juicy fruit flavour. Great for cocktails and mocktails.'),
-('Tropical Blue Caiman', 'A colourful tropical syrup with exotic fruit sweetness.')
-
-      ) AS v(name, description)
-      WHERE LOWER(TRIM(p.name)) = LOWER(TRIM(v.name));
+    const result = await db.query(`
+      SELECT name, category, description
+      FROM products
+      WHERE description IS NULL
+         OR TRIM(description) = ''
+         OR LOWER(TRIM(description)) IN (
+          'liqueur or spirit',
+          'gin',
+          'rum',
+          'vodka',
+          'whiskey',
+          'tequila',
+          'beer',
+          'wine',
+          'sparkling wine',
+          'soft drink',
+          'fruit juice',
+          'energy drink',
+          'bottled water',
+          'miniature spirit',
+          'miniature multipack',
+          'ready-to-drink alcoholic beverage',
+          'frozen food item',
+          'frozen meat product',
+          'frozen bakery item',
+          'frozen savoury pastry',
+          'condiment',
+          'tinned grocery item',
+          'chocolate bar',
+          'snack food'
+        )
+      ORDER BY category, name;
     `);
 
-    res.send("Descriptions loaded");
+    res.json(result.rows);
   } catch (err) {
-    console.error(err);
+    console.error("❌ Missing descriptions check failed:", err);
     res.status(500).send(err.message);
   }
 });
