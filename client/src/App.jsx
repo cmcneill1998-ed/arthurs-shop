@@ -1745,11 +1745,12 @@ const getDisplayPrice = (product) => {
         }}
       />
 
-      {viewProduct.description && (
-        <p style={{ color: "#4b5563", fontSize: "14px" }}>
-          {viewProduct.description}
-        </p>
-      )}
+     {viewProduct.description && (
+  <p style={{ color: "#4b5563", fontSize: "11px", lineHeight: "1.4" }}>
+    {viewProduct.description}
+  </p>
+)}
+
 
       {viewProduct.variants && viewProduct.variants.length > 1 && (
         <>

@@ -496,9 +496,7 @@ VALUES ($1,$2,$3,$4,$5,$6,'Pending','',$7) RETURNING id`,
   <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; padding: 20px; color: #1f2937;">
 
     <div style="text-align:center; margin-bottom: 15px;">
-      <img src="https://arthursofflicence.com/logo.png">
-           alt="Arthurs Off Licence"
-           style="width: 180px; margin-bottom: 5px;" />
+      <img src="https://arthursofflicence.com/logo.png" alt="Arthurs Off Licence" style="width: 180px; margin-bottom: 5px;" />
       <p style="font-size: 13px; color: #16A34A; margin: 0;">
         Premium drinks delivery
       </p>
@@ -1004,81 +1002,6 @@ app.post("/users/update", async (req, res) => {
   }
 });
 
-app.get("/load-descriptions", async (req, res) => {
-  try {
-    await db.query(`
-      UPDATE products p
-      SET description = v.description
-      FROM (
-        VALUES
-
-        ('Rushkinoff Caramel', 'A caramel flavoured vodka with rich toffee sweetness and a smooth finish. Perfect served chilled or in dessert cocktails.'),
-('Captain Morgan', 'A spiced rum with vanilla, caramel and warming spice notes. Excellent with cola and mixed drinks.'),
-('Grey Goose Citron', 'A premium lemon flavoured vodka with vibrant citrus notes and a smooth finish.'),
-('Glenmorangie', 'A Highland single malt Scotch whisky with vanilla, fruit and oak flavours. Smooth and approachable.'),
-('Johnny Walker Red Label', 'A blended Scotch whisky with bold flavour and subtle smoky character. Ideal for mixing.'),
-('Talisker', 'An island single malt whisky with maritime character, peppery spice and gentle smoke.'),
-('J&B', 'A smooth blended Scotch whisky with light malt and fruit notes. Perfect with mixers.'),
-('Jim Bean', 'A Kentucky bourbon whiskey with vanilla, oak and caramel flavours. Great neat or with cola.'),
-('Gordons No Alc', 'An alcohol free botanical spirit with classic juniper and citrus notes. Ideal with tonic.'),
-('Whitley Neill Rhubarb Ginger', 'A flavoured gin combining sweet rhubarb and warming ginger spice.'),
-('Jerikoff', 'A clean vodka with smooth flavour and versatile mixing character.'),
-
-('Lucozade Original', 'A sparkling glucose energy drink with its famous flavour and refreshing character.'),
-('Aquarius Lemon Can', 'A lemon flavoured isotonic drink designed to refresh and support hydration.'),
-('Aquarius Orange Can', 'An orange flavoured isotonic drink with refreshing citrus character.'),
-('Monster Can', 'A high caffeine energy drink with bold flavour and refreshing finish.'),
-('Red Bull Can', 'A world famous energy drink providing a refreshing taste and energy boost.'),
-('Old Jamaica Ginger Beer', 'A fiery ginger soft drink with bold spice and refreshing flavour.'),
-('Fruit Shoot', 'A fruit flavoured drink designed for convenient refreshment on the go.'),
-('Robinsons Blackcurrant', 'A blackcurrant cordial with rich fruit flavour that can be diluted to taste.'),
-('Schweppes', 'A classic mixer range known for crisp carbonation and refreshing flavour.'),
-('Schweppes Tonic', 'A refreshing tonic water with balanced bitterness, ideal for gin and tonic serves.'),
-
-('Buckfast', 'A fortified tonic wine with distinctive sweet flavour and rich character.'),
-('Blossom Hill', 'An easy drinking wine range with approachable fruit flavours and smooth finish.'),
-('Casillero Del Diablo', 'A premium Chilean wine known for rich fruit flavours and excellent value.'),
-('Mateus', 'A lightly sparkling rosé wine with smooth fruit flavour and refreshing finish.'),
-('Lancers', 'A lightly sparkling Portuguese rosé wine with refreshing fruit character.'),
-('Sangre Del Toro', 'A Spanish wine featuring ripe fruit flavours and balanced structure.'),
-('Vina Sol', 'A popular Spanish white wine with crisp fruit flavour and refreshing finish.'),
-('Martin Codax', 'A premium Albariño wine with citrus, stone fruit and refreshing acidity.'),
-
-('Hierbas Dulce', 'A traditional Mallorcan herbal liqueur with sweet botanical flavours. Best served chilled.'),
-('Hierbas Mix', 'A balanced herbal liqueur combining sweet and dry Mediterranean botanicals.'),
-('Hierbas Secas', 'A dry herbal liqueur with aromatic Mediterranean herbs and clean finish.'),
-('Tia Nadal', 'A smooth coffee style liqueur with roasted flavour and sweet finish.'),
-('Sourz All', 'A mixed fruit sour liqueur with sweet and tangy flavour. Popular served ice cold.'),
-('Tunel Cinnamon Boom', 'A cinnamon liqueur with warming spice and sweet character.'),
-('Jet Boom Red', 'A cinnamon and spice flavoured party liqueur best served chilled.'),
-('Strawberry Schnapps', 'A strawberry flavoured schnapps with sweet berry flavour and smooth finish.'),
-
-('Soup Tomato', 'A smooth tomato soup made from ripe tomatoes with rich comforting flavour.'),
-('Crumpets Pack 6', 'Traditional crumpets with a soft texture, ideal toasted and buttered.'),
-('Cornish Pastie', 'A traditional pastry filled with seasoned meat and vegetables.'),
-('Cheese Onion Pastie', 'A savoury pastry filled with cheese and onion.'),
-('Steak Guinness Pie', 'A hearty pastry pie filled with steak cooked in rich Guinness gravy.'),
-('Hash Brown 2.5KG', 'Golden crispy potato hash browns ideal for breakfast and catering use.'),
-('Chips 2.5KG bag', 'Frozen potato chips suitable for oven baking or deep frying.'),
-('Yorkshire Puddings Single', 'A traditional Yorkshire pudding perfect with roast dinners.'),
-('YOrkshire Puddings Bag 20', 'A large pack of traditional Yorkshire puddings ideal for family meals.'),
-
-('Underberg', 'A herbal digestive bitter traditionally enjoyed after meals.'),
-('Underberg 3 pk', 'A multipack of traditional herbal digestive bitters.'),
-('Bag 5', 'A miniature spirits gift pack containing a selection of miniatures.'),
-('Bag 7', 'A miniature spirits gift pack with assorted miniature bottles.'),
-('Bag 10', 'A larger miniature spirits gift pack featuring assorted miniatures.')
-
-      ) AS v(name, description)
-      WHERE LOWER(TRIM(p.name)) = LOWER(TRIM(v.name));
-    `);
-
-    res.send("Descriptions loaded");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(err.message);
-  }
-});
 
 
 
