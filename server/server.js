@@ -1004,72 +1004,21 @@ app.post("/users/update", async (req, res) => {
   }
 });
 
-
-app.get("/load-descriptions", async (req, res) => {
+app.get("/fix-categories", async (req, res) => {
   try {
     await db.query(`
-      UPDATE products p
-      SET description = v.description
-      FROM (
-        VALUES
-
-        ('Licor 43', 'A Spanish vanilla and citrus liqueur with smooth sweet spice notes. Excellent with milk, coffee or cola.'),
-('Cointreau', 'A premium orange liqueur with bright citrus flavour and a clean finish. Essential for margaritas and many classic cocktails.'),
-('Amaretto Disaronno', 'A classic Italian almond liqueur with marzipan and vanilla notes. Enjoy over ice or in cocktails and coffee drinks.'),
-('Jagermeister', 'A German herbal liqueur with spice and botanical flavours. Best served ice cold or mixed in cocktails.'),
-('Passoa', 'A passion fruit liqueur with tropical sweetness and tangy fruit notes. Perfect for fruity cocktails and spritz serves.'),
-('Pimms', 'A fruit-cup liqueur with herbal, citrus and spice flavours. Best served with lemonade, fruit and mint.'),
-('Tia Maria', 'A coffee liqueur with rich roasted coffee and vanilla notes. Perfect for espresso martinis and dessert drinks.'),
-('Khalua', 'A coffee liqueur with sweet roasted coffee flavour and smooth finish. Excellent for cocktails and after-dinner drinks.'),
-('Drambuie', 'A whisky liqueur with honey, herbs and spice. Enjoy neat, over ice or in whisky cocktails.'),
-('Galliano', 'An Italian herbal and vanilla liqueur with bright golden colour. Great for classic cocktail recipes and dessert drinks.'),
-('Baileys', 'A rich Irish cream liqueur blended with whiskey and fresh dairy cream. Enjoy over ice, in coffee or over desserts.'),
-('Amarula', 'A creamy fruit liqueur made from African marula fruit. Smooth, sweet and ideal over ice or in dessert drinks.'),
-('Chambord', 'A premium raspberry liqueur with berry, vanilla and citrus notes. Perfect for prosecco cocktails and spritzes.'),
-('Fernet Branca', 'A bold Italian herbal liqueur with minty, bitter and spicy flavours. Traditionally served as a digestif.'),
-('Aperol', 'An Italian aperitif with orange and bittersweet herbal flavours. Perfect for the classic Aperol Spritz.'),
-
-('Courvoisier VS', 'A French cognac with fruit, oak and floral notes. Smooth enough for sipping or mixing in premium cocktails.'),
-('Hennessy', 'A world-famous cognac with rich fruit, oak and warming spice. Excellent neat, over ice or in luxury cocktails.'),
-('Martell VS', 'A smooth French cognac with soft fruit and vanilla flavours. Ideal for sipping or mixing.'),
-
-('Carlos I', 'A premium Spanish brandy with dried fruit, oak and vanilla notes. Best enjoyed neat or over ice.'),
-('Cardinal Mendoza', 'A rich Spanish brandy with raisin, oak and spice character. Perfect as an after-dinner drink.'),
-('Torres 10', 'A popular Spanish brandy with smooth oak, vanilla and caramel notes. Great neat or over ice.'),
-('Torres 5', 'A lighter Spanish brandy with fruit and oak flavours. Ideal for easy drinking and mixers.'),
-('Magno', 'A Spanish brandy with mellow oak and caramel notes. Enjoy neat, on ice or with cola.'),
-('Veterano', 'A traditional Spanish brandy with smooth caramel and oak notes. A great all-round after-dinner drink.'),
-('Soberano', 'A smooth Spanish brandy with gentle dried fruit and oak character. Excellent over ice or mixed.'),
-('Lepanto', 'A premium Spanish brandy with elegant oak and dried fruit flavours. Best enjoyed slowly and neat.'),
-('Asbach', 'A German brandy with mellow fruit and oak flavours. Suitable for sipping or long mixed drinks.'),
-
-('Campari', 'A famous Italian bitter aperitif with orange and herbal notes. The key ingredient in a Negroni.'),
-('Martini Bianco', 'A sweet white vermouth with vanilla and herbal notes. Excellent over ice or with tonic.'),
-('Martini Rosso', 'A rich red vermouth with spice, herbs and caramel notes. Great in classic cocktails and aperitifs.'),
-('Martini Dry', 'A dry vermouth with crisp herbal character. Essential for classic martinis.'),
-('Martini Asti', 'A sweet sparkling Italian wine with fruity and floral notes. Ideal for celebrations and desserts.'),
-('Yzaguirre Blanco', 'A Spanish white vermouth with aromatic herbs and citrus notes. Enjoy chilled as an aperitif.'),
-
-('Ouzo 12', 'A Greek anise-flavoured spirit with liquorice and herbal notes. Traditionally served chilled or with water.'),
-('Ricard', 'A French pastis with bold anise and herbal character. Best served with cold water.'),
-('Pernod', 'A classic anise spirit with liquorice and herbal notes. Traditionally diluted with water before drinking.'),
-
-('Hierbas Dulce Tunel', 'A sweet Mallorcan herbal liqueur made with Mediterranean botanicals. Traditionally served chilled after meals.'),
-('Hierbas Mix Tunel', 'A balanced herbal liqueur combining sweet and dry botanical notes. Ideal served cold.'),
-('Hierbas Secas Tunel', 'A dry herbal liqueur with intense Mediterranean botanical flavours. Perfect as a digestif.'),
-('Palo Tunel', 'A traditional Mallorcan aperitif with bittersweet herbal flavour. Best served chilled over ice.'),
-('Anis Jordi Perello Tres Caires', 'A traditional anise-flavoured spirit with liquorice and herbal notes. Ideal served chilled after a meal.')
-
-      ) AS v(name, description)
-      WHERE LOWER(TRIM(p.name)) = LOWER(TRIM(v.name));
+      UPDATE products
+      SET category = 'Plastic Litres'
+      WHERE LOWER(TRIM(category)) = 'plastic litres';
     `);
 
-    res.send("Descriptions loaded");
+    res.send("Categories fixed");
   } catch (err) {
-    console.error("❌ Description load failed:", err);
+    console.error(err);
     res.status(500).send(err.message);
   }
 });
+
 
 
 app.listen(process.env.PORT || 10000, () => {

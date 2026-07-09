@@ -276,8 +276,15 @@ const normalizeCategory = (cat) => {
   if (["soft drink", "soft drinks"].includes(value))
     return "Soft Drinks";
 
-  return cat;
+  if (["plastic litre", "plastic litres"].includes(value))
+    return "Plastic Litres";
+
+  return value
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
+
 
 const categories = [
   "All",
