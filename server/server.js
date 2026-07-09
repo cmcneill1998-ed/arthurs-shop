@@ -1004,45 +1004,75 @@ app.post("/users/update", async (req, res) => {
   }
 });
 
-app.get("/missing-descriptions", async (req, res) => {
+app.get("/load-descriptions", async (req, res) => {
   try {
-    const result = await db.query(`
-      SELECT name, category, description
-      FROM products
-      WHERE description IS NULL
-         OR TRIM(description) = ''
-         OR LOWER(TRIM(description)) IN (
-          'liqueur or spirit',
-          'gin',
-          'rum',
-          'vodka',
-          'whiskey',
-          'tequila',
-          'beer',
-          'wine',
-          'sparkling wine',
-          'soft drink',
-          'fruit juice',
-          'energy drink',
-          'bottled water',
-          'miniature spirit',
-          'miniature multipack',
-          'ready-to-drink alcoholic beverage',
-          'frozen food item',
-          'frozen meat product',
-          'frozen bakery item',
-          'frozen savoury pastry',
-          'condiment',
-          'tinned grocery item',
-          'chocolate bar',
-          'snack food'
-        )
-      ORDER BY category, name;
+    await db.query(`
+      UPDATE products p
+      SET description = v.description
+      FROM (
+        VALUES
+
+        ('Bacardi Breezer Lime Bottle', 'A refreshing ready to drink rum cocktail with zesty lime flavour. Best served chilled straight from the bottle.'),
+        ('Bacardi Breezer Orange Bottle', 'A ready to drink rum cocktail bursting with sweet orange flavour. Perfect chilled on warm days.'),
+        ('Bacardi Breezer Passion Fruit Mango Bottle', 'A tropical ready to drink beverage combining passion fruit and mango flavours with Bacardi rum.'),
+        ('Bacardi Breezer Watermelon Bottle', 'A refreshing watermelon flavoured ready to drink rum cooler. Smooth, fruity and best served cold.'),
+        ('Smirnoff Ice', 'A crisp ready to drink vodka mixed beverage with refreshing citrus flavour. Popular served ice cold.'),
+        ('White Claw Hard Seltzer', 'A sparkling hard seltzer with light fruit flavour and refreshing finish. Low sweetness and easy drinking.'),
+        ('WKD Blue', 'A bright blue ready to drink alcoholic beverage with sweet mixed fruit flavour. Popular served chilled.'),
+
+        ('Birra Moretti', 'A premium Italian lager with balanced malt flavour and gentle bitterness. Crisp, refreshing and easy drinking.'),
+        ('Budweiser Bottle 330ml', 'An American style lager with a smooth, clean flavour and light malt character.'),
+        ('Budweiser Can 330ml', 'A classic American lager with a crisp, refreshing finish and easy drinking style.'),
+        ('Carlsberg Bottle 330ml', 'A smooth Danish pilsner with balanced bitterness and refreshing flavour.'),
+        ('Coors Light Bottle 33cl', 'A light lager with clean flavour and crisp finish. Ideal served ice cold.'),
+        ('Corona Bottle 35cl', 'A Mexican lager known for its crisp refreshing flavour. Best enjoyed chilled with a wedge of lime.'),
+        ('Corona LATA', 'A refreshing Mexican lager with light malt flavour and crisp finish.'),
+        ('Cruzcampo', 'A popular Spanish lager with smooth malt flavour and refreshing character.'),
+        ('Cruzcampo Shandy', 'A refreshing beer mixed with lemon flavour for a lighter drinking experience.'),
+        ('Desperados', 'A tequila flavoured lager with a unique sweet and citrus character.'),
+        ('Erdinger 500ml Bottle', 'A traditional German wheat beer with fruity notes and smooth mouthfeel.'),
+        ('Estrella Damm Bottle 330ml', 'A Mediterranean lager brewed in Barcelona with balanced malt and hop flavour.'),
+        ('Estrella Damm Can 330ml', 'A smooth Spanish lager with refreshing flavour and crisp finish.'),
+        ('Estrella Galicia 330ml bottle', 'A premium Spanish lager with rich malt character and crisp bitterness.'),
+        ('Estrella Galicia Can 330ml', 'A well-balanced Spanish lager with smooth flavour and refreshing finish.'),
+        ('Guinness Can 440', 'A famous Irish stout with rich roasted malt flavour and creamy texture.'),
+        ('Guinness Zero Can 440', 'An alcohol-free version of Guinness with roasted malt flavour and smooth character.'),
+        ('Heineken Bottle', 'A world-famous Dutch lager with balanced bitterness and crisp refreshing finish.'),
+        ('Heineken Can', 'A premium lager with smooth malt flavour and refreshing character.'),
+        ('Mahou 5 Star Bottle', 'A popular Spanish lager with rich flavour and refreshing finish.'),
+        ('Mahou 5 Star Can', 'A smooth full flavoured Spanish lager with balanced malt and hop character.'),
+        ('Mahou Classic', 'A traditional Spanish lager with clean refreshing flavour and light bitterness.'),
+        ('Mahou Litre', 'A large format Spanish lager with crisp flavour and easy drinking character.'),
+        ('Miller', 'A light lager with a clean crisp flavour and refreshing finish.'),
+        ('Peroni', 'A premium Italian lager with subtle citrus notes and refreshing finish.'),
+        ('San Miguel Bottle 33cl', 'A smooth Spanish lager with balanced malt flavour and refreshing finish.'),
+        ('San Miguel Bottle 25cl', 'A classic Spanish lager served in a compact bottle format.'),
+        ('San Miguel Can 33cl', 'A refreshing Spanish lager with crisp flavour and clean finish.'),
+        ('San Miguel Radler', 'A beer blended with lemon flavour for a refreshing citrus twist.'),
+        ('Stella Bottle 33cl', 'A premium Belgian lager known for its crisp flavour and balanced bitterness.'),
+        ('Tennents Can 500ml', 'A Scottish lager with smooth flavour and clean refreshing character.'),
+
+        ('Koppaberg Can Mix Fruit Tropical', 'A fruit cider packed with tropical fruit flavours and refreshing sweetness.'),
+        ('Orchard thieves', 'A modern cider with crisp apple flavour and smooth refreshing finish.'),
+
+        ('Buckfast', 'A fortified tonic wine with a distinctive sweet flavour and rich character.'),
+        ('Freixenet Prosecco', 'A sparkling Italian prosecco with fresh fruit flavours and lively bubbles.'),
+        ('Freixenet Italian Rose', 'A sparkling rosé wine with delicate berry flavours and refreshing finish.'),
+        ('Freixenet Carta Nevada Brut', 'A crisp Spanish cava with fine bubbles and balanced flavour.'),
+        ('Freixenet Carta Nevada Semi', 'A semi-sweet sparkling cava with smooth fruit character.'),
+        ('Freixenet Cordon Negro Brut', 'A premium brut cava with refreshing citrus notes and elegant bubbles.'),
+        ('Cava Rigol', 'A traditional Spanish cava with crisp fruit flavour and lively effervescence.'),
+        ('Martin Codax', 'A premium Albariño wine with fresh citrus and stone fruit notes.'),
+        ('Vina Sol', 'A popular Spanish white wine with crisp fruit flavour and refreshing finish.'),
+        ('Mateus', 'A lightly sparkling rosé wine with gentle fruit sweetness and refreshing character.')
+
+      ) AS v(name, description)
+      WHERE LOWER(TRIM(p.name)) = LOWER(TRIM(v.name));
     `);
 
-    res.json(result.rows);
+    res.send("Descriptions loaded");
   } catch (err) {
-    console.error("❌ Missing descriptions check failed:", err);
+    console.error(err);
     res.status(500).send(err.message);
   }
 });
