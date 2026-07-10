@@ -1853,10 +1853,11 @@ const getDisplayPrice = (product) => {
       setViewProduct(p);
       setSelectedVariant(p.variants?.[0] || p);
     }}
-    style={{
-      position: "absolute",
-      top: "4px",
-      right: "4px",
+   style={{
+  position: "absolute",
+  top: "-20px",
+right: "-14px",
+zIndex: 100,
       border: "none",
       background: "#ffffff",
       borderRadius: "999px",
@@ -3219,22 +3220,25 @@ primaryNavBtn: {
   productGrid: {
   display: "grid",
   gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-  gap: "14px",
+  gap: "70px 14px",
+  paddingTop: "40px",
 },
 
 productCard: {
+  position: "relative",
   border: "none",
-  borderRadius: "18px",
-  padding: "18px",
+  borderRadius: "20px",
+  padding: "75px 16px 16px",
   textAlign: "center",
   background: "#ffffff",
-  overflow: "hidden",
+  overflow: "visible",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
-  minHeight: "340px",
-  boxShadow: "0 8px 20px rgba(0,0,0,.08)",
+  minHeight: "360px",
+  boxShadow: "0 10px 25px rgba(0,0,0,.08)",
 },
+
 
 categoryTag: {
   color: "#16A34A",
@@ -3426,18 +3430,19 @@ suggestionItem: {
 
 productImageWrap: {
   position: "absolute",
-  top: "-35px",
+  top: "-55px",
   left: "50%",
   transform: "translateX(-50%)",
-  width: "140px",
-  height: "140px",
+  width: "150px",
+  height: "150px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  overflow: "visible",
 },
 
 productImage: {
-  maxHeight: "130px",
+  maxHeight: "145px",
   maxWidth: "100%",
   objectFit: "contain",
 },
