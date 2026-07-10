@@ -1004,15 +1004,38 @@ app.post("/users/update", async (req, res) => {
 
 app.get("/missing-descriptions", async (req, res) => {
   try {
+    await db.query(`
+      UPDATE products
+      SET description = CASE
+        WHEN name = 'Absenta' THEN 'A strong anise flavoured spirit with distinctive herbal notes and a high alcohol content. Traditionally served diluted with water.'
+        WHEN name = 'Desperado 33cl' THEN 'A tequila flavoured lager combining refreshing beer with sweet citrus and tequila character. Best served chilled.'
+        WHEN name = 'Estrella Daura Gluten Free Bottle 330ml' THEN 'A gluten free Spanish lager with smooth malt flavour and refreshing finish. Suitable for coeliacs.'
+        WHEN name = 'Johnny Walker Black Label' THEN 'A premium blended Scotch whisky matured for at least 12 years with rich fruit, vanilla and smoky notes.'
+        WHEN name = 'Peach Schnapps' THEN 'A sweet peach flavoured schnapps with juicy fruit character. Ideal for cocktails and chilled shots.'
+        WHEN name = 'Rushkinoff' THEN 'A smooth vodka with a clean flavour profile and versatile character. Perfect for mixers and cocktails.'
+        WHEN name = 'Sambuca White' THEN 'A traditional Italian anise flavoured liqueur with sweet liquorice notes. Popular served neat or flambéed.'
+        WHEN name = 'Smirnoff' THEN 'A classic premium vodka with clean crisp flavour and smooth finish. Ideal for cocktails and mixed drinks.'
+        WHEN name = 'Vimto Light' THEN 'A low calorie mixed fruit soft drink with the distinctive Vimto flavour and refreshing taste.'
+        ELSE description
+      END
+      WHERE name IN (
+        'Absenta',
+        'Desperado 33cl',
+        'Estrella Daura Gluten Free Bottle 330ml',
+        'Johnny Walker Black Label',
+        'Peach Schnapps',
+        'Rushkinoff',
+        'Sambuca White',
+        'Smirnoff',
+        'Vimto Light'
+      );
+    `);
+
     const result = await db.query(`
-      SELECT
-        id,
-        name,
-        description
+      SELECT id, name, description
       FROM products
-      WHERE
-        description IS NULL
-        OR TRIM(description) = ''
+      WHERE description IS NULL
+         OR TRIM(description) = ''
       ORDER BY name;
     `);
 
@@ -1022,7 +1045,6 @@ app.get("/missing-descriptions", async (req, res) => {
     res.status(500).send(err.message);
   }
 });
-
 
 
 
