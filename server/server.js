@@ -1017,6 +1017,100 @@ app.get("/image-names", async (req, res) => {
   }
 });
 
+app.get("/load-descriptions", async (req, res) => {
+  try {
+    await db.query(`
+      UPDATE products
+      SET description = CASE
+        WHEN name = 'Yzaguirre Blanco' THEN 'A premium Spanish white vermouth with aromatic herbs, citrus notes and gentle sweetness. Perfect served over ice, with tonic, or as an aperitif before a meal.'
+        WHEN name = 'Veterano' THEN 'A classic Spanish spirit with smooth oak, caramel and warming notes. Traditionally enjoyed neat, over ice or as a relaxing after-dinner drink.'
+        WHEN name = 'Bulldog Gin' THEN 'A premium London dry gin featuring a unique blend of botanicals, delivering crisp juniper character with smooth citrus and floral notes. Ideal for premium gin and tonic serves.'
+        WHEN name = 'London No 1' THEN 'An award-winning premium gin recognised for its distinctive blue colour and elegant botanical profile. Smooth, aromatic and perfect for sophisticated cocktails.'
+        WHEN name = 'Xoriguer Mahon Gin' THEN 'A famous Mediterranean gin produced in Menorca using traditional methods. Rich in juniper character with a distinctive island heritage and refreshing finish.'
+        WHEN name = 'Midori' THEN 'A vibrant melon liqueur known for its bright green colour and sweet tropical flavour. Popular in cocktails adding both colour and refreshing fruit character.'
+        WHEN name = 'Kahlua' THEN 'A rich coffee liqueur combining roasted coffee beans, vanilla and caramel notes. Perfect in espresso martinis, cocktails or served over ice.'
+        WHEN name = 'Amaretto Ferrone' THEN 'A smooth almond liqueur with sweet marzipan, vanilla and nutty notes. Excellent after dinner, over ice or mixed into classic cocktails.'
+        WHEN name = 'Limoncello Ferrone' THEN 'A traditional Italian lemon liqueur bursting with fresh citrus flavour and refreshing sweetness. Best enjoyed ice cold after a meal.'
+        WHEN name = 'Bora Bora Cacao' THEN 'A premium chocolate flavoured syrup delivering rich cocoa sweetness. Perfect for cocktails, coffees, milkshakes and dessert creations.'
+        WHEN name = 'Der Meister' THEN 'A herbal liqueur crafted from a blend of botanicals, spices and herbs. Smooth, warming and ideal served chilled or over ice.'
+        WHEN name = 'Guilioncello' THEN 'A refreshing citrus liqueur inspired by traditional Italian recipes, offering vibrant lemon character and a smooth sweet finish.'
+        WHEN name = 'Irish Knights' THEN 'A smooth Irish cream liqueur combining whiskey notes with rich cream and vanilla flavours. Ideal over ice or in coffee-based drinks.'
+        WHEN name = 'Licor 1898' THEN 'A traditional Spanish liqueur featuring smooth sweetness and warming character. Excellent served chilled or enjoyed after dinner.'
+        WHEN name = 'Triple Sec Caiman' THEN 'A premium orange liqueur made from citrus peel extracts, providing bright orange flavour essential for margaritas and classic cocktails.'
+        WHEN name = 'Havana Club 5' THEN 'A premium Cuban aged rum with rich notes of vanilla, oak, cocoa and tropical fruit. Smooth enough for sipping while remaining excellent in cocktails.'
+        WHEN name = 'Captain Morgan Spiced sin alcohol' THEN 'An alcohol-free spiced spirit alternative delivering the familiar vanilla and warming spice character associated with classic spiced rum serves.'
+        WHEN name = 'Absolut Mango' THEN 'A tropical mango flavoured vodka offering ripe fruit sweetness balanced by Absolut’s signature smooth finish. Great with lemonade and cocktails.'
+        WHEN name = 'Absolut Wildberries' THEN 'A berry flavoured vodka packed with rich forest fruit character and vibrant sweetness. Perfect for refreshing long drinks and fruity cocktails.'
+        WHEN name = 'Absolut Raspberry' THEN 'A raspberry infused vodka with bright berry flavour and a clean, crisp finish. Excellent with soda, lemonade or mixed drinks.'
+        WHEN name = 'Absolut Peach' THEN 'A peach flavoured vodka bursting with juicy fruit notes and smooth character. Ideal for summer cocktails and refreshing serves.'
+        WHEN name = 'Absolut Peppar' THEN 'A pepper infused vodka delivering warming spice and savoury depth. Famously used in Bloody Mary cocktails and spicy mixed drinks.'
+        WHEN name = 'Absolut Passion Fruit' THEN 'A tropical passion fruit vodka with vibrant exotic flavour and refreshing finish. Excellent in fruity cocktails and mixers.'
+        WHEN name = 'Absolut Vanilla' THEN 'A vanilla flavoured vodka with smooth sweetness and creamy character. Ideal for espresso martinis and dessert-inspired cocktails.'
+        WHEN name = 'Crystal Head' THEN 'A luxury Canadian vodka renowned for exceptional purity and smoothness. Distilled multiple times and presented in the iconic crystal skull bottle.'
+        WHEN name = 'Naga Chilli Vodka' THEN 'A powerful chilli infused vodka delivering intense heat alongside smooth spirit character. Popular with adventurous drinkers and spicy cocktails.'
+        WHEN name = 'Jack Daniels Single Barrel' THEN 'A premium Tennessee whiskey selected from individual barrels for exceptional character. Rich notes of oak, caramel, vanilla and spice.'
+        WHEN name = 'XUXU' THEN 'A strawberry liqueur combining real fruit flavour with smooth sweetness. Refreshing served chilled or used in fruity cocktails.'
+        WHEN name = 'Smirnoff Mango Passionfruit' THEN 'A tropical flavoured vodka blending juicy mango and passion fruit notes with Smirnoff’s clean, crisp finish.'
+        WHEN name = 'Smirnoff Rosca' THEN 'A classic vodka offering smooth, clean flavour and versatility. Ideal for cocktails, mixers and chilled serves.'
+        WHEN name = 'Jim Bean Honey' THEN 'A honey infused bourbon liqueur combining smooth whiskey warmth with sweet honey notes. Excellent over ice or mixed with lemonade.'
+        WHEN name = 'J and B' THEN 'A famous blended Scotch whisky delivering smooth malt character, light fruit notes and easy-drinking versatility. Perfect for mixing or enjoying over ice.'
+        WHEN name = 'Macallan 12 yo' THEN 'A highly regarded single malt Scotch whisky matured in oak casks, featuring rich dried fruit, vanilla and spice flavours with exceptional smoothness.'
+        WHEN name = 'Whyte and Mackay' THEN 'A smooth blended Scotch whisky with balanced malt, oak and honey notes. Popular with both whisky enthusiasts and casual drinkers.'
+        WHEN name = 'Acantus Blanco' THEN 'A fresh Spanish white wine with crisp fruit flavours, refreshing acidity and an easy-drinking style suitable for any occasion.'
+        WHEN name = 'Acantus Tinto' THEN 'A smooth Spanish red wine offering ripe berry flavours, gentle tannins and balanced character. Excellent with food or enjoyed on its own.'
+        WHEN name = 'Acantus Rosado' THEN 'A refreshing Spanish rosé wine with delicate red fruit flavours and a crisp finish. Perfect served chilled.'
+        WHEN name = 'Bach Tinto' THEN 'A popular Spanish red wine with soft berry flavours, smooth texture and approachable character. Ideal for pairing with a variety of dishes.'
+        ELSE description
+      END;
+    `);
+
+    app.get("/fix-categories", async (req, res) => {
+  try {
+    await db.query(`
+      UPDATE products
+      SET category =
+        CASE
+
+          WHEN LOWER(TRIM(category)) IN ('beer', 'beers', 'beers, beer')
+            THEN 'Beer'
+
+          WHEN LOWER(TRIM(category)) IN ('wine', 'wines')
+            THEN 'Wine'
+
+          WHEN LOWER(TRIM(category)) IN ('spirits', 'spirit')
+            THEN 'Spirits'
+
+          WHEN LOWER(TRIM(category)) IN ('liqueurs', 'liqueur')
+            THEN 'Liqueurs'
+
+          WHEN LOWER(TRIM(category)) IN ('soft drinks', 'soft drink')
+            THEN 'Soft Drinks'
+
+          WHEN LOWER(TRIM(category)) IN ('ciders', 'cider')
+            THEN 'Ciders'
+
+          WHEN LOWER(TRIM(category)) IN ('wine & cava', 'wine and cava')
+            THEN 'Wine & Cava'
+
+          ELSE INITCAP(TRIM(category))
+
+        END;
+    `);
+
+    res.send("Categories fixed");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+});
+
+    res.send("Descriptions loaded");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+});
+
 
 
 app.listen(process.env.PORT || 10000, () => {

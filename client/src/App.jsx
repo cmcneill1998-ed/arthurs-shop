@@ -1856,15 +1856,16 @@ const getDisplayPrice = (product) => {
   
       style={{
   position: "absolute",
-  top: "6px",
-right: "6px",
-  zIndex: 100,
+  top: "12px",
+  right: "12px",
+  zIndex: 10,
+  width: "32px",
+  height: "32px",
+  borderRadius: "50%",
+  border: "none",
   background: "#fff",
-  borderRadius: "999px",
-  boxShadow: "0 4px 10px rgba(0,0,0,.15)",
-  width: "28px",
-height: "28px",
-fontSize: "12px",
+  boxShadow: "0 4px 12px rgba(0,0,0,.15)",
+  cursor: "pointer",
 }}
   >
     🔍
@@ -1875,11 +1876,16 @@ fontSize: "12px",
 
   {/* TEXT */}
   <div>
-    <p style={styles.categoryTag}>{p.category}</p>
-    
-    <h3 style={styles.productTitle}>{p.name}</h3>
-    <p style={styles.desc}>{p.description || " "}</p>
-  </div>
+  <p style={styles.categoryTag}>
+    {String(p.category || "")
+      .split(",")[0]
+      .trim()
+      .replace(/\b\w/g, (l) => l.toUpperCase())}
+  </p>
+
+  <h3 style={styles.productTitle}>{p.name}</h3>
+  <p style={styles.desc}>{p.description || " "}</p>
+</div>
 
   {/* PRICE */}
   <div>
