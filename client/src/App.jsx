@@ -3431,7 +3431,7 @@ suggestionItem: {
 
 productImageWrap: {
   position: "absolute",
-  top: "-55px",
+  top: "-120px",
   left: "50%",
   transform: "translateX(-50%)",
   width: "150px",
