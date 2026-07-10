@@ -1856,12 +1856,15 @@ const getDisplayPrice = (product) => {
   
       style={{
   position: "absolute",
-  top: "10px",
-  right: "10px",
+  top: "6px",
+right: "6px",
   zIndex: 100,
   background: "#fff",
   borderRadius: "999px",
   boxShadow: "0 4px 10px rgba(0,0,0,.15)",
+  width: "28px",
+height: "28px",
+fontSize: "12px",
 }}
   >
     🔍
@@ -3228,7 +3231,7 @@ productCard: {
   position: "relative",
   border: "none",
   borderRadius: "20px",
-  padding: "70px 16px 16px",
+  padding: "45px 16px 16px",
   textAlign: "center",
   background: "#ffffff",
   overflow: "visible",
@@ -3244,7 +3247,10 @@ categoryTag: {
   color: "#16A34A",
   fontSize: "14px",
   fontWeight: "bold",
-  marginBottom: "6px",
+  
+marginTop: "20px",
+  marginBottom: "10px",
+
 },
 
 price: {
@@ -3434,14 +3440,15 @@ productImageWrap: {
   transform: "translateX(-50%)",
 top: "-55px",
   width: "170px",
-  height: "80px",
+  height: "60px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  maxheight: "180px",
 },
 
 productImage: {
-  maxHeight: "240px",
+  maxHeight: "180px",
   maxWidth: "100%",
   objectFit: "contain",
 },
