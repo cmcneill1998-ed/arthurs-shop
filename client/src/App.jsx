@@ -1311,6 +1311,7 @@ const getDisplayPrice = (product) => {
     marginBottom: "20px",
     textAlign: "center",
     fontWeight: "bold",
+    fontSize: "13px",
   }}
 >
   🚚 Same-day delivery before 12pm • Orders under €20 incur a €5 delivery charge
@@ -3242,7 +3243,7 @@ productCard: {
 
  price: {
   fontWeight: "bold",
-  fontSize: "15px",
+  fontSize: "17px",
   color: "#F97316",
   marginTop: "4px",
   marginBottom: "2px",
@@ -3447,7 +3448,7 @@ orderCard: {
 },
 
 desc: {
-  fontSize: "11px",
+  fontSize: "12px",
   color: "#6b7280",
   minHeight: "48px",
 },
