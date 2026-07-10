@@ -1857,7 +1857,7 @@ const getDisplayPrice = (product) => {
       style={{
   position: "absolute",
   top: "15px",
-  right: "15px",
+  right: "18px",
   width: "32px",
   height: "32px",
   borderRadius: "50%",
