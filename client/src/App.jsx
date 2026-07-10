@@ -3448,20 +3448,29 @@ orderCard: {
 },
 
 desc: {
-  fontSize: "12px",
-  color: "#6b7280",
-  minHeight: "48px",
-},
-
-productTitle: {
-  minHeight: "60px",
+  minHeight: "42px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   textAlign: "center",
-  fontSize: "18px",
-  fontWeight: "bold",
-  margin: "10px 0",
+  fontSize: "12px",
+  color: "#6b7280",
+  lineHeight: "1.3",
+},
+
+
+productTitle: {
+  minHeight: "56px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  textAlign: "center",
+  fontSize: "17px",
+  fontWeight: "700",
+  color: "#111827",
+  lineHeight: "1.25",
+  margin: "8px 0",
+  padding: "0 4px",
 },
 
 paginationWrap: {
