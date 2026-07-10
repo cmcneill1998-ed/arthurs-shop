@@ -2938,13 +2938,15 @@ function LandingPage() {
           "linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('/hero.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        padding: "40px",
+        padding: "40px 15px",
       }}
     >
       <div>
         <h1
           style={{
-            fontSize: "56px",
+            fontSize: "clamp(32px, 8vw, 56px)",
+lineHeight: "1.1",
+padding: "0 10px",
             fontWeight: "800",
             marginBottom: "15px",
           }}
@@ -2954,7 +2956,8 @@ function LandingPage() {
 
         <p
           style={{
-            fontSize: "22px",
+            fontSize: "clamp(16px, 4vw, 22px)",
+padding: "0 10px",
             maxWidth: "700px",
             margin: "0 auto 25px",
           }}
@@ -3134,6 +3137,7 @@ nav: {
     padding: "10px 14px",
     cursor: "pointer",
     fontWeight: "bold",
+    whiteSpace: "nowrap",
   },
 
 primaryNavBtn: {
@@ -3218,7 +3222,8 @@ primaryNavBtn: {
     color: "#ffffff",
     border: "none",
     borderRadius: "6px",
-    padding: "8px 12px",
+  padding: "10px 16px",
+  whiteSpace: "nowrap",
     cursor: "pointer",
     fontWeight: "bold",
   },
@@ -3226,7 +3231,7 @@ primaryNavBtn: {
  
   productGrid: {
   display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
   gap: "14px",
 },
 
@@ -3461,11 +3466,9 @@ desc: {
 },
 
 productTitle: {
-  fontSize: "17px",
-  fontWeight: "700",
-  color: "#111827",
+  fontSize: "16px",
   lineHeight: "1.3",
-  marginBottom: "8px",
+  wordBreak: "break-word",
 },
 
 paginationWrap: {
