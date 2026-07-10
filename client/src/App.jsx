@@ -1853,18 +1853,19 @@ const getDisplayPrice = (product) => {
       setViewProduct(p);
       setSelectedVariant(p.variants?.[0] || p);
     }}
-   style={{
+  
+      style={{
   position: "absolute",
-  top: "-20px",
-right: "-14px",
-zIndex: 100,
-      border: "none",
-      background: "#ffffff",
-      borderRadius: "999px",
-      padding: "5px 7px",
-      cursor: "pointer",
-      boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-    }}
+  top: "10px",
+  right: "10px",
+  zIndex: 100,
+  border: "none",
+  background: "#ffffff",
+  borderRadius: "999px",
+  padding: "6px 8px",
+  cursor: "pointer",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+}}
   >
     🔍
   </button>
@@ -3047,7 +3048,7 @@ function getProductImage(product) {
 
 const styles = {
   page: {
-    background: "#f3f4f6",
+  background: "#DDE1E6",
     minHeight: "100vh",
     padding: "24px",
     fontFamily: "Arial, sans-serif",
@@ -3438,7 +3439,6 @@ productImageWrap: {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  overflow: "visible",
 },
 
 productImage: {
