@@ -1017,53 +1017,19 @@ app.get("/image-names", async (req, res) => {
   }
 });
 
-app.get("/load-descriptions", async (req, res) => {
+app.get("/count-descriptions", async (req, res) => {
   try {
-    await db.query(`
-      UPDATE products
-      SET description = CASE
-
-     WHEN name = 'Chicken & Mushroom Pie' THEN 'A traditional British pie filled with tender chicken pieces and a rich creamy mushroom sauce, wrapped in a golden flaky pastry crust.'
-WHEN name = 'Mince Meat & Onion Pie' THEN 'A hearty pie packed with seasoned minced beef and onion in a rich savoury gravy, encased in golden pastry.'
-WHEN name = 'Steak & Guinness Pie' THEN 'A premium pie filled with slow-cooked beef steak and rich Guinness gravy, wrapped in a crisp golden pastry shell.'
-WHEN name = 'Steak & Kidney Pie' THEN 'A classic British favourite combining tender steak and kidney in a rich savoury gravy with a flaky pastry topping.'
-WHEN name = 'Steak Pie' THEN 'A hearty steak pie packed with tender beef and rich gravy, finished with a golden baked pastry crust.'
-WHEN name = 'Meat & Potato Pie' THEN 'A comforting pie filled with seasoned meat and soft potatoes in a rich traditional gravy, wrapped in flaky pastry.'
-WHEN name = 'Sausage Roll Jumbo' THEN 'A generously sized sausage roll featuring seasoned pork sausage meat wrapped in crisp golden puff pastry.'
-WHEN name = 'Bacon 2.25kg' THEN 'Premium quality frozen bacon ideal for breakfasts, sandwiches and home cooking. Convenient bulk pack suitable for families and catering.'
-WHEN name = 'Bacon 400g' THEN 'Quality streaky bacon with rich smoky flavour, perfect for breakfasts, sandwiches and everyday cooking.'
-WHEN name = 'Sausage Bag 40' THEN 'A large pack of traditional pork sausages, ideal for breakfasts, family meals and barbecues.'
-WHEN name = 'Lorne Sausage 1Kg bag' THEN 'Traditional Scottish square sausage with a rich savoury flavour. Perfect for cooked breakfasts and breakfast rolls.'
-WHEN name = 'Gammon Steak Pack 2' THEN 'Thick-cut gammon steaks offering a juicy texture and rich flavour. Ideal grilled, fried or oven cooked.'
-WHEN name = 'Irish Steak Burger' THEN 'Premium Irish beef burgers made from quality cuts of beef with a rich meaty flavour and succulent texture.'
-WHEN name = 'Haggis' THEN 'A traditional Scottish delicacy prepared using a classic recipe, delivering rich savoury flavour and authentic character.'
-WHEN name = 'Chicken Kiev Bag 5' THEN 'Succulent chicken breast portions filled with rich garlic butter and coated for a delicious crispy finish.'
-WHEN name = 'Chicken Kiev Single' THEN 'Tender chicken breast filled with creamy garlic butter, perfect for an easy and satisfying meal.'
-WHEN name = 'Spicy Chicken Wings Bag 48' THEN 'A large pack of spicy chicken wings coated in a flavourful seasoning with a satisfying kick.'
-WHEN name = 'Spicy Chicken Wings Single' THEN 'Tender chicken wings seasoned with a spicy coating, perfect as a snack, starter or party food.'
-WHEN name = 'Pork Pies Pack 4' THEN 'Traditional pork pies featuring seasoned pork meat encased in a crisp pastry crust.'
-WHEN name = 'Thick Bread' THEN 'Frozen thick-sliced bread perfect for toast, sandwiches and everyday family meals.'
-WHEN name = 'Medium Bread' THEN 'Soft medium-cut bread offering versatility for sandwiches, toast and snacks.'
-WHEN name = 'Wholemeal Bread' THEN 'Nutritious wholemeal bread with a rich flavour and soft texture, ideal for sandwiches and toast.'
-WHEN name = 'Malted Wholegrain' THEN 'A wholesome malted wholegrain loaf packed with flavour and texture, perfect for breakfasts and sandwiches.'
-WHEN name = 'Dutch Baps Pack 8' THEN 'Soft floury bread rolls ideal for breakfast rolls, sandwiches and lunchtime snacks.'
-WHEN name = 'Tea Cakes Pack 5' THEN 'Traditional teacakes packed with juicy fruit, delicious lightly toasted and served warm with butter.'
-WHEN name = 'Muffins Pack 4' THEN 'Classic English muffins with a soft texture, perfect toasted for breakfast or brunch.'
-WHEN name = 'Fruit Scones Single' THEN 'Traditional fruit scone containing sweet dried fruit, delicious served with butter, jam or cream.'
-WHEN name = 'Jacket Potato Bag 7' THEN 'Large baking potatoes ideal for oven cooking and serving with a wide variety of toppings.'
-WHEN name = 'Jacket Potato Single' THEN 'A large baking potato perfect for creating quick, filling and versatile meals.'
-WHEN name = 'Potato Scones' THEN 'Traditional Scottish potato scones with a soft texture and rich potato flavour, ideal for breakfast.'
-
-      END;
+    const result = await db.query(`
+      SELECT COUNT(*) as total,
+             COUNT(description) as with_descriptions
+      FROM products
     `);
 
-    res.send("Descriptions loaded");
+    res.json(result.rows[0]);
   } catch (err) {
-    console.error(err);
     res.status(500).send(err.message);
   }
 });
-
 
 
 app.listen(process.env.PORT || 10000, () => {
