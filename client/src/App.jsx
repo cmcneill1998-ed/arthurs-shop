@@ -1856,19 +1856,16 @@ const getDisplayPrice = (product) => {
   
       style={{
   position: "absolute",
-  top: "90px",
-  right: "18px",
-  width: "34px",
-  height: "34px",
+  top: "15px",
+  right: "15px",
+  width: "32px",
+  height: "32px",
   borderRadius: "50%",
   border: "none",
   background: "#fff",
-  boxShadow: "0 4px 12px rgba(0,0,0,.15)",
+  boxShadow: "0 4px 10px rgba(0,0,0,.15)",
   zIndex: 20,
   cursor: "pointer",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
 }}
 
   >
