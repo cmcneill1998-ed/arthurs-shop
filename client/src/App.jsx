@@ -3032,6 +3032,7 @@ padding: "0 10px",
   );
 }
 
+
 function getProductImage(product) {
   if (product.image) return product.image;
 
