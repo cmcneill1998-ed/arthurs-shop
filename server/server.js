@@ -1022,6 +1022,7 @@ app.get("/load-descriptions", async (req, res) => {
     await db.query(`
       UPDATE products
       SET description = CASE
+
         WHEN name = 'Yzaguirre Blanco' THEN 'A premium Spanish white vermouth with aromatic herbs, citrus notes and gentle sweetness. Perfect served over ice, with tonic, or as an aperitif before a meal.'
         WHEN name = 'Veterano' THEN 'A classic Spanish spirit with smooth oak, caramel and warming notes. Traditionally enjoyed neat, over ice or as a relaxing after-dinner drink.'
         WHEN name = 'Bulldog Gin' THEN 'A premium London dry gin featuring a unique blend of botanicals, delivering crisp juniper character with smooth citrus and floral notes. Ideal for premium gin and tonic serves.'
@@ -1056,53 +1057,38 @@ app.get("/load-descriptions", async (req, res) => {
         WHEN name = 'J and B' THEN 'A famous blended Scotch whisky delivering smooth malt character, light fruit notes and easy-drinking versatility. Perfect for mixing or enjoying over ice.'
         WHEN name = 'Macallan 12 yo' THEN 'A highly regarded single malt Scotch whisky matured in oak casks, featuring rich dried fruit, vanilla and spice flavours with exceptional smoothness.'
         WHEN name = 'Whyte and Mackay' THEN 'A smooth blended Scotch whisky with balanced malt, oak and honey notes. Popular with both whisky enthusiasts and casual drinkers.'
+
         WHEN name = 'Acantus Blanco' THEN 'A fresh Spanish white wine with crisp fruit flavours, refreshing acidity and an easy-drinking style suitable for any occasion.'
         WHEN name = 'Acantus Tinto' THEN 'A smooth Spanish red wine offering ripe berry flavours, gentle tannins and balanced character. Excellent with food or enjoyed on its own.'
         WHEN name = 'Acantus Rosado' THEN 'A refreshing Spanish rosé wine with delicate red fruit flavours and a crisp finish. Perfect served chilled.'
         WHEN name = 'Bach Tinto' THEN 'A popular Spanish red wine with soft berry flavours, smooth texture and approachable character. Ideal for pairing with a variety of dishes.'
+
+        WHEN name = 'Bach Seco' THEN 'A refreshing Spanish sparkling wine with crisp fruit flavours, lively bubbles and a clean dry finish. Ideal for celebrations, aperitifs and light meals.'
+        WHEN name = 'Bach Semi' THEN 'A semi-sweet Spanish sparkling wine offering delicate fruit notes, gentle sweetness and refreshing bubbles. Perfect for special occasions and easy drinking.'
+        WHEN name = 'Bach Rosado (Blush)' THEN 'A vibrant rosé sparkling wine with fresh berry flavours, delicate sweetness and elegant fizz. Best served chilled.'
+        WHEN name = 'Bicicletes I Peces Rosado' THEN 'A refreshing Spanish rosé wine featuring red berry flavours, crisp acidity and a smooth finish. Ideal for warm evenings and Mediterranean cuisine.'
+        WHEN name = 'Bicicletes I Peces Verdejo' THEN 'A fresh Verdejo white wine with citrus, tropical fruit and floral notes. Crisp, aromatic and highly refreshing.'
+        WHEN name = 'Bicicletes I Peces Sauv Blanc' THEN 'A Sauvignon Blanc bursting with citrus, gooseberry and tropical fruit flavours. Bright, lively and perfect served chilled.'
+        WHEN name = 'Campo Viejo Crianza' THEN 'A renowned Rioja red wine aged in oak barrels, delivering rich berry flavours, vanilla notes and a smooth balanced finish.'
+        WHEN name = 'Conde De Caralt Rosado' THEN 'A delicate Spanish rosé with fresh strawberry and raspberry notes, balanced acidity and a refreshing finish.'
+        WHEN name = 'Conde De Caralt Seco' THEN 'A dry sparkling wine with crisp fruit flavours, lively bubbles and an elegant finish. Ideal for celebrations and aperitifs.'
+        WHEN name = 'Conde De Caralt Semi' THEN 'A semi-sweet sparkling wine offering refreshing fruit flavours, gentle sweetness and fine effervescence.'
+        WHEN name = 'Conde De Caralt Tinto' THEN 'A smooth Spanish red wine featuring ripe berry fruit flavours, soft tannins and approachable character.'
+        WHEN name = 'Costa Dor Rosada' THEN 'A refreshing Spanish rosé with bright berry flavours and a crisp finish. Perfect served chilled on sunny days.'
+        WHEN name = 'Costa Dor Tinto' THEN 'A balanced Spanish red wine with notes of red fruits and soft oak influence. Smooth, versatile and easy drinking.'
+        WHEN name = 'Costa Dor Select' THEN 'A premium Spanish wine offering rich fruit character, smooth texture and an elegant finish. Suitable for a variety of occasions.'
+        WHEN name = 'Echo Falls Chardonnay' THEN 'A popular Chardonnay showing ripe tropical fruit flavours, hints of vanilla and a smooth approachable finish.'
+        WHEN name = 'Echo Falls White Zinfandel' THEN 'A fruity rosé wine with juicy strawberry and raspberry flavours balanced by refreshing sweetness.'
+        WHEN name = 'Echo Falls Pinot Grigio' THEN 'A crisp and refreshing Pinot Grigio with citrus, green apple and pear notes. Light, easy drinking and refreshing.'
+        WHEN name = 'Echo Falls Summer Berries' THEN 'A fruit-infused wine bursting with mixed berry flavours and refreshing sweetness. Best served chilled over ice.'
+        WHEN name = 'El Coto Tinto' THEN 'A classic Rioja red wine featuring ripe berry flavours, gentle oak character and a smooth balanced finish.'
+        WHEN name = 'El Coto White' THEN 'A refreshing Spanish white wine with citrus fruit, floral aromas and crisp acidity. Perfect with seafood and lighter dishes.'
+        WHEN name = 'Faustino I' THEN 'An iconic Gran Reserva Rioja showcasing layers of ripe fruit, spice, vanilla and oak. Elegant, complex and highly regarded by wine lovers.'
+
         ELSE description
+
       END;
     `);
-
-    app.get("/fix-categories", async (req, res) => {
-  try {
-    await db.query(`
-      UPDATE products
-      SET category =
-        CASE
-
-          WHEN LOWER(TRIM(category)) IN ('beer', 'beers', 'beers, beer')
-            THEN 'Beer'
-
-          WHEN LOWER(TRIM(category)) IN ('wine', 'wines')
-            THEN 'Wine'
-
-          WHEN LOWER(TRIM(category)) IN ('spirits', 'spirit')
-            THEN 'Spirits'
-
-          WHEN LOWER(TRIM(category)) IN ('liqueurs', 'liqueur')
-            THEN 'Liqueurs'
-
-          WHEN LOWER(TRIM(category)) IN ('soft drinks', 'soft drink')
-            THEN 'Soft Drinks'
-
-          WHEN LOWER(TRIM(category)) IN ('ciders', 'cider')
-            THEN 'Ciders'
-
-          WHEN LOWER(TRIM(category)) IN ('wine & cava', 'wine and cava')
-            THEN 'Wine & Cava'
-
-          ELSE INITCAP(TRIM(category))
-
-        END;
-    `);
-
-    res.send("Categories fixed");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(err.message);
-  }
-});
 
     res.send("Descriptions loaded");
   } catch (err) {
