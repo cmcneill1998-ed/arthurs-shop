@@ -1002,6 +1002,27 @@ app.post("/users/update", async (req, res) => {
   }
 });
 
+app.get("/missing-descriptions", async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT
+        id,
+        name,
+        description
+      FROM products
+      WHERE
+        description IS NULL
+        OR TRIM(description) = ''
+      ORDER BY name;
+    `);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+});
+
 
 
 

@@ -1132,7 +1132,7 @@ setOrderNote={setOrderNote}
   <div style={{ maxWidth: "1000px", margin: "0 auto", textAlign: "center" }}>
     
     <p style={{ fontWeight: "bold", marginBottom: "8px" }}>
-      Island-wide drinks delivery service for customers and businesses.
+      Santa Ponsa drinks delivery service for customers and businesses.
       Trade prices available – buy single items or full cases.
     </p>
 
