@@ -3425,17 +3425,20 @@ suggestionItem: {
 },
 
 productImageWrap: {
-  width: "100%",
-  height: "150px",
+  position: "absolute",
+  top: "-35px",
+  left: "50%",
+  transform: "translateX(-50%)",
+  width: "140px",
+  height: "140px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  marginBottom: "10px",
 },
 
 productImage: {
-  maxHeight: "140px",
-  maxWidth: "95%",
+  maxHeight: "130px",
+  maxWidth: "100%",
   objectFit: "contain",
 },
 
