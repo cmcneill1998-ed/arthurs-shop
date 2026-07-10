@@ -1746,7 +1746,7 @@ const getDisplayPrice = (product) => {
       />
 
      {viewProduct.description && (
-  <p style={{ color: "#4b5563", fontSize: "11px", lineHeight: "1.4" }}>
+  <p style={{ color: "#4b5563", fontSize: "12px", lineHeight: "1.4" }}>
     {viewProduct.description}
   </p>
 )}
@@ -2921,135 +2921,122 @@ function LoginPage({
 
 function LandingPage() {
   const navigate = useNavigate();
+
   return (
     <section
-  style={{
-    ...styles.card,
-    textAlign: "center",
-    padding: "60px 20px",
-    background:
-      "linear-gradient(135deg, #F97316 0%, #EA580C 100%)",
-    color: "#fff",
-  }}
->
-  <h1
-    style={{
-      fontSize: "42px",
-      marginBottom: "12px",
-      color: "#fff",
-    }}
-  >
-    Arthurs Off Licence
-  </h1>
-
-  <p
-    style={{
-      fontSize: "20px",
-      marginBottom: "20px",
-      maxWidth: "700px",
-      margin: "0 auto 20px auto",
-    }}
-  >
-    Beer, Wine, Spirits & Soft Drinks delivered across Santa Ponsa.
-  </p>
-
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "center",
-      gap: "12px",
-      flexWrap: "wrap",
-    }}
-  >
-    <button
-      style={styles.primaryBtn}
-      onClick={() => navigate("/products")}
+      style={{
+        borderRadius: "24px",
+        overflow: "hidden",
+        position: "relative",
+        minHeight: "500px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+        color: "#fff",
+        backgroundImage:
+          "linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('/hero.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        padding: "40px",
+      }}
     >
-      Shop Now
-    </button>
+      <div>
+        <h1
+          style={{
+            fontSize: "56px",
+            fontWeight: "800",
+            marginBottom: "15px",
+          }}
+        >
+          Arthur's Off Licence
+        </h1>
 
-    <button
-      style={styles.secondaryBtn}
-      onClick={() => navigate("/login")}
-    >
-      Login / Register
-    </button>
-  </div>
+        <p
+          style={{
+            fontSize: "22px",
+            maxWidth: "700px",
+            margin: "0 auto 25px",
+          }}
+        >
+          Premium beers, wines, spirits and snacks delivered across Mallorca.
+        </p>
 
-  <p
-    style={{
-      marginTop: "25px",
-      fontSize: "14px",
-      opacity: 0.9,
-    }}
-  >
-    ✅ 24-hour delivery • ✅ Competitive Pricing • ✅ Secure payments & emails
-  </p>
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <button
+            style={styles.primaryBtn}
+            onClick={() => navigate("/products")}
+          >
+            Shop Now
+          </button>
 
-  <div
-  style={{
-    display: "flex",
-    justifyContent: "center",
-    gap: "12px",
-    flexWrap: "wrap",
-    marginTop: "30px",
-  }}
->
-  <div
-    style={{
-      background: "rgba(255,255,255,0.15)",
-      padding: "15px",
-      borderRadius: "10px",
-      minWidth: "180px",
-    }}
-  >
-    🍺 Beer
-  </div>
+          <button
+            style={styles.secondaryBtn}
+            onClick={() => navigate("/login")}
+          >
+            Login / Register
+          </button>
+        </div>
 
-  <div
-    style={{
-      background: "rgba(255,255,255,0.15)",
-      padding: "15px",
-      borderRadius: "10px",
-      minWidth: "180px",
-    }}
-  >
-    🍷 Wine
-  </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))",
+            gap: "12px",
+            marginTop: "40px",
+            width: "100%",
+            maxWidth: "900px",
+          }}
+        >
+          <div
+            style={{
+              background: "rgba(255,255,255,.15)",
+              padding: "14px",
+              borderRadius: "12px",
+            }}
+          >
+            🔒 Secure Payments
+          </div>
 
-  <div
-    style={{
-      background: "rgba(255,255,255,0.15)",
-      padding: "15px",
-      borderRadius: "10px",
-      minWidth: "180px",
-    }}
-  >
-    🍹 Spirits
-  </div>
+          <div
+            style={{
+              background: "rgba(255,255,255,.15)",
+              padding: "14px",
+              borderRadius: "12px",
+            }}
+          >
+            🚚 Fast Delivery
+          </div>
 
-  <div
-    style={{
-      background: "rgba(255,255,255,0.15)",
-      padding: "15px",
-      borderRadius: "10px",
-      minWidth: "180px",
-    }}
-  >
-    🥤 Soft Drinks
-  </div>
-  <div
-  style={{
-    background: "rgba(255,255,255,0.15)",
-    padding: "15px",
-    borderRadius: "10px",
-    minWidth: "180px",
-  }}
->
-  🍿 Snacks
-</div>
-</div>
-</section>
+          <div
+            style={{
+              background: "rgba(255,255,255,.15)",
+              padding: "14px",
+              borderRadius: "12px",
+            }}
+          >
+            🍺 Beer • Wine • Spirits
+          </div>
+
+          <div
+            style={{
+              background: "rgba(255,255,255,.15)",
+              padding: "14px",
+              borderRadius: "12px",
+            }}
+          >
+            ⭐ Trusted Local Retailer
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -3069,7 +3056,7 @@ function getProductImage(product) {
 
 const styles = {
   page: {
-    background: "#F9FAFB",
+    background: "#f3f4f6",
     minHeight: "100vh",
     padding: "24px",
     fontFamily: "Arial, sans-serif",
@@ -3244,16 +3231,16 @@ primaryNavBtn: {
 },
 
 productCard: {
-  border: "1px solid #e5e7eb",
-  borderRadius: "12px",
-  padding: "14px",
-  textAlign: "center",
-  background: "#ffffff",
+  border: "none",
+  borderRadius: "18px",
+  background: "#fff",
   overflow: "hidden",
+  boxShadow: "0 8px 24px rgba(0,0,0,.08)",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
-  minHeight: "320px",
+  transition: "all .2s ease",
+  minHeight: "360px",
 },
 
   categoryTag: {
@@ -3263,9 +3250,11 @@ productCard: {
   },
 
   price: {
-    fontWeight: "bold",
-    fontSize: "18px",
-  },
+  fontWeight: "800",
+  fontSize: "24px",
+  color: "#F97316",
+  marginBottom: "6px",
+},
 
   smallText: {
     fontSize: "11px",
@@ -3442,15 +3431,16 @@ suggestionItem: {
 
 productImageWrap: {
   width: "100%",
-  height: "100px",
+  height: "180px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  marginBottom: "10px",
 },
 
 productImage: {
-  maxHeight: "90px",
-  maxWidth: "90%",
+  maxHeight: "170px",
+  maxWidth: "95%",
   objectFit: "contain",
 },
 
@@ -3465,22 +3455,17 @@ orderCard: {
 },
 
 desc: {
-  minHeight: "50px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  textAlign: "center",
+  fontSize: "11px",
+  color: "#6b7280",
+  minHeight: "48px",
 },
 
 productTitle: {
-  minHeight: "60px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  textAlign: "center",
-  fontSize: "18px",
-  fontWeight: "bold",
-  margin: "10px 0",
+  fontSize: "17px",
+  fontWeight: "700",
+  color: "#111827",
+  lineHeight: "1.3",
+  marginBottom: "8px",
 },
 
 paginationWrap: {
