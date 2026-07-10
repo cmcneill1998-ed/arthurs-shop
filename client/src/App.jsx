@@ -943,14 +943,6 @@ fetch(`${API_BASE}/create-checkout-session`, {
   textAlign: "center",
   flex: 1,
 }}>
-  <p style={{ ...styles.kicker, marginBottom: "4px", textAlign: "center" }}>
-    Premium drinks delivery
-  </p>
-
-  <h1 style={{ ...styles.h1, textAlign: "center" }}>
-    Arthurs Off Licence
-  </h1>
-
   <p style={{ ...styles.sub, textAlign: "center", maxWidth: "500px", margin: "0 auto" }}>
     Premium drinks delivery for both businesses and everyday shoppers. 
   </p>
@@ -1895,23 +1887,16 @@ const getDisplayPrice = (product) => {
   </div>
 
   {/* BUTTONS */}
-  <div style={{ marginTop: "10px" }}>
-    <button
-      style={{ ...styles.primaryBtn, width: "100%" }}
-      onClick={() => {
-  const cheapestVariant = getCheapestVariant(p);
-
-  addToCart({
-    ...cheapestVariant,
-    name:
-      cheapestVariant.variant && cheapestVariant.variant.trim() !== ""
-        ? `${p.name} - ${cheapestVariant.variant}`
-        : cheapestVariant.name,
-  });
-}}
-    >
-      Add to Basket
-    </button>
+<div style={{ marginTop: "10px" }}>
+  <button
+    style={{ ...styles.primaryBtn, width: "100%" }}
+    onClick={() => {
+      setViewProduct(p);
+      setSelectedVariant(p.variants?.[0] || p);
+    }}
+  >
+    View Options
+  </button>
 
     {isStaff && (
       <div style={{ marginTop: "6px" }}>
@@ -2989,55 +2974,56 @@ padding: "0 10px",
         </div>
 
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))",
-            gap: "12px",
-            marginTop: "40px",
-            width: "100%",
-            maxWidth: "900px",
-          }}
-        >
-          <div
-            style={{
-              background: "rgba(255,255,255,.15)",
-              padding: "14px",
-              borderRadius: "12px",
-            }}
-          >
-            🔒 Secure Payments
-          </div>
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    gap: "8px",
+    flexWrap: "wrap",
+    marginTop: "25px",
+    fontSize: "12px",
+    fontWeight: "600",
+  }}
+>
+  <div
+    style={{
+      background: "rgba(255,255,255,.15)",
+      padding: "8px 10px",
+      borderRadius: "999px",
+    }}
+  >
+    🔒 Secure Payments
+  </div>
 
-          <div
-            style={{
-              background: "rgba(255,255,255,.15)",
-              padding: "14px",
-              borderRadius: "12px",
-            }}
-          >
-            🚚 Fast Delivery
-          </div>
+  <div
+    style={{
+      background: "rgba(255,255,255,.15)",
+      padding: "8px 10px",
+      borderRadius: "999px",
+    }}
+  >
+    🚚 Fast Delivery
+  </div>
 
-          <div
-            style={{
-              background: "rgba(255,255,255,.15)",
-              padding: "14px",
-              borderRadius: "12px",
-            }}
-          >
-            🍺 Beer • Wine • Spirits
-          </div>
+  <div
+    style={{
+      background: "rgba(255,255,255,.15)",
+      padding: "8px 10px",
+      borderRadius: "999px",
+    }}
+  >
+    🍺 Beer • Wine • Spirits
+  </div>
 
-          <div
-            style={{
-              background: "rgba(255,255,255,.15)",
-              padding: "14px",
-              borderRadius: "12px",
-            }}
-          >
-            ⭐ Trusted Local Retailer
-          </div>
-        </div>
+  <div
+    style={{
+      background: "rgba(255,255,255,.15)",
+      padding: "8px 10px",
+      borderRadius: "999px",
+    }}
+  >
+    ⭐ Trusted Retailer
+  </div>
+</div>
       </div>
     </section>
   );
