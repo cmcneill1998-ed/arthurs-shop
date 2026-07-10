@@ -3048,7 +3048,8 @@ function getProductImage(product) {
 
 const styles = {
   page: {
-  background: "#DDE1E6",
+
+  background: "#E5E7EB",
     minHeight: "100vh",
     padding: "24px",
     fontFamily: "Arial, sans-serif",
@@ -3229,7 +3230,7 @@ productCard: {
   position: "relative",
   border: "none",
   borderRadius: "20px",
-  padding: "75px 16px 16px",
+  padding: "45px 16px 16px",
   textAlign: "center",
   background: "#ffffff",
   overflow: "visible",
@@ -3237,7 +3238,7 @@ productCard: {
   flexDirection: "column",
   justifyContent: "space-between",
   minHeight: "360px",
-  boxShadow: "0 10px 25px rgba(0,0,0,.08)",
+  boxShadow: "0 18px 40px rgba(0,0,0,.18)",
 },
 
 
