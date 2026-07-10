@@ -3241,9 +3241,10 @@ productCard: {
   },
 
   price: {
-  fontWeight: "600",
-  fontSize: "18px",
-  color: "#ea580c",
+  fontWeight: "800",
+  fontSize: "24px",
+  color: "#F97316",
+  marginBottom: "6px",
 },
 
   smallText: {
