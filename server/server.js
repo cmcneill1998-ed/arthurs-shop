@@ -1017,16 +1017,530 @@ app.get("/image-names", async (req, res) => {
   }
 });
 
-app.get("/count-descriptions", async (req, res) => {
+app.get("/restore-descriptions", async (req, res) => {
   try {
     const result = await db.query(`
-      SELECT COUNT(*) as total,
-             COUNT(description) as with_descriptions
-      FROM products
+      UPDATE products
+      SET description = CASE
+
+        /* =========================
+           SPECIFIC WINES / CAVA / CHAMPAGNE
+        ========================= */
+
+        WHEN LOWER(TRIM(name)) = 'laurent perrier rose'
+          THEN 'A prestigious rosé champagne with elegant red fruit flavours, fine bubbles and a refined finish. Perfect for celebrations, gifting and special occasions.'
+
+        WHEN LOWER(TRIM(name)) = 'moet et chandon rose'
+          THEN 'A luxurious rosé champagne with vibrant berry flavours, elegant bubbles and a smooth stylish finish. Ideal for celebrations and premium gifting.'
+
+        WHEN LOWER(TRIM(name)) = 'moet et chandon brut'
+          THEN 'A world-famous brut champagne with citrus, apple and brioche notes, balanced by fine bubbles and a clean refreshing finish.'
+
+        WHEN LOWER(TRIM(name)) = 'veuve clicquot'
+          THEN 'An iconic premium champagne known for rich fruit character, balanced acidity and elegant bubbles. A timeless choice for special occasions.'
+
+        WHEN LOWER(TRIM(name)) = 'acantus blanco'
+          THEN 'A fresh Spanish white wine with crisp fruit flavours, light acidity and an easy-drinking finish. Ideal served chilled with light meals or on its own.'
+
+        WHEN LOWER(TRIM(name)) = 'acantus tinto'
+          THEN 'A smooth Spanish red wine with ripe berry flavours, gentle tannins and a balanced finish. Great with food or casual evening drinks.'
+
+        WHEN LOWER(TRIM(name)) = 'acantus rosado'
+          THEN 'A refreshing Spanish rosé with delicate red fruit flavours and a crisp finish. Best served chilled.'
+
+        WHEN LOWER(TRIM(name)) = 'bach tinto'
+          THEN 'A popular Spanish red wine with soft berry flavours, smooth texture and approachable character. Ideal for pairing with a wide range of dishes.'
+
+        WHEN LOWER(TRIM(name)) = 'bach seco'
+          THEN 'A refreshing Spanish dry wine with crisp fruit notes and a clean finish. Great as an aperitif or with lighter meals.'
+
+        WHEN LOWER(TRIM(name)) = 'bach semi'
+          THEN 'A smooth semi-sweet Spanish wine with gentle fruit character and an easy-drinking finish. Best served chilled.'
+
+        WHEN LOWER(TRIM(name)) = 'bach rosado (blush)'
+          THEN 'A bright blush rosé with soft berry notes, gentle sweetness and refreshing character. Ideal served chilled.'
+
+        WHEN LOWER(TRIM(name)) = 'bicicletes i peces rosado'
+          THEN 'A refreshing Spanish rosé wine with red berry flavours, crisp acidity and a smooth finish. Perfect for warm evenings and Mediterranean food.'
+
+        WHEN LOWER(TRIM(name)) = 'bicicletes i peces verdejo'
+          THEN 'A fresh Verdejo white wine with citrus, tropical fruit and floral notes. Crisp, aromatic and refreshing.'
+
+        WHEN LOWER(TRIM(name)) = 'bicicletes i peces sauv blanc'
+          THEN 'A Sauvignon Blanc with citrus, gooseberry and tropical fruit flavours. Bright, lively and best served chilled.'
+
+        WHEN LOWER(TRIM(name)) = 'campo viejo crianza'
+          THEN 'A renowned Rioja Crianza aged in oak, offering rich berry fruit, vanilla notes and a smooth balanced finish.'
+
+        WHEN LOWER(TRIM(name)) = 'conde de caralt rosado'
+          THEN 'A delicate Spanish rosé with strawberry and raspberry notes, balanced acidity and a refreshing finish.'
+
+        WHEN LOWER(TRIM(name)) = 'conde de caralt seco'
+          THEN 'A dry Spanish wine with crisp fruit flavour and a clean finish. Great for everyday drinking and light meals.'
+
+        WHEN LOWER(TRIM(name)) = 'conde de caralt semi'
+          THEN 'A semi-sweet Spanish wine with soft fruit character, gentle sweetness and a smooth finish.'
+
+        WHEN LOWER(TRIM(name)) = 'conde de caralt tinto'
+          THEN 'A smooth Spanish red wine with ripe berry flavours, soft tannins and approachable character.'
+
+        WHEN LOWER(TRIM(name)) = 'costa dor rosado'
+          THEN 'A refreshing Spanish rosé with bright berry flavours and a crisp finish. Best served chilled.'
+
+        WHEN LOWER(TRIM(name)) = 'costa dor tinto'
+          THEN 'A balanced Spanish red wine with red fruit notes and a smooth easy-drinking finish.'
+
+        WHEN LOWER(TRIM(name)) = 'costa dor select'
+          THEN 'A smooth Spanish wine with rounded fruit character and an easy-drinking finish. Suitable for casual meals and gatherings.'
+
+        WHEN LOWER(TRIM(name)) = 'echo falls chardonnay'
+          THEN 'A popular Chardonnay with ripe tropical fruit flavours, subtle vanilla notes and a smooth approachable finish.'
+
+        WHEN LOWER(TRIM(name)) = 'echo falls white zinfandel'
+          THEN 'A fruity rosé wine with strawberry and raspberry flavours balanced by refreshing sweetness.'
+
+        WHEN LOWER(TRIM(name)) = 'echo falls pinot grigio'
+          THEN 'A crisp and refreshing Pinot Grigio with citrus, green apple and pear notes. Light and easy drinking.'
+
+        WHEN LOWER(TRIM(name)) = 'echo falls summer berries'
+          THEN 'A fruit-infused wine bursting with mixed berry flavours and refreshing sweetness. Best served chilled over ice.'
+
+        WHEN LOWER(TRIM(name)) = 'el coto tinto'
+          THEN 'A classic Rioja red wine with ripe berry flavours, gentle oak notes and a smooth balanced finish.'
+
+        WHEN LOWER(TRIM(name)) = 'el coto white'
+          THEN 'A refreshing Spanish white wine with citrus fruit, floral aromas and crisp acidity. Perfect with seafood and lighter dishes.'
+
+        WHEN LOWER(TRIM(name)) = 'faustino i'
+          THEN 'An iconic Gran Reserva Rioja with layers of ripe fruit, spice, vanilla and oak. Elegant, complex and highly regarded.'
+
+        WHEN LOWER(TRIM(name)) = 'faustino v'
+          THEN 'A smooth Rioja wine with ripe fruit character, gentle oak notes and a balanced finish. Great with meat, tapas and everyday meals.'
+
+        WHEN LOWER(TRIM(name)) = 'faustino vii tinto'
+          THEN 'A classic Rioja red wine with soft red fruit flavours, light oak character and an easy-drinking finish.'
+
+        WHEN LOWER(TRIM(name)) = 'i heart pinot grigio'
+          THEN 'A crisp Pinot Grigio with fresh citrus and pear notes. Light, refreshing and ideal served chilled.'
+
+        WHEN LOWER(TRIM(name)) = 'i heart merlot'
+          THEN 'A smooth Merlot with soft plum and berry flavours. Easy drinking and suitable for a variety of meals.'
+
+        WHEN LOWER(TRIM(name)) = 'i heart sauvv blanc'
+          THEN 'A fresh Sauvignon Blanc with citrus and tropical fruit notes. Bright, crisp and refreshing.'
+
+        WHEN LOWER(TRIM(name)) = 'i heart chardonnay'
+          THEN 'A rounded Chardonnay with ripe fruit flavours and a smooth finish. Great chilled or with lighter food.'
+
+        WHEN LOWER(TRIM(name)) = 'i heart rosado'
+          THEN 'A refreshing rosé with soft berry flavours and a crisp finish. Ideal chilled on warm days.'
+
+        WHEN LOWER(TRIM(name)) = 'jamshed chardonnay'
+          THEN 'A smooth Chardonnay with ripe fruit flavours and a rounded finish. Easy drinking and food friendly.'
+
+        WHEN LOWER(TRIM(name)) = 'lancers'
+          THEN 'A lightly sparkling Portuguese rosé wine with refreshing fruit character and a smooth easy-drinking style.'
+
+        WHEN LOWER(TRIM(name)) = 'macia batle red'
+          THEN 'A Mallorcan red wine with ripe fruit flavours and balanced structure. Great with meats, tapas and Mediterranean dishes.'
+
+        WHEN LOWER(TRIM(name)) = 'macia batle rosado'
+          THEN 'A Mallorcan rosé wine with fresh red fruit character and a refreshing finish. Best served chilled.'
+
+        WHEN LOWER(TRIM(name)) = 'macia batle white'
+          THEN 'A Mallorcan white wine with crisp citrus notes and refreshing acidity. Ideal with seafood and light dishes.'
+
+        WHEN LOWER(TRIM(name)) = 'marques de caceres crianza'
+          THEN 'A quality Rioja Crianza with red fruit, spice and gentle oak character. Smooth and balanced.'
+
+        WHEN LOWER(TRIM(name)) = 'marques de caceres rosado'
+          THEN 'A refreshing Rioja rosé with strawberry and red berry flavours. Crisp, fruity and elegant.'
+
+        WHEN LOWER(TRIM(name)) = 'marques de caceres white'
+          THEN 'A bright Spanish white wine with citrus fruit character and a clean refreshing finish.'
+
+        WHEN LOWER(TRIM(name)) = 'martin codax'
+          THEN 'A premium Albariño wine with citrus, stone fruit and fresh acidity. Excellent with seafood and Mediterranean dishes.'
+
+        WHEN LOWER(TRIM(name)) = 'mateus'
+          THEN 'A lightly sparkling rosé wine with gentle fruit sweetness and refreshing character. Best served chilled.'
+
+        WHEN LOWER(TRIM(name)) = 'sangre del toro'
+          THEN 'A Spanish wine with ripe fruit flavours, balanced structure and a smooth finish. Great with meat, tapas and everyday meals.'
+
+        WHEN LOWER(TRIM(name)) = 'sangria don simon plastic'
+          THEN 'A classic Spanish sangria with fruity sweetness and refreshing character. Best served chilled over ice with fruit.'
+
+        WHEN LOWER(TRIM(name)) = 'sarria verdejo'
+          THEN 'A crisp Verdejo white wine with citrus and tropical fruit notes. Fresh, aromatic and refreshing.'
+
+        WHEN LOWER(TRIM(name)) = 'vina sol'
+          THEN 'A popular Spanish white wine with crisp fruit flavour and a refreshing finish. Ideal chilled with seafood or light meals.'
+
+        WHEN LOWER(TRIM(name)) = 'whispering angel'
+          THEN 'A premium Provence rosé with delicate red fruit flavours, crisp acidity and an elegant dry finish.'
+
+        /* =========================
+           SPECIFIC SPIRITS / LIQUEURS
+        ========================= */
+
+        WHEN LOWER(TRIM(name)) = 'yzaguirre blanco'
+          THEN 'A premium Spanish white vermouth with aromatic herbs, citrus notes and gentle sweetness. Perfect over ice, with tonic or as an aperitif.'
+
+        WHEN LOWER(TRIM(name)) = 'veterano'
+          THEN 'A classic Spanish spirit with smooth oak, caramel and warming notes. Traditionally enjoyed neat, over ice or after dinner.'
+
+        WHEN LOWER(TRIM(name)) = 'bulldog gin'
+          THEN 'A premium London dry gin with crisp juniper, citrus and floral botanicals. Ideal for a premium gin and tonic.'
+
+        WHEN LOWER(TRIM(name)) = 'london no 1'
+          THEN 'A premium gin with elegant botanical character and a distinctive style. Smooth, aromatic and excellent for cocktails.'
+
+        WHEN LOWER(TRIM(name)) = 'xoriguer mahon gin'
+          THEN 'A famous Menorcan gin made using traditional methods, with bold juniper character and Mediterranean heritage.'
+
+        WHEN LOWER(TRIM(name)) = 'midori'
+          THEN 'A vibrant melon liqueur known for its bright green colour and sweet tropical flavour. Great in cocktails.'
+
+        WHEN LOWER(TRIM(name)) = 'kahlua'
+          THEN 'A rich coffee liqueur with roasted coffee, vanilla and caramel notes. Perfect for espresso martinis and after-dinner drinks.'
+
+        WHEN LOWER(TRIM(name)) = 'amaretto ferrone'
+          THEN 'A smooth almond liqueur with sweet marzipan, vanilla and nutty notes. Ideal over ice or in classic cocktails.'
+
+        WHEN LOWER(TRIM(name)) = 'limoncello ferrone'
+          THEN 'A traditional Italian-style lemon liqueur with bright citrus flavour and refreshing sweetness. Best served ice cold.'
+
+        WHEN LOWER(TRIM(name)) = 'bora bora cacao'
+          THEN 'A chocolate flavoured cocktail syrup with rich cocoa sweetness. Perfect for cocktails, coffees, milkshakes and desserts.'
+
+        WHEN LOWER(TRIM(name)) = 'der meister'
+          THEN 'A herbal liqueur with botanical, spice and warming notes. Best served chilled or over ice.'
+
+        WHEN LOWER(TRIM(name)) = 'giulioncello'
+          THEN 'A citrus liqueur with bright lemon character and a smooth sweet finish. Excellent served chilled.'
+
+        WHEN LOWER(TRIM(name)) = 'irish knights'
+          THEN 'An Irish cream-style liqueur with smooth whiskey notes, cream and vanilla flavours. Great over ice or in coffee.'
+
+        WHEN LOWER(TRIM(name)) = 'licor 1898'
+          THEN 'A Spanish liqueur with smooth sweetness and warming character. Ideal served chilled or after dinner.'
+
+        WHEN LOWER(TRIM(name)) = 'triple sec caiman'
+          THEN 'An orange liqueur with bright citrus flavour, ideal for margaritas, cosmopolitans and classic cocktails.'
+
+        WHEN LOWER(TRIM(name)) = 'havana club 5'
+          THEN 'A Cuban aged rum with notes of oak, vanilla and tropical fruit. Smooth enough for sipping and versatile in cocktails.'
+
+        WHEN LOWER(TRIM(name)) = 'captain morgan spiced sin alcohol'
+          THEN 'An alcohol-free spiced spirit alternative with vanilla and warming spice character. Great with cola or mixers.'
+
+        WHEN LOWER(TRIM(name)) = 'absolut mango'
+          THEN 'A mango flavoured vodka with tropical sweetness and Absolut’s smooth clean finish. Great with lemonade or cocktails.'
+
+        WHEN LOWER(TRIM(name)) = 'absolut wildberries'
+          THEN 'A berry flavoured vodka with rich forest fruit character and vibrant sweetness. Perfect for refreshing mixed drinks.'
+
+        WHEN LOWER(TRIM(name)) = 'absolut raspberry'
+          THEN 'A raspberry flavoured vodka with bright berry notes and a clean crisp finish. Excellent with soda or lemonade.'
+
+        WHEN LOWER(TRIM(name)) = 'absolut peach'
+          THEN 'A peach flavoured vodka with juicy fruit notes and smooth character. Ideal for summer cocktails and mixers.'
+
+        WHEN LOWER(TRIM(name)) = 'absolut peppar'
+          THEN 'A pepper infused vodka with warming spice and savoury depth. Famous for Bloody Mary cocktails.'
+
+        WHEN LOWER(TRIM(name)) = 'absolut passion fruit'
+          THEN 'A tropical passion fruit vodka with exotic fruit flavour and refreshing finish. Perfect in fruity cocktails.'
+
+        WHEN LOWER(TRIM(name)) = 'absolut vanilla'
+          THEN 'A vanilla flavoured vodka with smooth sweetness and creamy character. Ideal for espresso martinis and dessert-style cocktails.'
+
+        WHEN LOWER(TRIM(name)) = 'crystal head'
+          THEN 'A premium Canadian vodka known for exceptional purity, smoothness and its iconic skull bottle.'
+
+        WHEN LOWER(TRIM(name)) = 'naga chilli vodka'
+          THEN 'A powerful chilli infused vodka with intense heat and smooth spirit character. Best for spicy shots and bold cocktails.'
+
+        WHEN LOWER(TRIM(name)) = 'jack daniels single barrel'
+          THEN 'A premium Tennessee whiskey selected from individual barrels, with rich oak, caramel, vanilla and spice notes.'
+
+        WHEN LOWER(TRIM(name)) = 'xuxu'
+          THEN 'A strawberry liqueur made with sweet fruit flavour and smooth character. Great chilled or in fruity cocktails.'
+
+        WHEN LOWER(TRIM(name)) = 'smirnoff mango passionfruit'
+          THEN 'A tropical flavoured vodka blending mango and passion fruit notes with Smirnoff’s clean crisp finish.'
+
+        WHEN LOWER(TRIM(name)) = 'smirnoff rosca'
+          THEN 'A smooth vodka with clean flavour and versatile mixing character. Ideal for cocktails and long drinks.'
+
+        WHEN LOWER(TRIM(name)) = 'jim bean honey'
+          THEN 'A honey infused bourbon liqueur combining whiskey warmth with sweet honey notes. Great over ice or with lemonade.'
+
+        WHEN LOWER(TRIM(name)) = 'j and b'
+          THEN 'A smooth blended Scotch whisky with light malt and fruit notes. Perfect for mixing or serving over ice.'
+
+        WHEN LOWER(TRIM(name)) = 'macallan 12 yo'
+          THEN 'A highly regarded single malt Scotch whisky with dried fruit, vanilla, spice and oak character.'
+
+        WHEN LOWER(TRIM(name)) = 'whyte and mackay'
+          THEN 'A smooth blended Scotch whisky with balanced malt, oak and honey notes. Easy drinking and versatile.'
+
+        /* =========================
+           CHAMPAGNE / CIDER / BEER / MIXERS REQUEST BATCH
+        ========================= */
+
+        WHEN LOWER(TRIM(name)) LIKE '%thatchers can%'
+          THEN 'A premium apple cider with crisp fruit flavour, refreshing character and a clean finish. Best served chilled.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%koppaberg can pear%'
+          THEN 'A Swedish pear cider packed with juicy pear flavour and refreshing sweetness. Best served chilled over ice.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%koppaberg can strawberry lime%'
+          THEN 'A popular fruit cider blending sweet strawberry with zesty lime for a crisp refreshing finish.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%koppaberg can mix fruit%'
+          THEN 'A refreshing mixed fruit cider with berry flavours and balanced sweetness. Perfect served ice cold.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%coors light can 500ml%'
+          THEN 'A light American lager with crisp refreshing flavour and a clean finish. Best enjoyed ice cold.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%guinness zero can%'
+          THEN 'An alcohol-free stout with roasted malt flavour, smooth body and a creamy Guinness-style finish.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%magners can 500ml%'
+          THEN 'A traditional Irish cider with crisp apple flavour and refreshing character. Best served chilled.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%rekordelig can passion fruit%'
+          THEN 'A Swedish fruit cider with exotic passion fruit flavour and refreshing sweetness.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%rekordelig can strawberry lime%'
+          THEN 'A refreshing fruit cider combining sweet strawberry notes with zesty lime.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%rekordelig can wild berry%'
+          THEN 'A mixed berry cider packed with juicy fruit character and balanced sweetness.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%rekordelig can mango%raspberry%'
+          THEN 'A tropical fruit cider blending mango sweetness with raspberry freshness and a smooth finish.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%lucozade sport%'
+          THEN 'An isotonic sports drink designed to help replenish fluids and electrolytes during and after exercise.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%walkers%'
+          THEN 'Classic potato crisps available in a variety of popular flavours. Perfect for snacking, lunches and parties.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%fevertree pink grapefruit%'
+          THEN 'A premium pink grapefruit soda with vibrant citrus flavour and refreshing bitterness. Ideal for premium mixed drinks.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%carlsberg bottle 330ml%'
+          THEN 'A smooth Danish pilsner with balanced malt flavour and a crisp refreshing finish. Best served chilled.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%fevertree mediterranean tonic%'
+          THEN 'A premium tonic water with Mediterranean herbs and citrus notes. Perfect with premium gin.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%fevertree sicillian lemonade%'
+          THEN 'A sparkling Sicilian lemonade with vibrant citrus flavour and natural sweetness. Great as a mixer or soft drink.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%fevertree elderflower tonic%'
+          THEN 'A delicate elderflower tonic water with light floral notes. Ideal with gin, vodka or served chilled on its own.'
+
+        WHEN LOWER(TRIM(name)) LIKE '%fevertree soda%'
+          THEN 'A premium soda water with fine carbonation and a clean refreshing finish. Ideal for cocktails and spirits.'
+
+        /* =========================
+           FROZEN FOOD
+        ========================= */
+
+        WHEN LOWER(TRIM(name)) = 'chicken & mushroom pie'
+          THEN 'A traditional British pie filled with tender chicken pieces and rich creamy mushroom sauce, wrapped in golden flaky pastry.'
+
+        WHEN LOWER(TRIM(name)) = 'mince meat & onion pie'
+          THEN 'A hearty pie packed with seasoned minced beef and onion in rich savoury gravy, encased in golden pastry.'
+
+        WHEN LOWER(TRIM(name)) = 'steak & guinness pie'
+          THEN 'A premium pie filled with slow-cooked beef steak and rich Guinness gravy, wrapped in crisp golden pastry.'
+
+        WHEN LOWER(TRIM(name)) = 'steak & kidney pie'
+          THEN 'A classic British pie combining tender steak and kidney in rich savoury gravy with golden pastry.'
+
+        WHEN LOWER(TRIM(name)) = 'steak pie'
+          THEN 'A hearty steak pie packed with tender beef and rich gravy, finished with a golden pastry crust.'
+
+        WHEN LOWER(TRIM(name)) = 'meat & potato pie'
+          THEN 'A comforting pie filled with seasoned meat and soft potatoes in traditional rich gravy, wrapped in pastry.'
+
+        WHEN LOWER(TRIM(name)) = 'sausage roll jumbo'
+          THEN 'A generously sized sausage roll filled with seasoned sausage meat and wrapped in crisp golden puff pastry.'
+
+        WHEN LOWER(TRIM(name)) = 'bacon 2.25kg'
+          THEN 'A bulk pack of quality frozen bacon, ideal for breakfasts, sandwiches, cooking and catering.'
+
+        WHEN LOWER(TRIM(name)) = 'bacon 400g'
+          THEN 'Quality bacon with rich savoury flavour, ideal for breakfasts, sandwiches and everyday cooking.'
+
+        WHEN LOWER(TRIM(name)) = 'bacon 200g'
+          THEN 'A convenient pack of bacon ideal for breakfasts, sandwiches and smaller meals.'
+
+        WHEN LOWER(TRIM(name)) = 'sausage bag 40'
+          THEN 'A large pack of traditional sausages, ideal for breakfasts, family meals and barbecues.'
+
+        WHEN LOWER(TRIM(name)) = 'sausage individual'
+          THEN 'A single traditional sausage with savoury flavour, ideal for breakfast rolls or quick meals.'
+
+        WHEN LOWER(TRIM(name)) = 'lorne sausage 1kg bag'
+          THEN 'Traditional Scottish square sausage with rich savoury flavour. Perfect for cooked breakfasts and rolls.'
+
+        WHEN LOWER(TRIM(name)) = 'black pudding single'
+          THEN 'A single portion of black pudding, ideal for cooked breakfasts and traditional meals.'
+
+        WHEN LOWER(TRIM(name)) = 'black pudding stick 1.36kg'
+          THEN 'A full stick of traditional black pudding with rich savoury flavour, ideal for slicing and cooking.'
+
+        WHEN LOWER(TRIM(name)) = 'gammon joint per kg'
+          THEN 'A frozen gammon joint sold by weight, ideal for roasting or slicing for meals.'
+
+        WHEN LOWER(TRIM(name)) = 'gammon steak pack 2'
+          THEN 'Two thick-cut gammon steaks with juicy texture and rich flavour. Ideal grilled, fried or oven cooked.'
+
+        WHEN LOWER(TRIM(name)) = 'irish steak burger'
+          THEN 'A premium Irish steak burger with rich beef flavour and succulent texture. Great for grilling or frying.'
+
+        WHEN LOWER(TRIM(name)) = 'haggis'
+          THEN 'A traditional Scottish haggis with rich savoury flavour and authentic character.'
+
+        WHEN LOWER(TRIM(name)) = 'chicken kiev bag 5'
+          THEN 'A pack of chicken Kiev portions filled with garlic butter and coated for a crispy finish.'
+
+        WHEN LOWER(TRIM(name)) = 'chicken kiev single'
+          THEN 'A tender chicken Kiev filled with garlic butter, ideal for a quick and satisfying meal.'
+
+        WHEN LOWER(TRIM(name)) = 'spicy chicken wings bag 48'
+          THEN 'A large pack of spicy chicken wings with a flavourful coating and satisfying kick.'
+
+        WHEN LOWER(TRIM(name)) = 'spicy chicken wings single'
+          THEN 'A spicy chicken wing with bold seasoning, perfect as a snack, starter or party food.'
+
+        WHEN LOWER(TRIM(name)) = 'southern fried chicken goujon strip bag'
+          THEN 'A bag of southern fried chicken goujon strips with crispy coating and tender chicken inside.'
+
+        WHEN LOWER(TRIM(name)) = 'pork pies pack 4'
+          THEN 'A pack of traditional pork pies with seasoned pork filling and crisp pastry crust.'
+
+        WHEN LOWER(TRIM(name)) = 'thick bread'
+          THEN 'Frozen thick-sliced bread perfect for toast, sandwiches and everyday family meals.'
+
+        WHEN LOWER(TRIM(name)) = 'medium bread'
+          THEN 'Soft medium-cut bread suitable for sandwiches, toast and snacks.'
+
+        WHEN LOWER(TRIM(name)) = 'wholemeal bread'
+          THEN 'Nutritious wholemeal bread with rich flavour and soft texture, ideal for sandwiches and toast.'
+
+        WHEN LOWER(TRIM(name)) = 'malted wholegrain'
+          THEN 'A wholesome malted wholegrain loaf with rich flavour and texture, perfect for breakfasts and sandwiches.'
+
+        WHEN LOWER(TRIM(name)) = 'dutch baps pack 8'
+          THEN 'Soft bread rolls ideal for breakfast rolls, sandwiches and lunchtime snacks.'
+
+        WHEN LOWER(TRIM(name)) = 'tea cakes pack 5'
+          THEN 'Traditional teacakes with fruit, delicious toasted and served warm with butter.'
+
+        WHEN LOWER(TRIM(name)) = 'muffins pack 4'
+          THEN 'Classic English muffins with a soft texture, perfect toasted for breakfast or brunch.'
+
+        WHEN LOWER(TRIM(name)) = 'fruit scones single'
+          THEN 'A traditional fruit scone with dried fruit, delicious served with butter, jam or cream.'
+
+        WHEN LOWER(TRIM(name)) = 'jacket potato bag 7'
+          THEN 'A bag of large baking potatoes ideal for oven cooking and serving with a variety of toppings.'
+
+        WHEN LOWER(TRIM(name)) = 'jacket potato single'
+          THEN 'A large baking potato perfect for a quick, filling and versatile meal.'
+
+        WHEN LOWER(TRIM(name)) = 'potato scones'
+          THEN 'Traditional Scottish potato scones with soft texture and rich potato flavour, ideal for breakfast.'
+
+        /* =========================
+           GENERIC FALLBACKS BY CATEGORY / NAME
+        ========================= */
+
+        WHEN LOWER(name) LIKE '%gin%'
+          THEN 'A quality gin with botanical character, refreshing flavour and versatile mixing potential. Perfect with tonic, citrus garnish or classic cocktails.'
+
+        WHEN LOWER(name) LIKE '%vodka%' OR LOWER(name) LIKE '%smirnoff%' OR LOWER(name) LIKE '%absolut%' OR LOWER(name) LIKE '%rushkinoff%'
+          THEN 'A smooth vodka with clean flavour and versatile character. Ideal for mixers, cocktails and chilled serves.'
+
+        WHEN LOWER(name) LIKE '%rum%' OR LOWER(name) LIKE '%bacardi%' OR LOWER(name) LIKE '%captain morgan%' OR LOWER(name) LIKE '%havana%'
+          THEN 'A flavourful rum with smooth sweetness and warming character. Excellent with cola, tropical mixers or cocktails.'
+
+        WHEN LOWER(name) LIKE '%whisky%' OR LOWER(name) LIKE '%whiskey%' OR LOWER(name) LIKE '%jack daniels%' OR LOWER(name) LIKE '%johnny walker%' OR LOWER(name) LIKE '%j&b%'
+          THEN 'A quality whisky with smooth malt, oak and warming character. Enjoy neat, over ice or with your favourite mixer.'
+
+        WHEN LOWER(name) LIKE '%tequila%' OR LOWER(name) LIKE '%cuervo%' OR LOWER(name) LIKE '%don julio%'
+          THEN 'A tequila with agave character and smooth finish. Great for shots, margaritas and premium cocktails.'
+
+        WHEN LOWER(name) LIKE '%liqueur%' OR LOWER(category) LIKE '%liqueur%' OR LOWER(category) LIKE '%liquor%'
+          THEN 'A smooth liqueur with distinctive flavour and sweet character. Ideal served chilled, over ice or mixed into cocktails.'
+
+        WHEN LOWER(category) LIKE '%wine%'
+          THEN 'A quality wine with balanced flavour and easy-drinking character. Best served at the appropriate temperature for its style.'
+
+        WHEN LOWER(category) LIKE '%beer%' OR LOWER(category) LIKE '%beers%'
+          THEN 'A refreshing beer with crisp flavour and easy-drinking character. Best served chilled.'
+
+        WHEN LOWER(category) LIKE '%cider%'
+          THEN 'A refreshing cider with fruit-forward flavour and crisp finish. Best served chilled.'
+
+        WHEN LOWER(category) LIKE '%soft drink%'
+          THEN 'A refreshing soft drink, mixer or juice product ideal for serving chilled or combining with drinks.'
+
+        WHEN LOWER(category) LIKE '%frozen%'
+          THEN 'A convenient frozen food product ideal for quick meals, snacks or family cooking.'
+
+        WHEN LOWER(category) LIKE '%dried%'
+          THEN 'A cupboard essential suitable for everyday meals, snacks or cooking.'
+
+        WHEN LOWER(category) LIKE '%sweet%'
+          THEN 'A sweet or snack product ideal for treats, sharing or everyday snacking.'
+
+        WHEN LOWER(category) LIKE '%miniature%'
+          THEN 'A miniature bottle or multipack option, ideal for gifts, sampling, parties or travel.'
+
+        ELSE COALESCE(NULLIF(TRIM(description), ''), 'Quality product available from Arthurs Off Licence.')
+
+      END
+      WHERE description IS NULL
+         OR TRIM(description) = ''
+         OR LOWER(TRIM(description)) IN (
+          'beer',
+          'wine',
+          'vodka',
+          'gin',
+          'rum',
+          'whiskey',
+          'tequila',
+          'liqueur or spirit',
+          'soft drink',
+          'fruit juice',
+          'energy drink',
+          'bottled water',
+          'frozen food item',
+          'frozen meat product',
+          'frozen bakery item',
+          'frozen savoury pastry',
+          'tinned grocery item',
+          'condiment',
+          'chocolate bar',
+          'snack food',
+          'sparkling wine',
+          'miniature spirit',
+          'miniature multipack',
+          'ready-to-drink alcoholic beverage'
+        );
     `);
 
-    res.json(result.rows[0]);
+    res.send("Descriptions restored");
   } catch (err) {
+    console.error(err);
     res.status(500).send(err.message);
   }
 });
