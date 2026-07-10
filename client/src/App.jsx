@@ -1856,8 +1856,8 @@ const getDisplayPrice = (product) => {
   
       style={{
   position: "absolute",
-  top: "15px",
-  right: "18px",
+  top: "18px",
+  right: "12px",
   width: "32px",
   height: "32px",
   borderRadius: "50%",
@@ -1891,7 +1891,7 @@ const getDisplayPrice = (product) => {
   {/* PRICE */}
   <div>
     <p style={styles.price}>
-  €{Number(getDisplayPrice(p)).toFixed(2)}
+  From €{Number(getDisplayPrice(p)).toFixed(2)}
 </p>
     {isBar && <p style={styles.smallText}>Bar discount applied</p>}
   </div>
