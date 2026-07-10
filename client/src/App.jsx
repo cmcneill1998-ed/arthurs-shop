@@ -3433,11 +3433,11 @@ suggestionItem: {
 
 productImageWrap: {
   position: "absolute",
-  top: "-55px",
+  top: "-65px",
   left: "50%",
   transform: "translateX(-50%)",
   width: "150px",
-  height: "150px",
+  height: "80px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
