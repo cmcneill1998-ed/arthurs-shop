@@ -3042,7 +3042,7 @@ function getProductImage(product) {
     .trim()
     .replace(/\s+/g, "-");
 
-  return `/products/${cleanName}.jpg`;
+  return `/products/${cleanName}.png`;
 }
 
 
@@ -3432,7 +3432,7 @@ suggestionItem: {
 
 productImageWrap: {
   position: "absolute",
-  top: "-120px",
+  top: "-55px",
   left: "50%",
   transform: "translateX(-50%)",
   width: "150px",
