@@ -3240,11 +3240,12 @@ productCard: {
     fontWeight: "bold",
   },
 
-  price: {
-  fontWeight: "800",
-  fontSize: "24px",
+ price: {
+  fontWeight: "bold",
+  fontSize: "15px",
   color: "#F97316",
-  marginBottom: "6px",
+  marginTop: "4px",
+  marginBottom: "2px",
 },
 
   smallText: {
@@ -3452,9 +3453,14 @@ desc: {
 },
 
 productTitle: {
-  fontSize: "16px",
-  lineHeight: "1.3",
-  wordBreak: "break-word",
+  minHeight: "60px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  textAlign: "center",
+  fontSize: "18px",
+  fontWeight: "bold",
+  margin: "10px 0",
 },
 
 paginationWrap: {
