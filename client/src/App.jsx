@@ -1882,8 +1882,8 @@ const getDisplayPrice = (product) => {
   {/* PRICE */}
   <div>
     <p style={styles.price}>
-      From €{Number(getDisplayPrice(p)).toFixed(2)}
-    </p>
+  €{Number(getDisplayPrice(p)).toFixed(2)}
+</p>
     {isBar && <p style={styles.smallText}>Bar discount applied</p>}
   </div>
 
@@ -3225,28 +3225,30 @@ primaryNavBtn: {
 productCard: {
   border: "none",
   borderRadius: "18px",
-  background: "#fff",
+  padding: "18px",
+  textAlign: "center",
+  background: "#ffffff",
   overflow: "hidden",
-  boxShadow: "0 8px 24px rgba(0,0,0,.08)",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
-  transition: "all .2s ease",
-  minHeight: "360px",
+  minHeight: "340px",
+  boxShadow: "0 8px 20px rgba(0,0,0,.08)",
 },
 
-  categoryTag: {
-    color: "#16A34A",
-    fontSize: "15px",
-    fontWeight: "bold",
-  },
-
- price: {
+categoryTag: {
+  color: "#16A34A",
+  fontSize: "14px",
   fontWeight: "bold",
-  fontSize: "17px",
+  marginBottom: "6px",
+},
+
+price: {
+  fontWeight: "700",
+  fontSize: "16px",
   color: "#F97316",
-  marginTop: "4px",
-  marginBottom: "2px",
+  marginTop: "8px",
+  marginBottom: "6px",
 },
 
   smallText: {
@@ -3424,7 +3426,7 @@ suggestionItem: {
 
 productImageWrap: {
   width: "100%",
-  height: "180px",
+  height: "150px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -3432,7 +3434,7 @@ productImageWrap: {
 },
 
 productImage: {
-  maxHeight: "170px",
+  maxHeight: "140px",
   maxWidth: "95%",
   objectFit: "contain",
 },
@@ -3448,14 +3450,12 @@ orderCard: {
 },
 
 desc: {
-  minHeight: "42px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
+  minHeight: "54px",
   textAlign: "center",
   fontSize: "12px",
   color: "#6b7280",
-  lineHeight: "1.3",
+  lineHeight: "1.35",
+  padding: "0 12px",
 },
 
 
@@ -3480,6 +3480,17 @@ paginationWrap: {
   alignItems: "center",
   gap: "10px",
   marginTop: "20px",
+},
+
+categoryTag: {
+  display: "inline-block",
+  background: "#DCFCE7",
+  color: "#15803d",
+  padding: "4px 10px",
+  borderRadius: "999px",
+  fontSize: "11px",
+  fontWeight: "700",
+  marginBottom: "8px",
 },
 
 
