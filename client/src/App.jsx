@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Routes, Route, Link, Navigate, useNavigate } from "react-router-dom";
 import logo from "./image.png";
-import Orders from "./Orders";
 import LegalNoticePage from "./pages/LegalNoticePage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import CookiePolicyPage from "./pages/CookiePolicyPage";
@@ -86,6 +85,8 @@ const [password, setPassword] = useState("");
 
   const [message, setMessage] = useState("");
   const [checkoutError, setCheckoutError] = useState("");
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+  const placingOrderRef = useRef(false);
   const [search, setSearch] = useState("");
   const [isResetMode, setIsResetMode] = useState(false);
   const [category, setCategory] = useState("All");
@@ -630,14 +631,21 @@ const delivery = cart.length > 0 && subtotal < DELIVERY_THRESHOLD ? DELIVERY_FEE
 const total = subtotal + delivery;
 
 
-  function placeOrder() {
-    setCheckoutError("");
-    setMessage("");
+ function placeOrder() {
+  if (placingOrderRef.current) return;
+
+  placingOrderRef.current = true;
+  setIsPlacingOrder(true);
+
+  setCheckoutError("");
+  setMessage("");
 
     if (!currentUser) {
-      setCheckoutError("You must create an account or log in before placing an order.");
-      return;
-    }
+  setCheckoutError("You must create an account or log in before placing an order.");
+  placingOrderRef.current = false;
+  setIsPlacingOrder(false);
+  return;
+}
 
     const now = new Date();
     const day = now.getDay();
@@ -655,6 +663,8 @@ const total = subtotal + delivery;
 
     if (cart.length === 0) {
       setCheckoutError("Your basket is empty.");
+      placingOrderRef.current = false;
+setIsPlacingOrder(false);
       return;
     }
 
@@ -667,6 +677,8 @@ const total = subtotal + delivery;
         !checkoutForm.nif
       ) {
         setCheckoutError("Bar checkout needs contact name, email, company name, address and NIF.");
+        placingOrderRef.current = false;
+setIsPlacingOrder(false);
         return;
       }
     } else if (!isStaff) {
@@ -677,11 +689,16 @@ const total = subtotal + delivery;
         !checkoutForm.hotelAddress
       ) {
         setCheckoutError("Customer checkout needs name, email, hotel room and hotel address.");
+        placingOrderRef.current = false;
+setIsPlacingOrder(false);
         return;
       }
     }
 
  const orderNumber = `ARTH-${Date.now().toString().slice(-8)}`;
+ const clientOrderId = `ARTH-${Date.now()}-${Math.random()
+  .toString(36)
+  .slice(2)}`;
 
 setLastOrder({
   orderNumber,
@@ -731,6 +748,8 @@ fetch(`${API_BASE}/create-checkout-session`, {
   hotelRoom: checkoutForm.hotelRoom || "",
   hotelAddress: checkoutForm.hotelAddress || "",
   note: orderNote,
+  clientOrderId,
+
 }),
     });
 
@@ -745,8 +764,10 @@ fetch(`${API_BASE}/create-checkout-session`, {
 })
 
   .catch(() => {
-    setCheckoutError("Checkout failed");
-  });
+  placingOrderRef.current = false;
+  setIsPlacingOrder(false);
+  setCheckoutError("Checkout failed");
+});
 
 }
 
@@ -1036,6 +1057,7 @@ setOrderNote={setOrderNote}
   cart={cart}
   message={message}
   setAuthMode={setAuthMode}
+  isPlacingOrder={isPlacingOrder}
 />
             }
           />
@@ -2173,6 +2195,7 @@ function CheckoutPage({
   cart,
   message,
   setAuthMode,
+  isPlacingOrder,
 }) {
   return (
     <section style={styles.card}>
@@ -2290,9 +2313,17 @@ function CheckoutPage({
   </div>
 </div>
 
-      <button style={styles.primaryBtn} onClick={placeOrder}>
-        Place Order
-      </button>
+      <button
+  style={{
+    ...styles.primaryBtn,
+    opacity: isPlacingOrder ? 0.6 : 1,
+    cursor: isPlacingOrder ? "not-allowed" : "pointer",
+  }}
+  disabled={isPlacingOrder}
+  onClick={placeOrder}
+>
+  {isPlacingOrder ? "Processing..." : "Place Order"}
+</button>
     </section>
   );
 }

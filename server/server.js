@@ -34,13 +34,20 @@ async function ensureOrderItemsTable() {
 
     
 
-    // ✅ THIS FIXES YOUR ERROR
     await db.query(`
-      ALTER TABLE order_items
-      ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0.5;
-      ALTER TABLE orders
-ADD COLUMN IF NOT EXISTS customerNote TEXT DEFAULT '';
-    `);
+  ALTER TABLE order_items
+  ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) DEFAULT 0.5;
+
+  ALTER TABLE orders
+  ADD COLUMN IF NOT EXISTS customerNote TEXT DEFAULT '';
+
+  ALTER TABLE orders
+  ADD COLUMN IF NOT EXISTS clientOrderId TEXT;
+
+  CREATE UNIQUE INDEX IF NOT EXISTS orders_clientorderid_unique
+  ON orders(clientOrderId)
+  WHERE clientOrderId IS NOT NULL;
+`);
 
     
 
@@ -81,47 +88,6 @@ async function ensureUsersTable() {
   }
 }
 
-async function ensureStaffUser() {
-  try {
-    await db.query(`
-      INSERT INTO users
-      (
-        role,
-        fullname,
-        email,
-        password,
-        nif,
-        companyname,
-        address,
-        hotelroom,
-        hoteladdress
-      )
-      VALUES
-      (
-        'staff',
-        'Arthurs Staff',
-        'staff@arthurs.test',
-        'demo123',
-        '',
-        'Arthurs',
-        'Store Address',
-        '',
-        ''
-      )
-      ON CONFLICT (email)
-      DO UPDATE SET
-        role = 'staff',
-        fullname = 'Arthurs Staff',
-        password = 'demo123',
-        companyname = 'Arthurs',
-        address = 'Store Address';
-    `);
-
-    console.log("✅ staff user ready");
-  } catch (err) {
-    console.error("❌ staff user failed:", err);
-  }
-}
 
 
   async function ensureStaffUser() {
@@ -424,14 +390,51 @@ app.post("/create-checkout-session", async (req, res) => {
 
 
 app.post("/order", async (req, res) => {
-  const { customerName, email, total, items = [], role, hotelRoom, hotelAddress, note } = req.body;
+  const {
+    customerName,
+    email,
+    total,
+    items = [],
+    role,
+    hotelRoom,
+    hotelAddress,
+    note,
+    clientOrderId,
+  } = req.body;
 
   try {
+    // ✅ Prevent duplicate order saves from double-clicks / repeat requests
+    if (clientOrderId) {
+      const existingOrder = await db.query(
+        "SELECT id FROM orders WHERE clientOrderId = $1",
+        [clientOrderId]
+      );
+
+      if (existingOrder.rows.length > 0) {
+        return res.json({
+          success: true,
+          orderId: existingOrder.rows[0].id,
+          duplicatePrevented: true,
+        });
+      }
+    }
+
     // ✅ SAVE ORDER TO DB FIRST
     const result = await db.query(
-      `INSERT INTO orders (customerName, email, total, role, hotelRoom, hotelAddress, status, staffNote, customerNote)
-VALUES ($1,$2,$3,$4,$5,$6,'Pending','',$7) RETURNING id`,
-     [customerName, email, total, role, hotelRoom || "", hotelAddress || "", note || ""]
+      `INSERT INTO orders
+       (customerName, email, total, role, hotelRoom, hotelAddress, status, staffNote, customerNote, clientOrderId)
+       VALUES ($1,$2,$3,$4,$5,$6,'Pending','',$7,$8)
+       RETURNING id`,
+      [
+        customerName,
+        email,
+        total,
+        role,
+        hotelRoom || "",
+        hotelAddress || "",
+        note || "",
+        clientOrderId || null,
+      ]
     );
 
     const orderId = result.rows[0].id;
