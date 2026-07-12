@@ -1858,22 +1858,26 @@ const getDisplayPrice = (product) => {
   {/* IMAGE */}
  
  
-  <div style={{ position: "relative" }}>
-  <img
-    src={getProductImage(p)}
-    onError={(e) => {
-      e.target.src = "/products/placeholder.png";
-    }}
-    alt={p.name}
-    style={{
-      ...styles.productImage,
-      cursor: "pointer",
-    }}
-    onClick={() => {
-      setViewProduct(p);
-      setSelectedVariant(p.variants?.[0] || p);
-    }}
-  />
+{/* IMAGE */}
+<div style={{ position: "relative", height: "95px" }}>
+  <div style={styles.productImageWrap}>
+    <img
+      src={getProductImage(p)}
+      onError={(e) => {
+        e.target.src = "/products/placeholder.png";
+      }}
+      alt={p.name}
+      style={{
+        ...styles.productImage,
+        cursor: "pointer",
+      }}
+      onClick={() => {
+        setViewProduct(p);
+        setSelectedVariant(p.variants?.[0] || p);
+      }}
+    />
+
+  </div>
 
   <button
     type="button"
@@ -1881,26 +1885,23 @@ const getDisplayPrice = (product) => {
       setViewProduct(p);
       setSelectedVariant(p.variants?.[0] || p);
     }}
-  
-      style={{
-  position: "absolute",
-  top: "18px",
-  right: "12px",
-  width: "32px",
-  height: "32px",
-  borderRadius: "50%",
-  border: "none",
-  background: "#fff",
-  boxShadow: "0 4px 10px rgba(0,0,0,.15)",
-  zIndex: 20,
-  cursor: "pointer",
-}}
-
+    style={{
+      position: "absolute",
+      top: "10px",
+      right: "10px",
+      width: "32px",
+      height: "32px",
+      borderRadius: "50%",
+      border: "none",
+      background: "#fff",
+      boxShadow: "0 4px 10px rgba(0,0,0,.15)",
+      zIndex: 30,
+      cursor: "pointer",
+    }}
   >
     🔍
   </button>
 </div>
-
 
 
   {/* TEXT */}
@@ -3543,13 +3544,12 @@ productImageWrap: {
   position: "absolute",
   left: "50%",
   transform: "translateX(-50%)",
-top: "-55px",
+  top: "-65px",
   width: "170px",
-  height: "60px",
+  height: "180px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  maxheight: "180px",
 },
 
 productImage: {
