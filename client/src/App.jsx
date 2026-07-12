@@ -1858,7 +1858,7 @@ const getDisplayPrice = (product) => {
   {/* IMAGE */}
  
  
-  <div style={{ ...styles.productCard, position: "relative" }}>
+  <div style={{ position: "relative" }}>
   <img
     src={getProductImage(p)}
     onError={(e) => {
