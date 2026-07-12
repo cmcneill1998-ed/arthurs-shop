@@ -44,11 +44,18 @@ async function ensureOrderItemsTable() {
   ALTER TABLE orders
   ADD COLUMN IF NOT EXISTS clientOrderId TEXT;
 
+  
+
   CREATE UNIQUE INDEX IF NOT EXISTS orders_clientorderid_unique
   ON orders(clientOrderId)
   WHERE clientOrderId IS NOT NULL;
 `);
 
+
+await db.query(`
+  ALTER TABLE orders
+  ADD COLUMN IF NOT EXISTS deliverypin TEXT;
+`);
     
 
     
@@ -58,6 +65,9 @@ async function ensureOrderItemsTable() {
     console.error("❌ Failed to create/update order_items table:", err);
   }
 }
+
+
+
 
 // =========================
 // USERS TABLE
@@ -109,7 +119,7 @@ async function ensureUsersTable() {
       (
         'staff',
         'Arthurs Staff',
-        'staff@arthurs.test',
+        'arthursofflicence@gmail.com',
         'demo123',
         '',
         'Arthurs',
@@ -403,6 +413,9 @@ app.post("/order", async (req, res) => {
   } = req.body;
 
   try {
+    const deliveryPin = String(
+  Math.floor(1000 + Math.random() * 9000)
+);
     // ✅ Prevent duplicate order saves from double-clicks / repeat requests
     if (clientOrderId) {
       const existingOrder = await db.query(

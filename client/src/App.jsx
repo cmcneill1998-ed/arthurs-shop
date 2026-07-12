@@ -21,7 +21,7 @@ export default function App() {
       id: 1,
       role: "staff",
       fullName: "Arthurs Staff",
-      email: "staff@arthurs.test",
+      email: "arthursofflicence@gmail.com",
       password: "demo123",
       nif: "",
       companyName: "Arthurs",
@@ -489,9 +489,9 @@ function resetPassword() {
       (u.role === "bar" &&
         String(u.nif || "").toLowerCase() ===
           String(loginForm.resetCheck || "").toLowerCase()) ||
-      (u.role === "staff" &&
-        String(u.email || "").toLowerCase() ===
-          String(loginForm.email || "").toLowerCase());
+      u.role === "staff" &&
+String(u.nif || "").toLowerCase() ===
+String(loginForm.resetCheck || "").toLowerCase()
 
     return emailMatches && securityMatches;
   });
@@ -1348,9 +1348,13 @@ const getDisplayPrice = (product) => {
   placeholder="Search products"
   value={search}
   onChange={(e) => {
-    setSearch(e.target.value);
-    setShowSuggestions(true);
-  }}
+  setSearch(e.target.value);
+  setShowSuggestions(true);
+
+  if (e.target.value.trim()) {
+    setCategory("All");
+  }
+}}
 />
 
    <button
@@ -1852,7 +1856,7 @@ const getDisplayPrice = (product) => {
   {/* IMAGE */}
  
  
-  <div style={{ ...styles.productImageWrap, position: "relative" }}>
+  <div style={{ ...styles.productCard, position: "relative" }}>
   <img
     src={getProductImage(p)}
     onError={(e) => {
@@ -2650,13 +2654,30 @@ function AccountPage({ isBar, isStaff, profileForm, setProfileForm, saveProfile,
         ) : !isStaff ? (
           <>
             <div style={styles.formRow}>
-              <input
-                style={styles.inputClean}
-                placeholder="Hotel room"
-                value={profileForm.hotelRoom}
-                onChange={(e) => setProfileForm({ ...profileForm, hotelRoom: e.target.value })}
-              />
-            </div>
+
+<input
+
+style={styles.inputClean}
+
+placeholder="Access Code"
+
+value={profileForm.nif}
+
+onChange={(e) =>
+
+setProfileForm({
+
+...profileForm,
+
+nif: e.target.value,
+
+})
+
+}
+
+/>
+
+</div>
 
             <div style={styles.formRow}>
               <input
@@ -2879,15 +2900,45 @@ function LoginPage({
           </div>
 
           {isResetMode && (
-  <input
-    style={styles.input}
-    placeholder="Hotel room (or NIF for bars)"
-    value={loginForm.resetCheck || ""}
-    onChange={(e) =>
-      setLoginForm({ ...loginForm, resetCheck: e.target.value })
-    }
+  <>
+    <div
+      style={{
+        background: "#FEE2E2",
+        border: "1px solid #DC2626",
+        color: "#991B1B",
+        padding: "12px",
+        borderRadius: "8px",
+        marginBottom: "12px",
+        fontSize: "13px",
+      }}
+    >
+      Please confirm your account details before resetting your password.
+
+      <br /><br />
+
+      • Retail customers should enter their Hotel Room<br />
+      • Bar customers should enter their NIF<br />
+      • Staff should enter their Access Code
+
+      <br /><br />
+
+      Enter your new password and submit.
+      If your verification details are correct, your password will be updated immediately.
+    </div>
+
+    <input
+      style={styles.input}
+      placeholder="Hotel Room / NIF / Access Code"
+      value={loginForm.resetCheck || ""}
+      onChange={(e) =>
+        setLoginForm({
+          ...loginForm,
+          resetCheck: e.target.value,
+        })
+      }
     />
-  )}
+  </>
+)}
 
 
           <button
