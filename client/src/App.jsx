@@ -2390,6 +2390,11 @@ function OrdersPage({
 <p>
   <strong>Status:</strong> {order.status || "Pending"}
 </p>
+{order.deliverypin && (
+  <p>
+    <strong>Delivery PIN:</strong> {order.deliverypin}
+  </p>
+)}
 
 {order.customerNote && (
   <p style={{ marginTop: "6px", fontStyle: "italic", color: "#374151" }}>

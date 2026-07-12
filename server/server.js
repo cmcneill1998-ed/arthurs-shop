@@ -435,8 +435,8 @@ app.post("/order", async (req, res) => {
     // ✅ SAVE ORDER TO DB FIRST
     const result = await db.query(
       `INSERT INTO orders
-       (customerName, email, total, role, hotelRoom, hotelAddress, status, staffNote, customerNote, clientOrderId, deliveryPin)
-       VALUES ($1,$2,$3,$4,$5,$6,'Pending','',$7,$8)
+       (customerName, email, total, role, hotelRoom, hotelAddress, status, staffNote, customerNote, clientOrderId, deliverypin)
+       VALUES ($1,$2,$3,$4,$5,$6,'Pending','',$7,$8,$9)
        RETURNING id`,
       [
         customerName,
@@ -526,6 +526,25 @@ app.post("/order", async (req, res) => {
     <p style="margin: 5px 0;">
       Your order number is <strong>${orderId}</strong>
     </p>
+    <p>
+  <strong>Delivery PIN:</strong> ${deliveryPin}
+</p>
+
+<div style="
+background:#FEF3C7;
+padding:12px;
+border-radius:8px;
+margin-top:10px;
+">
+  Give this PIN to your driver upon delivery.
+
+  Providing this PIN confirms:
+  <br>• Delivery received
+  <br>• Order checked
+  <br>• Goods accepted
+
+  Items are non-refundable unless approved by management.
+</div>
 
     <h3 style="margin-top: 20px; margin-bottom: 10px;">
       Order Details
@@ -634,6 +653,9 @@ app.post("/order", async (req, res) => {
       <p><strong>Customer:</strong> ${customerName}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
+      <p>
+  <strong>Delivery PIN:</strong> ${deliveryPin}
+</p>
 
       ${
         hotelRoom
@@ -729,8 +751,8 @@ app.get("/orders", async (req, res) => {
   hotelRoom: order.hotelroom,
   hotelAddress: order.hoteladdress,
   customerNote: order.customernote,
+  deliverypin: order.deliverypin,
 }));
-
       return res.json(formatted);
     }
 
@@ -745,6 +767,7 @@ app.get("/orders", async (req, res) => {
   hotelRoom: order.hotelroom,
   hotelAddress: order.hoteladdress,
   customerNote: order.customernote,
+  deliverypin: order.deliverypin,
 }));
 
     res.json(formatted);
