@@ -483,15 +483,17 @@ function resetPassword() {
       u.email.toLowerCase() === loginForm.email.toLowerCase();
 
     const securityMatches =
-      (u.role === "customer" &&
-        String(u.hotelRoom || "").toLowerCase() ===
-          String(loginForm.resetCheck || "").toLowerCase()) ||
-      (u.role === "bar" &&
-        String(u.nif || "").toLowerCase() ===
-          String(loginForm.resetCheck || "").toLowerCase()) ||
-      u.role === "staff" &&
-String(u.nif || "").toLowerCase() ===
-String(loginForm.resetCheck || "").toLowerCase()
+  (u.role === "customer" &&
+    String(u.hotelRoom || "").toLowerCase() ===
+      String(loginForm.resetCheck || "").toLowerCase()) ||
+
+  (u.role === "bar" &&
+    String(u.nif || "").toLowerCase() ===
+      String(loginForm.resetCheck || "").toLowerCase()) ||
+
+  (u.role === "staff" &&
+    String(u.nif || "").toLowerCase() ===
+      String(loginForm.resetCheck || "").toLowerCase());
 
     return emailMatches && securityMatches;
   });
