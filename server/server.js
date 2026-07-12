@@ -435,7 +435,7 @@ app.post("/order", async (req, res) => {
     // ✅ SAVE ORDER TO DB FIRST
     const result = await db.query(
       `INSERT INTO orders
-       (customerName, email, total, role, hotelRoom, hotelAddress, status, staffNote, customerNote, clientOrderId)
+       (customerName, email, total, role, hotelRoom, hotelAddress, status, staffNote, customerNote, clientOrderId, deliveryPin)
        VALUES ($1,$2,$3,$4,$5,$6,'Pending','',$7,$8)
        RETURNING id`,
       [
@@ -447,6 +447,7 @@ app.post("/order", async (req, res) => {
         hotelAddress || "",
         note || "",
         clientOrderId || null,
+        deliveryPin,
       ]
     );
 

@@ -2651,44 +2651,53 @@ function AccountPage({ isBar, isStaff, profileForm, setProfileForm, saveProfile,
               />
             </div>
           </>
-        ) : !isStaff ? (
-          <>
-            <div style={styles.formRow}>
+        ) : isStaff ? (
+  <>
+    <div style={styles.formRow}>
+      <input
+        style={styles.inputClean}
+        placeholder="Access Code"
+        value={profileForm.nif}
+        onChange={(e) =>
+          setProfileForm({
+            ...profileForm,
+            nif: e.target.value,
+          })
+        }
+      />
+    </div>
+  </>
+) : (
+  <>
+    <div style={styles.formRow}>
+      <input
+        style={styles.inputClean}
+        placeholder="Hotel room"
+        value={profileForm.hotelRoom}
+        onChange={(e) =>
+          setProfileForm({
+            ...profileForm,
+            hotelRoom: e.target.value,
+          })
+        }
+      />
+    </div>
 
-<input
-
-style={styles.inputClean}
-
-placeholder="Access Code"
-
-value={profileForm.nif}
-
-onChange={(e) =>
-
-setProfileForm({
-
-...profileForm,
-
-nif: e.target.value,
-
-})
-
-}
-
-/>
-
-</div>
-
-            <div style={styles.formRow}>
-              <input
-                style={styles.inputClean}
-                placeholder="Hotel address"
-                value={profileForm.hotelAddress}
-                onChange={(e) => setProfileForm({ ...profileForm, hotelAddress: e.target.value })}
-              />
-            </div>
-          </>
-        ) : null}
+    <div style={styles.formRow}>
+      <input
+        style={styles.inputClean}
+        placeholder="Hotel address"
+        value={profileForm.hotelAddress}
+        onChange={(e) =>
+          setProfileForm({
+            ...profileForm,
+            hotelAddress: e.target.value,
+          })
+        }
+      />
+    </div>
+  </>
+)}
       </div>
 
       <button
