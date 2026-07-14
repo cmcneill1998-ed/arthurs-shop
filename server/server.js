@@ -856,22 +856,44 @@ app.post("/orders/update", async (req, res) => {
 });
 
 app.post("/reset-password", async (req, res) => {
-  const { email, newPassword } = req.body;
+  const { email, newPassword, accessCode } = req.body;
 
   try {
-    if (!email || !newPassword) {
-      return res.status(400).json({ error: "Missing fields" });
+    const result = await db.query(
+      "SELECT * FROM users WHERE LOWER(email) = LOWER($1)",
+      [email.trim()]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: "Details do not match our records",
+      });
+    }
+
+    const user = result.rows[0];
+
+    if (
+      String(user.nif || "").trim().toLowerCase() !==
+      String(accessCode || "").trim().toLowerCase()
+    ) {
+      return res.status(401).json({
+        error: "Details do not match our records",
+      });
     }
 
     await db.query(
-      "UPDATE users SET password = $1 WHERE email = $2",
-      [newPassword, email]
+      "UPDATE users SET password = $1 WHERE id = $2",
+      [
+        newPassword.trim(),
+        user.id,
+      ]
     );
 
-    res.json({ success: true });
-
+    res.json({
+      success: true,
+    });
   } catch (err) {
-    console.error("Reset password failed:", err);
+    console.error(err);
     res.status(500).send("Reset failed");
   }
 });

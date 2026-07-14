@@ -478,52 +478,41 @@ function resetPassword() {
     return;
   }
 
-  const matchedUser = users.find((u) => {
-    const emailMatches =
-      u.email.toLowerCase() === loginForm.email.toLowerCase();
+  fetch(`${API_BASE}/reset-password`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    email: loginForm.email,
+    newPassword: loginForm.password,
+    accessCode: loginForm.resetCheck,
+  }),
+})
+  .then(async (res) => {
+    const data = await res.json();
 
-    const securityMatches =
-  (u.role === "customer" &&
-    String(u.hotelRoom || "").toLowerCase() ===
-      String(loginForm.resetCheck || "").toLowerCase()) ||
+    if (!res.ok) {
+      throw new Error(
+        data.error || "Details do not match our records."
+      );
+    }
 
-  (u.role === "bar" &&
-    String(u.nif || "").toLowerCase() ===
-      String(loginForm.resetCheck || "").toLowerCase()) ||
+    setMessage(
+      "✅ Password reset successful. You can now log in."
+    );
 
-  (u.role === "staff" &&
-    String(u.nif || "").toLowerCase() ===
-      String(loginForm.resetCheck || "").toLowerCase());
+    setIsResetMode(false);
 
-    return emailMatches && securityMatches;
+    setLoginForm({
+      email: "",
+      password: "",
+      resetCheck: "",
+    });
+  })
+  .catch((err) => {
+    setMessage(err.message);
   });
-
-if (!matchedUser) {
-  setMessage("Details do not match our records.");
-  return;
-}
-
-const updatedUsers = users.map((u) => {
-  if (u.email.toLowerCase() === loginForm.email.toLowerCase()) {
-    return {
-      ...u,
-      password: loginForm.password.trim()
-    };
-  }
-  return u;
-});
-
-setUsers(updatedUsers);
-localStorage.setItem("arthurs_users", JSON.stringify(updatedUsers));
-
-setMessage("✅ Password reset successful. You can now log in.");
-setIsResetMode(false);
-
-setLoginForm({
-  email: "",
-  password: "",
-  resetCheck: ""
-});
 
 }
 
@@ -3637,6 +3626,7 @@ categoryTag: {
   borderRadius: "999px",
   fontSize: "11px",
   fontWeight: "700",
+  marginTop: "30px",
   marginBottom: "8px",
 },
 
