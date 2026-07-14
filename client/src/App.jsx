@@ -3369,8 +3369,8 @@ primaryNavBtn: {
 productGrid: {
   display: "grid",
   gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))",
-  gap: "120px 14px",
-  paddingTop: "40px",
+  gap: "70px 14px",
+  paddingTop: "20px",
 },
 
 productCard: {
@@ -3389,8 +3389,8 @@ productImageWrap: {
   left: "50%",
   transform: "translateX(-50%)",
   top: "-90px",
-  width: "170px",
-  height: "180px",
+  width: "180px",
+  height: "220px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -3581,7 +3581,7 @@ suggestionItem: {
 
 
 productImage: {
-  maxHeight: "180px",
+  maxHeight: "220px",
   maxWidth: "100%",
   objectFit: "contain",
 },
