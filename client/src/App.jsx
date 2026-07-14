@@ -1887,8 +1887,8 @@ const getDisplayPrice = (product) => {
     }}
     style={{
   position: "absolute",
-  top: "12px",
-  right: "12px",
+  top: "-20px",
+  right: "5px",
   width: "34px",
   height: "34px",
   borderRadius: "50%",
@@ -1899,7 +1899,7 @@ const getDisplayPrice = (product) => {
   alignItems: "center",
   justifyContent: "center",
   cursor: "pointer",
-  zIndex: 5,
+  zIndex: 999,
 }}
 
   >
