@@ -1886,18 +1886,22 @@ const getDisplayPrice = (product) => {
       setSelectedVariant(p.variants?.[0] || p);
     }}
     style={{
-      position: "absolute",
-      top: "10px",
-      right: "10px",
-      width: "32px",
-      height: "32px",
-      borderRadius: "50%",
-      border: "none",
-      background: "#fff",
-      boxShadow: "0 4px 10px rgba(0,0,0,.15)",
-      zIndex: 30,
-      cursor: "pointer",
-    }}
+  position: "absolute",
+  top: "12px",
+  right: "12px",
+  width: "34px",
+  height: "34px",
+  borderRadius: "50%",
+  border: "none",
+  background: "rgba(255,255,255,0.92)",
+  boxShadow: "0 3px 10px rgba(0,0,0,0.18)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+  zIndex: 5,
+}}
+
   >
     🔍
   </button>
@@ -3326,37 +3330,55 @@ primaryNavBtn: {
   },
 
  
-  productGrid: {
+productGrid: {
   display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-  gap: "70px 14px",
-  paddingTop: "70px",
+  gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))",
+  gap: "85px 14px",
+  paddingTop: "80px",
 },
 
 productCard: {
   position: "relative",
-  border: "none",
-  borderRadius: "20px",
-  padding: "45px 16px 16px",
-  textAlign: "center",
-  background: "#ffffff",
   overflow: "visible",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-  minHeight: "360px",
-  boxShadow: "0 22px 50px rgba(0,0,0,.22)"
+  background: "#fff",
+  borderRadius: "18px",
+  padding: "95px 14px 16px",
+  boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+  textAlign: "center",
+  minHeight: "245px",
 },
 
+productImageWrap: {
+  position: "absolute",
+  top: "-72px",
+  left: "50%",
+  transform: "translateX(-50%)",
+  width: "165px",
+  height: "165px",
+  display: "flex",
+  alignItems: "flex-end",
+  justifyContent: "center",
+  zIndex: 2,
+  pointerEvents: "none",
+},
+
+productImage: {
+  maxWidth: "155px",
+  maxHeight: "175px",
+  objectFit: "contain",
+  filter: "drop-shadow(0 8px 10px rgba(0,0,0,0.18))",
+},
 
 categoryTag: {
-  color: "#16A34A",
-  fontSize: "14px",
-  fontWeight: "bold",
-  
-marginTop: "20px",
-  marginBottom: "10px",
-
+  position: "relative",
+  zIndex: 3,
+  marginTop: "0",
+  marginBottom: "6px",
+  fontSize: "11px",
+  fontWeight: "700",
+  color: "#777",
+  textTransform: "uppercase",
+  letterSpacing: "0.4px",
 },
 
 price: {
