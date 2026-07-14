@@ -1945,38 +1945,74 @@ const getDisplayPrice = (product) => {
       <div style={{ marginTop: "6px" }}>
         {p.variants && p.variants.length > 1 ? (
   <>
-    {p.variants.map((variant) => (
-      <button
-        key={variant.id}
-        style={{
-          ...styles.secondaryBtn,
-          width: "100%",
-          marginBottom: "6px",
-        }}
-        onClick={() => {
-          setEditingProduct(variant);
+   {p.variants.map((variant) => (
+  <div key={variant.id}>
+    <button
+      style={{
+        ...styles.secondaryBtn,
+        width: "100%",
+        marginBottom: "6px",
+      }}
+      onClick={() => {
+        setEditingProduct(variant);
 
-          setEditProduct({
-            name: variant.name || "",
-            category: variant.category || "",
-            description: variant.description || "",
-            retailPrice: Number(
-              variant.retailPrice || variant.retailprice || 0
-            ).toFixed(2),
-            barPrice: Number(
-              variant.barPrice || variant.barprice || 0
-            ).toFixed(2),
-            productGroup:
-              variant.productGroup ||
-              variant.productgroup ||
-              "",
-            variant: variant.variant || "",
-          });
-        }}
-      >
-        Edit {variant.variant || variant.name}
-      </button>
-    ))}
+        setEditProduct({
+          name: variant.name || "",
+          category: variant.category || "",
+          description: variant.description || "",
+          retailPrice: Number(
+            variant.retailPrice || variant.retailprice || 0
+          ).toFixed(2),
+          barPrice: Number(
+            variant.barPrice || variant.barprice || 0
+          ).toFixed(2),
+          productGroup:
+            variant.productGroup ||
+            variant.productgroup ||
+            "",
+          variant: variant.variant || "",
+        });
+      }}
+    >
+      Edit {variant.variant || variant.name}
+    </button>
+
+    <button
+      style={{
+        ...styles.removeBtn,
+        width: "100%",
+        marginBottom: "6px",
+      }}
+      onClick={() => {
+        if (
+          !window.confirm(
+            `Delete ${variant.variant || variant.name}?`
+          )
+        )
+          return;
+
+        fetch(`${API_BASE}/products/delete`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: variant.id,
+          }),
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error();
+            window.location.reload();
+          })
+          .catch(() =>
+            alert("Failed to delete variant")
+          );
+      }}
+    >
+      Delete {variant.variant || variant.name}
+    </button>
+  </div>
+))}
   </>
 ) : (
   <button
@@ -3333,8 +3369,8 @@ primaryNavBtn: {
 productGrid: {
   display: "grid",
   gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))",
-  gap: "85px 14px",
-  paddingTop: "80px",
+  gap: "120px 14px",
+  paddingTop: "40px",
 },
 
 productCard: {
@@ -3342,44 +3378,25 @@ productCard: {
   overflow: "visible",
   background: "#fff",
   borderRadius: "18px",
-  padding: "95px 14px 16px",
+  padding: "40px 14px 16px",
   boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
   textAlign: "center",
-  minHeight: "245px",
+  minHeight: "unset",
 },
 
 productImageWrap: {
   position: "absolute",
-  top: "-72px",
   left: "50%",
   transform: "translateX(-50%)",
-  width: "165px",
-  height: "165px",
+  top: "-90px",
+  width: "170px",
+  height: "180px",
   display: "flex",
-  alignItems: "flex-end",
+  alignItems: "center",
   justifyContent: "center",
-  zIndex: 2,
-  pointerEvents: "none",
-},
-
-productImage: {
-  maxWidth: "155px",
-  maxHeight: "175px",
-  objectFit: "contain",
-  filter: "drop-shadow(0 8px 10px rgba(0,0,0,0.18))",
-},
-
-categoryTag: {
-  position: "relative",
   zIndex: 3,
-  marginTop: "0",
-  marginBottom: "6px",
-  fontSize: "11px",
-  fontWeight: "700",
-  color: "#777",
-  textTransform: "uppercase",
-  letterSpacing: "0.4px",
 },
+
 
 price: {
   fontWeight: "700",
@@ -3562,17 +3579,6 @@ suggestionItem: {
   color: "#111827",
 },
 
-productImageWrap: {
-  position: "absolute",
-  left: "50%",
-  transform: "translateX(-50%)",
-  top: "-65px",
-  width: "170px",
-  height: "180px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-},
 
 productImage: {
   maxHeight: "180px",
